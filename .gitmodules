@@ -1,0 +1,3 @@
+[submodule "choros-corpus"]
+	path = choros-corpus
+	url = git@bitbucket.org:msampaio/choros-corpus.git
