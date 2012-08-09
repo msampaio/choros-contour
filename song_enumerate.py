@@ -15,7 +15,7 @@ def parse_music(filename):
 
 
 def count_items(score):
-    notes = score.parts[0].flat.notes
+    notes = score.parts[0].flat.notesAndRests
     for x, note in enumerate(notes, 1):
         if x % 5 == 0:
             note.addLyric(x)
