@@ -6,8 +6,11 @@ from music21.contour import Contour
 
 
 class Phrase(object):
-    def __init__(self, piece="", number=0, size=0, contour=None, contour_size=0, lily=""):
+    def __init__(self, piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0, lily=''):
         self.piece = piece
+        self.composer = composer
+        self.filename = filename
+        self.collection = collection
         self.number = number
         self.size = size
         self.contour = contour
@@ -15,35 +18,32 @@ class Phrase(object):
         self.lily = lily
 
     def __repr__(self):
-        return "<Phrase: {0} {1}:{2}>".format(self.piece, self.number, self.size)
+        return "<Phrase: {0}. {1}:{2}>".format(self.piece, self.collection, self.number)
 
 
-def note_has_fermata(note):
-    return any([True for x in note.expressions if isinstance(x, music21.expressions.Fermata)])
+def split_phrases(basename, flatten_song):
+    with open(basename + '.phrase') as pf:
+        phrase_loc = [[int(n) for n in loc.split()] for loc in pf.readlines()]
+    return [flatten_song[beg - 1:end] for beg, end in phrase_loc]
 
+def make_phrases(basename):
+    song = music21.parse(basename + '.xml')
 
-def split_phrases(voice):
-    phrases = [music21.stream.Stream()]
-    counter = 0
+    piece = song.metadata.title
+    composer = song.metadata.composer
+    # FIXME: improve collection and filename retrieval approach
+    collection, filename = basename.split('/')[-2:]
 
-    for n in voice.flat.notes.stripTies():
-        if n.expressions and note_has_fermata(n):
-            phrases[counter].append(n)
-            phrases.append(music21.stream.Stream())
-            counter += 1
-        else:
-            phrases[counter].append(n)
+    flatten_song = song.flat.notesAndRests
+    phrases = split_phrases(basename, flatten_song)
 
-    return [phrase for phrase in phrases if phrase]
-
-
-def make_phrases(filename):
-    music = music21.parse(filename)
-    piece = music.getElementsByClass(music21.text.TextBox)[0].content
-    phrases = split_phrases(music.parts[0])
     result = []
-    for number, music in enumerate(phrases):
-        contour = Contour(music)
-        lily = music.lily
-        result.append(Phrase(piece, number, len(music), contour, len(contour), lily))
+    for number, phr in enumerate(phrases):
+        number = number + 1
+        size = len(phr)
+        # insert lily
+        contour = Contour(phr)
+        contour_size = len(contour)
+        result.append(Phrase(piece, composer, filename, collection, number, size, contour, contour_size))
+
     return result
