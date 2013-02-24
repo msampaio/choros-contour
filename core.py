@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import music21
+import os
 from music21.contour import Contour
 
 
@@ -26,7 +27,13 @@ def split_phrases(basename, flatten_song):
         phrase_loc = [[int(n) for n in loc.split()] for loc in pf.readlines()]
     return [flatten_song[beg - 1:end] for beg, end in phrase_loc]
 
+
 def make_phrases(basename):
+    """Create Pharse objects from a given xml file:
+
+    >>> make_phrases('file.xml')
+    """
+
     song = music21.parse(basename + '.xml')
 
     piece = song.metadata.title
@@ -34,6 +41,7 @@ def make_phrases(basename):
     # FIXME: improve collection and filename retrieval approach
     collection, filename = basename.split('/')[-2:]
 
+    print "Making phrase of {0}".format(piece)
     flatten_song = song.flat.notesAndRests
     phrases = split_phrases(basename, flatten_song)
 
@@ -47,3 +55,7 @@ def make_phrases(basename):
         result.append(Phrase(piece, composer, filename, collection, number, size, contour, contour_size))
 
     return result
+
+
+def files_list(directory=os.path.join(os.getcwd(), 'choros-corpus', 'O Melhor de Pixinguinha')):
+    return [os.path.join(directory, f.split('.phrase')[0]) for f in os.listdir(directory) if f.endswith('.phrase')]
