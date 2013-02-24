@@ -11,3 +11,6 @@
 ** Redução de contornos
    Incidência de versões reduzidas de contornos diferentes entre si.
    Mostrar gráficos de contornos reduzidos a < 0 2 1 >, < 0 1 >, etc.
+** Contornos e notas de frases
+   Escolher algumas frases dos choros para mostrar juntamente com seu
+   contorno.
