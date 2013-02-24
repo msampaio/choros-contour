@@ -1,0 +1,13 @@
+# -*- mode:org -*-
+# Local IspellDict: brasileiro, english
+
+#+TITLE: Notas sobre contornos em choros
+#+AUTHOR: Marcos da Silva Sampaio
+#+EMAIL: marcos@sampaio.me
+#+LATEX_HEADER: \usepackage[brazil]{babel}
+#+OPTIONS: toc:nil
+
+* Dados sobre frases para mostrar
+** Redução de contornos
+   Incidência de versões reduzidas de contornos diferentes entre si.
+   Mostrar gráficos de contornos reduzidos a < 0 2 1 >, < 0 1 >, etc.
