@@ -7,7 +7,8 @@ from music21.contour import Contour
 
 
 class Phrase(object):
-    def __init__(self, piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0, lily=''):
+    def __init__(self, score, piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0):
+        self.score = score
         self.piece = piece
         self.composer = composer
         self.filename = filename
@@ -16,46 +17,58 @@ class Phrase(object):
         self.size = size
         self.contour = contour
         self.contour_size = contour_size
-        self.lily = lily
 
     def __repr__(self):
         return "<Phrase: {0}. {1}:{2}>".format(self.piece, self.collection, self.number)
 
 
-def split_phrases(basename, flatten_song):
-    with open(basename + '.phrase') as pf:
-        phrase_loc = [[int(n) for n in loc.split()] for loc in pf.readlines()]
-    return [flatten_song[beg - 1:end] for beg, end in phrase_loc]
-
-
-def make_phrases(basename):
-    """Create Pharse objects from a given xml file:
-
-    >>> make_phrases('file.xml')
+def m21_data(x_name):
+    """Returns Music21 data (flatten stream object, piece name,
+    composer) and collection from a given xml file path.
     """
 
-    song = music21.parse(basename + '.xml')
-
+    song = music21.parse(x_name)
     piece = song.metadata.title
     composer = song.metadata.composer
-    # FIXME: improve collection and filename retrieval approach
-    collection, filename = basename.split('/')[-2:]
+    collection = os.path.basename(os.path.dirname(x_name))
+    flatten_obj = song.flat.notesAndRests
+    return flatten_obj, piece, composer, collection
 
-    print "Making phrase of {0}".format(piece)
-    flatten_song = song.flat.notesAndRests
-    phrases = split_phrases(basename, flatten_song)
+def phrase_locations_parser(p_name):
+    """Returns a list with event numbers of phrases from a .phrase
+    file path.
+    """
 
+    with open(p_name) as pfile:
+        return [[int(n) for n in loc.split()] for loc in pfile.readlines()]
+
+def split_phrase(flatten_obj, phrase_locations):
+    """Returns a list of phrases from a given music21 flatten score
+    object, and a list of phrase locations.
+    """
+    
+    return [flatten_obj[beg - 1:end] for beg, end in phrase_locations]
+
+
+def make_phrase_obj(basename):
+    """Returns a list of Phrase objects with each phrase of a given
+    file path. The file path must not have extension.
+    """
+
+    p_name = basename + '.phrase'
+    x_name = basename + '.xml'
+    flatten_obj, piece, composer, collection = m21_data(x_name)
+    phrase_locations = phrase_locations_parser(p_name)
+    phrases_obj = split_phrase(flatten_obj, phrase_locations)
+    phrases_number = len(phrases_obj)
+    print "Making {0} phrases of {1}".format(phrases_number, piece)
+    
     result = []
-    for number, phr in enumerate(phrases):
+    for number, phr in enumerate(phrases_obj):
         number = number + 1
         size = len(phr)
-        # insert lily
         contour = Contour(phr)
         contour_size = len(contour)
-        result.append(Phrase(piece, composer, filename, collection, number, size, contour, contour_size))
+        result.append(Phrase(phr, piece, composer, x_name, collection, number, size, contour, contour_size))
 
     return result
-
-
-def files_list(directory=os.path.join(os.getcwd(), 'choros-corpus', 'O Melhor de Pixinguinha')):
-    return [os.path.join(directory, f.split('.phrase')[0]) for f in os.listdir(directory) if f.endswith('.phrase')]
