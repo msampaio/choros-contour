@@ -3,6 +3,7 @@
 
 import music21
 import os
+import glob
 from music21.contour import Contour
 
 
