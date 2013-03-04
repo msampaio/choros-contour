@@ -72,3 +72,25 @@ def make_phrase_obj(basename):
         result.append(Phrase(phr, piece, composer, x_name, collection, number, size, contour, contour_size))
 
     return result
+
+
+def filenames_list(collection, extension='phrase'):
+    """Returns a list of paths that have .phrase."""
+
+    def aux(filename):
+        basename = os.path.basename(filename)
+        songfilename = basename.split('.')[0]
+        return os.path.join(directory, songfilename)
+
+    directory = os.path.join(os.getcwd(), 'choros-corpus', collection)
+    phrase_files = glob.glob(os.path.join(directory, "*.{0}".format(extension)))
+
+    return [aux(filename) for filename in phrase_files]
+
+
+def make_phrase_collection(collection):
+    """Returns a list of phrases objects separated by piece.
+    """
+
+    files = filenames_list(collection)
+    return [make_phrase_obj(f) for f in files]
