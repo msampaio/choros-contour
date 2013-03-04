@@ -4,6 +4,7 @@
 import music21
 import os
 import glob
+import pickle
 from music21.contour import Contour
 
 
@@ -95,3 +96,13 @@ def make_phrase_collection(collection):
 
     files = filenames_list(collection)
     return [make_phrase_obj(f) for f in files]
+
+
+def save_pickle(filename, data):
+    with open(os.path.join("data", filename), 'w') as fileobj:
+        pickle.dump(data, fileobj)
+
+
+def load_pickle(filename):
+    with open(os.path.join("data", filename)) as fileobj:
+        return pickle.load(fileobj)
