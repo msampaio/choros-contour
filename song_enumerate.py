@@ -32,6 +32,10 @@ def generate_pdf(filename):
     # Music21 leaves the lilypond file behind. Let's delete it.
     os.remove(basename)
 
+    new_name = filename.split('.')[0] + '.pdf'
+    old_name = basename + ".pdf"
+    os.rename(old_name, new_name)
+
 if __name__ == '__main__':
     if (len(sys.argv) > 1):
         filenames = sys.argv[1:]
