@@ -9,8 +9,12 @@ from music21.contour import Contour
 
 
 class Phrase(object):
-    def __init__(self, score, piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0):
-        self.score = score
+    # with music21 score
+    # def __init__(self, score, piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0):
+
+    # without music21 score
+    def __init__(self, piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0):
+        # self.score = score
         self.piece = piece
         self.composer = composer
         self.filename = filename
@@ -71,7 +75,11 @@ def make_phrase_obj(basename):
         size = len(phr)
         contour = Contour(phr)
         contour_size = len(contour)
-        result.append(Phrase(phr, piece, composer, x_name, collection, number, size, contour, contour_size))
+        # with music21 object
+        # result.append(Phrase(phr, piece, composer, x_name, collection, number, size, contour, contour_size))
+
+        # without music21 score
+        result.append(Phrase(piece, composer, x_name, collection, number, size, contour, contour_size))
 
     return result
 
