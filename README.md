@@ -37,17 +37,17 @@ You must be in choros virtualenv environment. Inside it, run ipython
 
 ## Save phrases in a variable
 
-    \>\>\> import core
+    >>> import core
 
-    \>\>\> pixinguinha = core.make_phrase_collection("O Melhor de Pixinguinha")
+    >>> pixinguinha = core.make_phrase_collection("O Melhor de Pixinguinha")
 
 ## Save data in a pickle file
 
-    \>\>\> core.save_pickle('pixinguinha', pixinguinha)
+    >>> core.save_pickle('pixinguinha', pixinguinha)
 
 ## Load data from a pickle file
 
-    \>\>\> data = core.load_pickle('pixinguinha')
+    >>> data = core.load_pickle('pixinguinha')
 
 ## Create pdf file with numbered events
 
