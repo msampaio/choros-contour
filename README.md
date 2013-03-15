@@ -54,3 +54,9 @@ You must be in choros virtualenv environment. Inside it, run ipython
 Outside ipython, run:
 
     $ python song_enumerate.py song.xml
+
+## Create separate xml files for each phrase of a song
+
+A .phrase file of the song must be in the same directory of the song. Outside ipython run:
+
+    $ python phrases_save.py song.xml
