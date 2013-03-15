@@ -84,18 +84,22 @@ def make_phrase_obj(basename):
     return result
 
 
+def __path_without_extension(path):
+    """Returns a complete path of a file without extension."""
+
+    directory = os.path.dirname(path)
+    basename = os.path.basename(path)
+    songfilename = basename.split('.')[0]
+    return os.path.join(directory, songfilename)
+
+
 def filenames_list(collection, extension='phrase'):
     """Returns a list of paths that have .phrase."""
-
-    def aux(filename):
-        basename = os.path.basename(filename)
-        songfilename = basename.split('.')[0]
-        return os.path.join(directory, songfilename)
 
     directory = os.path.join(os.getcwd(), 'choros-corpus', collection)
     phrase_files = glob.glob(os.path.join(directory, "*.{0}".format(extension)))
 
-    return [aux(filename) for filename in phrase_files]
+    return [__path_without_extension(filename) for filename in phrase_files]
 
 
 def make_phrase_collection(collection):
