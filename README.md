@@ -25,13 +25,13 @@ Install [virtualenv](http://genosmus.com/handbook/python/), create a
 
 Download `corpus` branch of
 [Kroger's Music21 fork](https://github.com/kroger/music21/tree/contour)
-and, inside new environment:
+and, inside `choros` environment:
 
     $ python setup.py install
 
 # Use
 
-You must be in choros virtualenv environment. Inside it, run ipython
+You must be in `choros` virtualenv environment. Inside it, run ipython
 
     $ ipython
 
@@ -60,3 +60,9 @@ Outside ipython, run:
 A .phrase file of the song must be in the same directory of the song. Outside ipython run:
 
     $ python phrases_save.py song.xml
+
+*Music21 problem*: It's not possible to save data in pickle, and
+ create files for each phrase because of
+ [Music21 problem with pickle](https://groups.google.com/forum/?fromgroups=#!topic/music21list/f8hUZqlhc64).
+ For while, (un)comment lines in `Phrase` class, and `make_phrase_obj`
+ function, in [core.py]() file.
