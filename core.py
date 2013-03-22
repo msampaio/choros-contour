@@ -10,11 +10,11 @@ from music21.contour import Contour
 
 class Phrase(object):
     # with music21 score
-    # def __init__(self, score, piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0):
+    def __init__(self, score, piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0):
+        self.score = score
 
     # without music21 score
-    def __init__(self, piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0):
-        # self.score = score
+    # def __init__(self, piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0):
         self.piece = piece
         self.composer = composer
         self.filename = filename
@@ -56,6 +56,37 @@ def split_phrase(flatten_obj, phrase_locations):
     return [flatten_obj[beg - 1:end] for beg, end in phrase_locations]
 
 
+def color_phrase_obj(basename):
+    """Return a music21 stream object with colored first and last
+    phrase notes."""
+
+    p_name = basename + '.phrase'
+    x_name = basename + '.xml'
+
+    song = music21.parse(x_name)
+    measures = song.parts[0].getElementsByClass('Measure')
+    locations = phrase_locations_parser(p_name)
+
+    beginning = []
+    ending =[]
+
+    for loc in locations:
+        beginning.append(loc[0])
+        ending.append(loc[1])
+
+    n = 0
+    for measure in measures:
+        events = measure.notesAndRests
+        for event in events:
+            n += 1
+            if n in beginning:
+                event.color = 'blue'
+            elif n in ending:
+                event.color = 'red'
+
+    return song
+
+
 def make_phrase_obj(basename):
     """Returns a list of Phrase objects with each phrase of a given
     file path. The file path must not have extension.
@@ -76,10 +107,10 @@ def make_phrase_obj(basename):
         contour = Contour(phr)
         contour_size = len(contour)
         # with music21 object
-        # result.append(Phrase(phr, piece, composer, x_name, collection, number, size, contour, contour_size))
+        result.append(Phrase(phr, piece, composer, x_name, collection, number, size, contour, contour_size))
 
         # without music21 score
-        result.append(Phrase(piece, composer, x_name, collection, number, size, contour, contour_size))
+        # result.append(Phrase(piece, composer, x_name, collection, number, size, contour, contour_size))
 
     return result
 
