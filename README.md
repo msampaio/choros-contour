@@ -66,3 +66,9 @@ A .phrase file of the song must be in the same directory of the song. Outside ip
  [Music21 problem with pickle](https://groups.google.com/forum/?fromgroups=#!topic/music21list/f8hUZqlhc64).
  For while, (un)comment lines in `Phrase` class, and `make_phrase_obj`
  function, in [core.py]() file.
+
+## Create a xml file with colored initial and final notes of phrases
+
+A .phrase file of the song must be in the same directory of the song. Outside ipython run:
+
+    $ python phrases_color.py song.xml
