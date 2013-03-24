@@ -6,7 +6,24 @@
 Um a zero documentation
 =======================
 
-Contents:
+Contents
+--------
+
+.. toctree::
+   :maxdepth: 2
+
+   introduction.rst
+
+Data and Analysis
+-----------------
+
+.. toctree::
+   :maxdepth: 2
+
+   reduced.rst
+
+Documentation
+-------------
 
 .. toctree::
    :maxdepth: 2
