@@ -7,7 +7,7 @@ import song
 import _utils
 
 class Phrase(object):
-    def __init__(self, score='', piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0, time_signature=(0, 0)):
+    def __init__(self, score='', piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0, time_signature=(0, 0), ambitus=0):
         self.score = score
         self.piece = piece
         self.composer = composer
@@ -18,6 +18,7 @@ class Phrase(object):
         self.contour = contour
         self.contour_size = contour_size
         self.time_signature = time_signature
+        self.ambitus = ambitus
 
     def __repr__(self):
         return "<Phrase: {0}. {1}:{2}>".format(self.piece, self.collection, self.number)
@@ -89,13 +90,14 @@ def make_phrase_obj(basename, music21_obj=True):
         size = len(phr)
         contour = Contour(phr)
         contour_size = len(contour)
+        ambitus = phr.analyze("ambitus").chromatic.directed
 
         # option to create Phrase object without music21 attribute to
         # save in pickle
         if not music21_obj:
             phr = ''
 
-        result.append(Phrase(phr, piece, composer, xml_name, collection, number, size, contour, contour_size, time_signature))
+        result.append(Phrase(phr, piece, composer, xml_name, collection, number, size, contour, contour_size, time_signature, ambitus))
 
     return result
 

@@ -45,7 +45,7 @@ def make_basic_data_webpage(alist):
         out.write(rst_header(u"Basic Data", 1))
 
         for name, collection in alist.items():
-            print name
+            print "Processing collection... {0}".format(name)
 
             collection_phrases = _utils.flatten(collection)
 
@@ -55,8 +55,13 @@ def make_basic_data_webpage(alist):
             out.write("Number of Phrases: {0}\n\n".format(len(collection_phrases)))
 
             out.write(rst_header("Time Signature", 3))
-            counter = Counter([phrase.time_signature[0] for phrase in collection_phrases])
-            out.write(rst_table(_utils.percentage(counter)))
+            time_signature = Counter([phrase.time_signature[0] for phrase in collection_phrases])
+            out.write(rst_table(_utils.percentage(time_signature)))
+            out.write("\n\n")
+
+            out.write(rst_header("Ambitus in semitones", 3))
+            ambitus = Counter([phrase.ambitus for phrase in collection_phrases])
+            out.write(rst_table(_utils.percentage(ambitus)))
             out.write("\n\n")
 
 
@@ -64,5 +69,5 @@ if __name__ == '__main__':
     PIXINGUINHA = data.load_pickle("pixinguinha")
 
     make_basic_data_webpage({
-        "Pixinguinha": PIXINGUINHA,
+        "O Melhor de Pixinguinha": PIXINGUINHA,
         })
