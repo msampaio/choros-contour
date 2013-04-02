@@ -20,6 +20,7 @@ Data and Analysis
 .. toctree::
    :maxdepth: 2
 
+   basic_data.rst
    reduced.rst
 
 Documentation

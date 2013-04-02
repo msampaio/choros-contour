@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import math
 import os
 import glob
 
@@ -15,6 +16,25 @@ def flatten(seq):
     return [item for sublist in seq for item in sublist]
 
 
+def sort2(dic):
+    return sorted(dic.items(), reverse=True, key=lambda x: x[1])
+
+
+def percentage(dic):
+    """Return a dictionary with percent values"""
+
+    def perc(val, total):
+        return val * 100.0 / total
+
+    total = sum(dic.values())
+    return {k: perc(v, total) for k, v in dic.items()}
+
+
+def subplot_base(plots_number):
+    maximum = 3
+    square = plots_number ** 0.5
+    rows_columns = math.ceil(square)
+    return int((rows_columns - 1) * 100 + rows_columns * 10)
 
 
 def __path_without_extension(path):
