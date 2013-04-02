@@ -2,11 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import music21
-import os
-import glob
-import pickle
 from music21.contour import Contour
-
+import song
+import _utils
 
 class Phrase(object):
     def __init__(self, score='', piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0, time_signature=(0, 0)):
@@ -25,27 +23,12 @@ class Phrase(object):
         return "<Phrase: {0}. {1}:{2}>".format(self.piece, self.collection, self.number)
 
 
-def m21_data(x_name):
-    """Returns Music21 data (flatten stream object, piece name,
-    composer) and collection from a given xml file path.
-    """
-
-    song = music21.parse(x_name)
-    piece = song.metadata.title
-    composer = song.metadata.composer
-    collection = os.path.basename(os.path.dirname(x_name))
-    flatten_obj = song.flat.notesAndRests
-    time_signature_obj = song.flat.getElementsByClass(music21.meter.TimeSignature)[0]
-    time_signature = time_signature_obj.numerator, time_signature_obj.denominator
-
-    return flatten_obj, piece, composer, collection, time_signature
-
-def phrase_locations_parser(p_name):
+def phrase_locations_parser(phrase_name):
     """Returns a list with event numbers of phrases from a .phrase
     file path.
     """
 
-    with open(p_name) as pfile:
+    with open(phrase_name) as pfile:
         return [[int(n) for n in loc.split()] for loc in pfile.readlines()]
 
 def split_phrase(flatten_obj, phrase_locations):
@@ -60,12 +43,12 @@ def color_phrase_obj(basename):
     """Return a music21 stream object with colored first and last
     phrase notes."""
 
-    p_name = basename + '.phrase'
-    x_name = basename + '.xml'
+    phrase_name = basename + '.phrase'
+    xml_name = basename + '.xml'
 
-    song = music21.parse(x_name)
+    song = music21.parse(xml_name)
     measures = song.parts[0].getElementsByClass('Measure')
-    locations = phrase_locations_parser(p_name)
+    locations = phrase_locations_parser(phrase_name)
 
     beginning = []
     ending =[]
@@ -92,10 +75,10 @@ def make_phrase_obj(basename, music21_obj=True):
     file path. The file path must not have extension.
     """
 
-    p_name = basename + '.phrase'
-    x_name = basename + '.xml'
-    flatten_obj, piece, composer, collection, time_signature = m21_data(x_name)
-    phrase_locations = phrase_locations_parser(p_name)
+    phrase_name = basename + '.phrase'
+    xml_name = basename + '.xml'
+    flatten_obj, piece, composer, collection, time_signature = song.m21_data(xml_name)
+    phrase_locations = phrase_locations_parser(phrase_name)
     phrases_obj = split_phrase(flatten_obj, phrase_locations)
     phrases_number = len(phrases_obj)
     print "Making {0} phrases of {1}".format(phrases_number, piece)
@@ -112,42 +95,14 @@ def make_phrase_obj(basename, music21_obj=True):
         if not music21_obj:
             phr = ''
 
-        result.append(Phrase(phr, piece, composer, x_name, collection, number, size, contour, contour_size, time_signature))
+        result.append(Phrase(phr, piece, composer, xml_name, collection, number, size, contour, contour_size, time_signature))
 
     return result
-
-
-def __path_without_extension(path):
-    """Returns a complete path of a file without extension."""
-
-    directory = os.path.dirname(path)
-    basename = os.path.basename(path)
-    songfilename = basename.split('.')[0]
-    return os.path.join(directory, songfilename)
-
-
-def filenames_list(collection, extension='phrase'):
-    """Returns a list of paths that have .phrase."""
-
-    directory = os.path.join(os.getcwd(), 'choros-corpus', collection)
-    phrase_files = glob.glob(os.path.join(directory, "*.{0}".format(extension)))
-
-    return [__path_without_extension(filename) for filename in phrase_files]
 
 
 def make_phrase_collection(collection, music21_obj=True):
     """Returns a list of phrases objects separated by piece.
     """
 
-    files = filenames_list(collection)
+    files = _utils.filenames_list(collection)
     return [make_phrase_obj(f, music21_obj) for f in files]
-
-
-def save_pickle(filename, data):
-    with open(os.path.join("data", filename), 'w') as fileobj:
-        pickle.dump(data, fileobj)
-
-
-def load_pickle(filename):
-    with open(os.path.join("data", filename)) as fileobj:
-        return pickle.load(fileobj)
