@@ -33,8 +33,11 @@ def phrase_locations_parser(phrase_name):
     file path.
     """
 
+    def make_location(location):
+        return [int(n) for n in location.split()]
+
     with open(phrase_name) as pfile:
-        return [[int(n) for n in loc.split()] for loc in pfile.readlines()]
+        return [make_location(location) for location in pfile.readlines() if make_location(location)]
 
 
 def split_phrase(flatObj, phrase_locations):
