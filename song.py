@@ -5,17 +5,21 @@ import os
 import music21
 
 
-def m21_data(xml_name):
-    """Returns Music21 data (flatten stream object, piece name,
-    composer) and collection from a given xml file path.
-    """
+class Song(object):
+    def __init__(self, score, collection):
+        self.score = score
+        self.piece = score.metadata.title
+        self.composer = score.metadata.composer
+        self.collection = collection
+        self.flatObj = score.flat.notesAndRests
+        time_signature_obj = score.flat.getElementsByClass(music21.meter.TimeSignature)[0]
+        self.time_signature = time_signature_obj.numerator, time_signature_obj.denominator
 
-    song = music21.parse(xml_name)
-    piece = song.metadata.title
-    composer = song.metadata.composer
+    def __repr__(self):
+        return "<Song: {0}. {1}>".format(self.piece, self.collection)
+
+
+def make_song(xml_name):
+    score = music21.parse(xml_name)
     collection = os.path.basename(os.path.dirname(xml_name))
-    flatten_obj = song.flat.notesAndRests
-    time_signature_obj = song.flat.getElementsByClass(music21.meter.TimeSignature)[0]
-    time_signature = time_signature_obj.numerator, time_signature_obj.denominator
-
-    return flatten_obj, piece, composer, collection, time_signature
+    return Song(score, collection)
