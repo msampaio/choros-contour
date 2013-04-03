@@ -6,6 +6,7 @@ from music21.contour import Contour
 import song
 import _utils
 
+
 class Phrase(object):
     def __init__(self, score='', piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0, time_signature=(0, 0), ambitus=0):
         self.score = score
@@ -23,6 +24,9 @@ class Phrase(object):
     def __repr__(self):
         return "<Phrase: {0}. {1}:{2}>".format(self.piece, self.collection, self.number)
 
+    def show(self):
+        self.score.show()
+
 
 def phrase_locations_parser(phrase_name):
     """Returns a list with event numbers of phrases from a .phrase
@@ -31,6 +35,7 @@ def phrase_locations_parser(phrase_name):
 
     with open(phrase_name) as pfile:
         return [[int(n) for n in loc.split()] for loc in pfile.readlines()]
+
 
 def split_phrase(flatObj, phrase_locations):
     """Returns a list of phrases from a given music21 flatten score
