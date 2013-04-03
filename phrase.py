@@ -76,7 +76,7 @@ def color_phrase_obj(basename):
     return song
 
 
-def make_phrase_obj(basename, music21_obj=True):
+def make_phrase(basename, music21_obj=True):
     """Returns a list of Phrase objects with each phrase of a given
     file path. The file path must not have extension.
     """
@@ -119,4 +119,4 @@ def make_phrase_collection(collection, music21_obj=True):
     """
 
     files = _utils.filenames_list(collection)
-    return [make_phrase_obj(f, music21_obj) for f in files]
+    return [make_phrase(f, music21_obj) for f in files]
