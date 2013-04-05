@@ -5,6 +5,7 @@ import math
 import os
 import glob
 import data
+import song
 
 def flatten(seq):
     """Flatten Sequences.
@@ -77,3 +78,32 @@ def make_collection_dict(path='choros-corpus'):
             print "There is no pickle file for collection {0}".format(collection)
 
     return collection_dict
+
+
+def make_composer_dict(path='choros-corpus'):
+    phrases = []
+    for collection in collections_list(path):
+        try:
+            phrases.extend(flatten(data.load_pickle(collection)))
+        except:
+            print "There is no pickle file for collection {0}".format(collection)
+
+    composer_dict = {}
+    for phrase in phrases:
+        composer = phrase.composer
+        if not composer in composer_dict:
+            composer_dict[composer] = []
+        composer_dict[composer].append(phrase)
+
+    return composer_dict
+
+
+def count_songs_from_phrases(phrases):
+    size = len(phrases)
+    songnames = []
+    for n, phr in enumerate(phrases):
+        print "Processing phrase {0} of {1}".format(n, size)
+        songname = phr.piece
+        if songname not in songnames:
+            songnames.append(songname)
+    return len(songnames)

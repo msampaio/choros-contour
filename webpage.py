@@ -33,38 +33,45 @@ def rst_table(dic, size=8):
     return "\n".join(result)
 
 
-# review
+def print_attribute(attribute, collection, out):
+    counter = Counter([getattr(song, attribute) for song in collection])
+    out.write(rst_table(_utils.percentage(counter)))
+    out.write("\n\n")
+
+
 def make_basic_data_webpage(alist):
 
-    def print_attribute(attribute, collection, out):
-        counter = Counter([getattr(song, attribute) for song in collection])
-        out.write(rst_table(_utils.percentage(counter)))
-        out.write("\n\n")
+    def print_data(composer, phrases):
+            print "Processing phrases of composer... {0}".format(composer)
 
-    with codecs.open("doc/basic_data.rst", 'w', encoding="utf-8") as out:
-        out.write(rst_header(u"Basic Data", 1))
+            songs_number = _utils.count_songs_from_phrases(phrases)
 
-        for name, collection in alist.items():
-            print "Processing collection... {0}".format(name)
+            out.write(rst_header(composer, 2))
 
-            collection_phrases = _utils.flatten(collection)
-
-            out.write(rst_header(name, 2))
-
-            out.write("Number of Songs: {0}\n\n".format(len(collection)))
-            out.write("Number of Phrases: {0}\n\n".format(len(collection_phrases)))
+            out.write("Number of Songs: {0}\n\n".format(songs_number))
+            out.write("Number of Phrases: {0}\n\n".format(len(phrases)))
 
             out.write(rst_header("Time Signature", 3))
-            time_signature = Counter([phrase.time_signature[0] for phrase in collection_phrases])
+            time_signature = Counter([phrase.time_signature[0] for phrase in phrases])
             out.write(rst_table(_utils.percentage(time_signature)))
             out.write("\n\n")
 
             out.write(rst_header("Ambitus in semitones", 3))
-            ambitus = Counter([phrase.ambitus for phrase in collection_phrases])
+            ambitus = Counter([phrase.ambitus for phrase in phrases])
             out.write(rst_table(_utils.percentage(ambitus)))
             out.write("\n\n")
 
 
+    with codecs.open("doc/basic_data.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Basic Data", 1))
+
+        all_phrases = _utils.flatten(alist.values())
+        print_data('All composers', all_phrases)
+
+        for composer, phrases in sorted(alist.items()):
+            print_data(composer, phrases)
+
+
 if __name__ == '__main__':
-    collection_dict = _utils.make_collection_dict('choros-corpus')
+    collection_dict = _utils.make_composer_dict('choros-corpus')
     make_basic_data_webpage(collection_dict)
