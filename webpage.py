@@ -64,6 +64,8 @@ def make_basic_data_webpage(alist):
 
     with codecs.open("doc/basic_data.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Basic Data", 1))
+        out.write('This page contains basic data of choros phrases such as time signature organized by composer. ')
+        out.write('The numbers in the table\'s second column are in percent.\n\n')
 
         all_phrases = _utils.flatten(alist.values())
         print_data('All composers', all_phrases)
