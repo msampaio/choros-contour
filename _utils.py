@@ -4,7 +4,7 @@
 import math
 import os
 import glob
-
+import data
 
 def flatten(seq):
     """Flatten Sequences.
@@ -66,3 +66,14 @@ def collections_list(path):
 def mkdir(directory):
     if not os.path.exists(directory):
         os.mkdir(directory)
+
+
+def make_collection_dict(path='choros-corpus'):
+    collection_dict = {}
+    for collection in collections_list(path):
+        try:
+            collection_dict[collection] = data.load_pickle(collection)
+        except:
+            print "There is no pickle file for collection {0}".format(collection)
+
+    return collection_dict

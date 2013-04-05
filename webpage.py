@@ -66,11 +66,5 @@ def make_basic_data_webpage(alist):
 
 
 if __name__ == '__main__':
-    coll_dict = {}
-    for coll in _utils.collections_list('choros-corpus'):
-        try:
-            coll_dict[coll] = data.load_pickle(coll)
-        except:
-            print "There is no pickle file for collection {0}".format(coll)
-
-    make_basic_data_webpage(coll_dict)
+    collection_dict = _utils.make_collection_dict('choros-corpus')
+    make_basic_data_webpage(collection_dict)
