@@ -2,13 +2,13 @@
 
 import os
 import sys
-import core
+import phrase
 
 
 def color_run(filename):
     print "Precessing song... {0}".format(os.path.basename(filename))
     basename = filename.split('.')[0]
-    core.color_phrase_obj(basename).write('musicxml', basename + ' - color.xml')
+    phrase.color_phrase_obj(basename).write('musicxml', basename + ' - color.xml')
 
     
 if __name__ == '__main__':

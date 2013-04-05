@@ -2,22 +2,23 @@
 
 import os
 import sys
-import core
+import phrase
+import _utils
 
 
-def save_phrase(phrase):
-    filename = phrase.filename
-    number = phrase.number
+def save_phrase(phr):
+    filename = phr.filename
+    number = phr.number
     print "Writing phrase {0}".format(number)
 
-    phrase_filename = core.__path_without_extension(filename) + ' - phrase {0}.xml'.format(number)
-    phrase.score.write('musicxml', phrase_filename)
+    phrase_filename = _utils.__path_without_extension(filename) + ' - phrase {0}.xml'.format(number)
+    phr.score.write('musicxml', phrase_filename)
 
 
 def save_phrases(path):
-    filename = core.__path_without_extension(path)
-    phrases = core.make_phrase_obj(filename)
-    [save_phrase(phrase) for phrase in phrases]
+    filename = _utils.__path_without_extension(path)
+    phrases = phrase.make_phrase(filename)
+    [save_phrase(phr) for phr in phrases]
 
 if __name__ == '__main__':
     if (len(sys.argv) > 1):
