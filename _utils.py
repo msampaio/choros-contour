@@ -61,3 +61,8 @@ def collections_list(path):
     for el in exclusion:
         collections.remove(el)
     return collections
+
+
+def mkdir(directory):
+    if not os.path.exists(directory):
+        os.mkdir(directory)

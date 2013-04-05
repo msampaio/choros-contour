@@ -5,6 +5,7 @@ import os
 import re
 import copy
 import shutil
+import _utils
 
 
 def directories(path):
@@ -25,15 +26,12 @@ def filename_pattern(pattern, directory):
 
 def copy_files(pattern, dirs, dest_dir):
 
-    def mkdir(directory):
-        if not os.path.exists(directory):
-            os.mkdir(directory)
     
     for directory in dirs:
         files = filename_pattern(pattern, directory)
         base_dir = os.path.basename(directory)
         dest = os.path.join(dest_dir, base_dir)
-        mkdir(dest)
+        _utils.mkdir(dest)
         for f in files:
             print "Copying file {0}, of collection {1}...".format(f, base_dir)
             shutil.copy(f, dest)

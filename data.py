@@ -18,6 +18,7 @@ def load_pickle(filename):
 
 
 if __name__ == '__main__':
+    _utils.mkdir('data')
     for coll in _utils.collections_list('choros-corpus'):
         print "Processing collection {0}...".format(coll)
         coll_data = phrase.make_phrase_collection(coll, False)
