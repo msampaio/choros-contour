@@ -53,3 +53,11 @@ def filenames_list(collection, extension='phrase'):
     phrase_files = glob.glob(os.path.join(directory, "*.{0}".format(extension)))
 
     return [__path_without_extension(filename) for filename in phrase_files]
+
+
+def collections_list(path):
+    exclusion = ['.DS_Store', '.git', 'README.md']
+    collections = os.listdir(path)
+    for el in exclusion:
+        collections.remove(el)
+    return collections

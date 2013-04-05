@@ -66,10 +66,11 @@ def make_basic_data_webpage(alist):
 
 
 if __name__ == '__main__':
-    PIXINGUINHA = data.load_pickle("pixinguinha")
-    MELHOR_CHORO_2 = data.load_pickle("melhorChoro_2")
+    coll_dict = {}
+    for coll in _utils.collections_list('choros-corpus'):
+        try:
+            coll_dict[coll] = data.load_pickle(coll)
+        except:
+            print "There is no pickle file for collection {0}".format(coll)
 
-    make_basic_data_webpage({
-        "O Melhor de Pixinguinha": PIXINGUINHA,
-        "O Melhor do Choro volume 2": MELHOR_CHORO_2,
-        })
+    make_basic_data_webpage(coll_dict)

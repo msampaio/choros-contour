@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import _utils
 import pickle
 import phrase
 
@@ -17,8 +18,10 @@ def load_pickle(filename):
 
 
 if __name__ == '__main__':
-    pixinguinha = phrase.make_phrase_collection("O Melhor de Pixinguinha", False)
-    melhorChoro_2 = phrase.make_phrase_collection("O Melhor do Choro volume 2", False)
-
-    save_pickle("pixinguinha", pixinguinha)
-    save_pickle("melhorChoro_2", melhorChoro_2)
+    for coll in _utils.collections_list('choros-corpus'):
+        print "Processing collection {0}...".format(coll)
+        coll_data = phrase.make_phrase_collection(coll, False)
+        if coll_data:
+            save_pickle(coll, coll_data)
+        else:
+            print "No .phrase or .xml phrases in collection {0}".format(coll)
