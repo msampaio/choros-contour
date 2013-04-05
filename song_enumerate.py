@@ -2,6 +2,8 @@
 
 import os
 import sys
+import shutil
+import _utils
 import music21
 
 def parse_music(filename):
@@ -23,18 +25,32 @@ def count_items(score):
 
 def generate_pdf(filename):
     # If we use a file with spaces we'll have problems
-    basename = os.path.splitext(filename)[0].replace(" ", "-")
+
+    # copy files to temporary directory and rename files
+    tmpdir = '/tmp/choros'
+    _utils.mkdir(tmpdir)
+    dirname = os.path.dirname(filename)
+    basename = os.path.basename(filename)
+    shutil.copy(filename, tmpdir)
+    tmpname = os.path.join(tmpdir, basename)
+    nospacename = os.path.splitext(tmpname)[0].replace(" ", "-")
+
+    # count items and generate pdf
     score = parse_music(filename)
     count_items(score)
     lily = music21.lily.translate.LilypondConverter()
     lily.loadObjectFromScore(score)
-    lily.createPDF(basename)
-    # Music21 leaves the lilypond file behind. Let's delete it.
-    os.remove(basename)
+    lily.createPDF(nospacename)
 
-    new_name = filename.split('.')[0] + '.pdf'
-    old_name = basename + ".pdf"
+    # rename and move to original directory
+    new_name = os.path.join(tmpdir, basename.split('.')[0] + '.pdf')
+    old_name = nospacename + ".pdf"
     os.rename(old_name, new_name)
+    shutil.copy(new_name, dirname)
+
+    # Music21 leaves the lilypond file behind. Let's delete it.
+    for f in tmpname, new_name, nospacename:
+        os.remove(f)
 
 if __name__ == '__main__':
     if (len(sys.argv) > 1):
