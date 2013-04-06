@@ -1,4 +1,0 @@
-Reduced contours
-================
-
-[insert data]

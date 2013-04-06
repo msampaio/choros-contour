@@ -7,6 +7,7 @@ from collections import Counter
 import _utils
 import data
 import plot
+import contour
 
 
 class WebpageError(Exception):
@@ -94,6 +95,40 @@ def make_basic_data_webpage(alist):
         for composer, phrases in sorted(alist.items()):
             print_basic_data(out, composer, phrases, all_phrases_number)
 
+
+def print_contour(out, composer, phrases, all_phrases_number):
+
+    print "Processing phrases of composer... {0}".format(composer)
+
+    songs_number = _utils.count_songs_from_phrases(phrases)
+    percentual_all_phrases = len(phrases) / float(all_phrases_number) * 100
+
+    out.write(rst_header(composer, 2))
+
+    out.write("Number of Songs: {0}\n\n".format(songs_number))
+    if percentual_all_phrases != 100:
+        out.write("Percentual of all phrases: {0:.2f}%\n\n".format(percentual_all_phrases))
+    out.write("Number of Phrases: {0}\n\n".format(len(phrases)))
+
+    print_plot(out, 'Morris Reduction', composer, contour.contour_reduction_count(phrases), plot.simple_pie)
+
+
+def make_contour_webpage(alist):
+
+    with codecs.open("doc/contour.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Contour", 1))
+        out.write('This page contains contour data of choros phrases such as Morris reduction organized by composer. ')
+        out.write('The numbers in the table\'s second column are in percent.\n\n')
+
+        all_phrases = _utils.flatten(alist.values())
+        all_phrases_number = len(all_phrases)
+        print_contour(out, 'All composers', all_phrases, all_phrases_number)
+
+        for composer, phrases in sorted(alist.items()):
+            print_contour(out, composer, phrases, all_phrases_number)
+
+
 if __name__ == '__main__':
     collection_dict = _utils.make_composer_dict('choros-corpus')
     make_basic_data_webpage(collection_dict)
+    make_contour_webpage(collection_dict)

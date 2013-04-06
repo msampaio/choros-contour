@@ -21,7 +21,7 @@ Data and Analysis
    :maxdepth: 2
 
    basic_data.rst
-   reduced.rst
+   contour.rst
 
 Documentation
 -------------

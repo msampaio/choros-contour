@@ -28,5 +28,6 @@ pip-log.txt
 .mr.developer.cfg
 /doc/_build/
 /data/
-/doc/basic_data.rst
 /doc/contour/
+/doc/basic_data.rst
+/doc/contour.rst
