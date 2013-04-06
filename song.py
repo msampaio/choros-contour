@@ -9,7 +9,7 @@ class Song(object):
     def __init__(self, score, collection, filename):
         self.score = score
         self.piece = score.metadata.title
-        self.composer = score.metadata.composer
+        self.composer = " ".join(score.metadata.composer.replace('\n', ' ').split())
         self.collection = collection
         self.flatObj = score.flat.notesAndRests
         time_signature_obj = score.flat.getElementsByClass(music21.meter.TimeSignature)[0]
