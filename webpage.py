@@ -69,7 +69,7 @@ def make_basic_data_webpage(alist):
         out.write("Number of Phrases: {0}\n\n".format(len(phrases)))
 
         aux('Time signature', Counter([phrase.time_signature[0] for phrase in phrases]), plot.simple_pie)
-        aux('Ambitus in semitones', Counter([phrase.ambitus for phrase in phrases]), plot.simple_pie)
+        aux('Ambitus in semitones', Counter([phrase.ambitus for phrase in phrases]), plot.simple_scatter)
 
     with codecs.open("doc/basic_data.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Basic Data", 1))

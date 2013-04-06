@@ -48,3 +48,24 @@ def simple_pie(values, labels=None, title=None, filename=None):
     if not filename:
         filename = '/tmp/foo.png'
     plt.savefig(filename, dpi=72)
+
+
+def simple_scatter(y, x, title=None, filename=None):
+    """Accepts a sequence of two sequences of values."""
+
+    range_numbers = range(len(x))
+    # make a square figure and axes
+    plt.figure(1, figsize=(4,4))
+
+    # if not labels:
+    #     labels = [j + 1 for j in range_numbers]
+
+    # x, y = values
+    plt.scatter(x, y, c='k')
+
+    if title:
+        plt.title(title, bbox={'facecolor':'0.8', 'pad':5})
+
+    if not filename:
+        filename = '/tmp/foo.png'
+    plt.savefig(filename, dpi=72)
