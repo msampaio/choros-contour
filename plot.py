@@ -57,11 +57,9 @@ def simple_scatter(y, x, title=None, filename=None):
     # make a square figure and axes
     plt.figure(1, figsize=(4,4))
 
-    # if not labels:
-    #     labels = [j + 1 for j in range_numbers]
-
-    # x, y = values
-    plt.scatter(x, y, c='k')
+    # FIXME: use values between 10 and 500
+    area = [i * 5 for i in y]
+    plt.scatter(x, y, s=area, c='k')
 
     if title:
         plt.title(title, bbox={'facecolor':'0.8', 'pad':5})
