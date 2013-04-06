@@ -48,7 +48,10 @@ def make_basic_data_webpage(alist):
 
         def aux(title, data, plot_fn):
             # plotting
-            dest = os.path.join("doc/contour", composer.replace(" ", "-") + "-" + title.replace(" ", "-") + ".png")
+            directory = "doc/contour"
+            r_composer = composer.replace(" ", "-")
+            r_title = title.replace(" ", "-")
+            dest = _utils.unicode_normalize(os.path.join(directory, r_composer + "-" + r_title + ".png"))
             pngfile = os.path.splitext(os.path.basename(dest))[0]
             plot.clear()
             plot_fn(data.values(), data.keys(), None, dest)

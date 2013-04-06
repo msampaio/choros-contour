@@ -6,6 +6,8 @@ import os
 import glob
 import data
 import song
+import unicodedata
+
 
 def flatten(seq):
     """Flatten Sequences.
@@ -107,3 +109,7 @@ def count_songs_from_phrases(phrases):
         if songname not in songnames:
             songnames.append(songname)
     return len(songnames)
+
+
+def unicode_normalize(string):
+    return unicodedata.normalize('NFKD', unicode(string)).encode('ascii', 'ignore')
