@@ -54,7 +54,10 @@ def make_basic_data_webpage(alist):
             dest = _utils.unicode_normalize(os.path.join(directory, r_composer + "-" + r_title + ".png"))
             pngfile = os.path.splitext(os.path.basename(dest))[0]
             plot.clear()
-            plot_fn(data.values(), data.keys(), None, dest)
+            if plot_fn == plot.simple_scatter:
+                plot_fn(data.values(), data.keys(), ['Number of Phrases', title], None, dest)
+            else:
+                plot_fn(data.values(), data.keys(), None, dest)
 
             # print in rst
             out.write(rst_header(title, 3))
