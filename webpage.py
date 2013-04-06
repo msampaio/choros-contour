@@ -2,9 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import codecs
+import os
 from collections import Counter
 import _utils
 import data
+import plot
+
 
 class WebpageError(Exception):
     pass
@@ -42,25 +45,31 @@ def print_attribute(attribute, collection, out):
 def make_basic_data_webpage(alist):
 
     def print_data(composer, phrases):
-            print "Processing phrases of composer... {0}".format(composer)
 
-            songs_number = _utils.count_songs_from_phrases(phrases)
+        def aux(title, data, plot_fn):
+            # plotting
+            dest = os.path.join("doc/contour", composer.replace(" ", "-") + "-" + title.replace(" ", "-") + ".png")
+            pngfile = os.path.splitext(os.path.basename(dest))[0]
+            plot.clear()
+            plot_fn(data.values(), data.keys(), None, dest)
 
-            out.write(rst_header(composer, 2))
-
-            out.write("Number of Songs: {0}\n\n".format(songs_number))
-            out.write("Number of Phrases: {0}\n\n".format(len(phrases)))
-
-            out.write(rst_header("Time Signature", 3))
-            time_signature = Counter([phrase.time_signature[0] for phrase in phrases])
-            out.write(rst_table(_utils.percentage(time_signature)))
+            # print in rst
+            out.write(rst_header(title, 3))
+            out.write(rst_image(pngfile, "contour", 90))
+            out.write(rst_table(_utils.percentage(data)))
             out.write("\n\n")
 
-            out.write(rst_header("Ambitus in semitones", 3))
-            ambitus = Counter([phrase.ambitus for phrase in phrases])
-            out.write(rst_table(_utils.percentage(ambitus)))
-            out.write("\n\n")
+        print "Processing phrases of composer... {0}".format(composer)
 
+        songs_number = _utils.count_songs_from_phrases(phrases)
+
+        out.write(rst_header(composer, 2))
+
+        out.write("Number of Songs: {0}\n\n".format(songs_number))
+        out.write("Number of Phrases: {0}\n\n".format(len(phrases)))
+
+        aux('Time signature', Counter([phrase.time_signature[0] for phrase in phrases]), plot.simple_pie)
+        aux('Ambitus in semitones', Counter([phrase.ambitus for phrase in phrases]), plot.simple_pie)
 
     with codecs.open("doc/basic_data.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Basic Data", 1))
