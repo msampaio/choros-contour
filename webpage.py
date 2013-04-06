@@ -44,7 +44,7 @@ def print_attribute(attribute, collection, out):
 
 def make_basic_data_webpage(alist):
 
-    def print_data(composer, phrases):
+    def print_data(composer, phrases, all_phrases_number):
 
         def aux(title, data, plot_fn):
             # plotting
@@ -65,10 +65,13 @@ def make_basic_data_webpage(alist):
         print "Processing phrases of composer... {0}".format(composer)
 
         songs_number = _utils.count_songs_from_phrases(phrases)
+        percentual_all_phrases = len(phrases) / float(all_phrases_number) * 100
 
         out.write(rst_header(composer, 2))
 
         out.write("Number of Songs: {0}\n\n".format(songs_number))
+        if percentual_all_phrases != 100:
+            out.write("Percentual of all phrases: {0:.2f}%\n\n".format(percentual_all_phrases))
         out.write("Number of Phrases: {0}\n\n".format(len(phrases)))
 
         aux('Time signature', Counter([phrase.time_signature[0] for phrase in phrases]), plot.simple_pie)
@@ -80,10 +83,11 @@ def make_basic_data_webpage(alist):
         out.write('The numbers in the table\'s second column are in percent.\n\n')
 
         all_phrases = _utils.flatten(alist.values())
-        print_data('All composers', all_phrases)
+        all_phrases_number = len(all_phrases)
+        print_data('All composers', all_phrases, all_phrases_number)
 
         for composer, phrases in sorted(alist.items()):
-            print_data(composer, phrases)
+            print_data(composer, phrases, all_phrases_number)
 
 
 if __name__ == '__main__':
