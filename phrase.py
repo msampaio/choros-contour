@@ -40,12 +40,12 @@ def phrase_locations_parser(phrase_name):
         return [make_location(location) for location in pfile.readlines() if make_location(location)]
 
 
-def split_phrase(flatObj, phrase_locations):
+def split_phrase(songObj, phrase_locations):
     """Returns a list of phrases from a given music21 flatten score
     object, and a list of phrase locations.
     """
-    
-    return [flatObj[beg - 1:end] for beg, end in phrase_locations]
+
+    return [songObj.get_phrase(beg, end) for beg, end in phrase_locations]
 
 
 def color_phrase_obj(basename):
@@ -88,14 +88,13 @@ def make_phrase(basename, music21_obj=True):
     xml_name = basename + '.xml'
 
     songObj = song.make_song(xml_name)
-    flatObj = songObj.flatObj
     piece = songObj.piece
     composer = songObj.composer
     collection = songObj.collection
     time_signature = songObj.time_signature
 
     phrase_locations = phrase_locations_parser(phrase_name)
-    phrases_obj = split_phrase(flatObj, phrase_locations)
+    phrases_obj = split_phrase(songObj, phrase_locations)
     phrases_number = len(phrases_obj)
     print "Making {0} phrases of {1}".format(phrases_number, piece)
 

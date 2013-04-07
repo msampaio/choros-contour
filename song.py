@@ -11,7 +11,6 @@ class Song(object):
         self.piece = score.metadata.title
         self.composer = " ".join(score.metadata.composer.replace('\n', ' ').split())
         self.collection = collection
-        self.flatObj = score.flat.notesAndRests
         time_signature_obj = score.flat.getElementsByClass(music21.meter.TimeSignature)[0]
         self.time_signature = time_signature_obj.numerator, time_signature_obj.denominator
         self.filename = filename
