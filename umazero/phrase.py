@@ -8,7 +8,7 @@ import _utils
 
 
 class Phrase(object):
-    def __init__(self, score='', piece='', composer='', filename='', collection='', number=0, size=0, contour=None, contour_size=0, time_signature=(0, 0), ambitus=0):
+    def __init__(self, score=None, piece=None, composer=None, filename=None, collection=None, number=None, size=None, contour=None, contour_size=None, time_signature=None, ambitus=None):
         self.score = score
         self.piece = piece
         self.composer = composer
@@ -109,7 +109,7 @@ def make_phrase(basename, music21_obj=True):
         # option to create Phrase object without music21 attribute to
         # save in pickle
         if not music21_obj:
-            phr = ''
+            phr = None
 
         result.append(Phrase(phr, piece, composer, xml_name, collection, number, size, contour, contour_size, time_signature, ambitus))
 
