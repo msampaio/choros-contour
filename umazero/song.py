@@ -43,6 +43,8 @@ class Song(object):
         measures = range(phrase_measures[0], phrase_measures[1] + 1)
 
         sNew = music21.stream.Stream()
+        sNew.initial = initial
+        sNew.final = final
         for m in part:
             if type(m) == music21.stream.Measure and m.number in measures:
                 sNew.append(m)

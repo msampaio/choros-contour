@@ -8,7 +8,7 @@ import _utils
 
 
 class Phrase(object):
-    def __init__(self, score=None, piece=None, composer=None, filename=None, collection=None, number=None, size=None, contour=None, contour_size=None, time_signature=None, ambitus=None):
+    def __init__(self, score=None, piece=None, composer=None, filename=None, collection=None, number=None, size=None, contour=None, contour_size=None, time_signature=None, ambitus=None, initial=None, final=None):
         self.score = score
         self.piece = piece
         self.composer = composer
@@ -20,12 +20,22 @@ class Phrase(object):
         self.contour_size = contour_size
         self.time_signature = time_signature
         self.ambitus = ambitus
+        self.initial = initial
+        self.final = final
 
     def __repr__(self):
         return "<Phrase: {0}. {1}:{2}>".format(self.piece, self.collection, self.number)
 
     def show(self):
-        self.score.show()
+        if self.score:
+            self.score.show()
+
+    def make_phrase_score(self):
+        if not self.score:
+            s = song.make_song(self.filename)
+            return s.get_phrase(self.initial, self.final)
+        else:
+            return self.score
 
 
 def phrase_locations_parser(phrase_name):
@@ -105,13 +115,15 @@ def make_phrase(basename, music21_obj=True):
         contour = Contour(phr)
         contour_size = len(contour)
         ambitus = phr.analyze("ambitus").chromatic.directed
+        initial = phr.initial
+        final = phr.final
 
         # option to create Phrase object without music21 attribute to
         # save in pickle
         if not music21_obj:
             phr = None
 
-        result.append(Phrase(phr, piece, composer, xml_name, collection, number, size, contour, contour_size, time_signature, ambitus))
+        result.append(Phrase(phr, piece, composer, xml_name, collection, number, size, contour, contour_size, time_signature, ambitus, initial, final))
 
     return result
 
