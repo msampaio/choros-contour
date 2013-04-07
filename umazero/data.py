@@ -8,6 +8,7 @@ import phrase
 
 
 def save_pickle(filename, data):
+    _utils.mkdir('data')
     with open(os.path.join("data", filename), 'w') as fileobj:
         pickle.dump(data, fileobj)
 
@@ -17,8 +18,7 @@ def load_pickle(filename):
         return pickle.load(fileobj)
 
 
-if __name__ == '__main__':
-    _utils.mkdir('data')
+def run():
     for coll in _utils.collections_list('choros-corpus'):
         print "Processing collection {0}...".format(coll)
         coll_data = phrase.make_phrase_collection(coll, False)
@@ -26,3 +26,7 @@ if __name__ == '__main__':
             save_pickle(coll, coll_data)
         else:
             print "No .phrase or .xml phrases in collection {0}".format(coll)
+
+
+if __name__ == '__main__':
+    run()

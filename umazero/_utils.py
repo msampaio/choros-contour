@@ -62,7 +62,10 @@ def collections_list(path):
     exclusion = ['.DS_Store', '.git', 'README.md']
     collections = os.listdir(path)
     for el in exclusion:
-        collections.remove(el)
+        try:
+            collections.remove(el)
+        except:
+            print 'The file {0} is not in path {1}'.format(el, path)
     return collections
 
 

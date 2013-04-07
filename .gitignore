@@ -26,8 +26,8 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
-/doc/_build/
+/docs/_build/
 /data/
-/doc/contour/
-/doc/basic_data.rst
-/doc/contour.rst
+/docs/contour/
+/docs/basic_data.rst
+/docs/contour.rst
