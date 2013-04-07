@@ -1,3 +1,6 @@
+SRC_DIR = umazero
+TEST_DIR = tests
+
 all: save_pickle view
 
 view: docs
@@ -14,10 +17,17 @@ webpage:
 # the saved data with save_pickle doesn't work
 # directory
 save_pickle:
-	python ./umazero/data.py
+	python $(SRC_DIR)/data.py
 
 copy:
-	python ./umazero/copy_files.py
+	python $(SRC_DIR)/copy_files.py
 
 clean:
 	find . -name "*.pyc" | xargs rm
+
+test:
+	python -m unittest discover -p 'test_*.py'
+
+check:
+	pep8 *.py $(SRC_DIR)/*.py $(TEST_DIR)/*.py
+
