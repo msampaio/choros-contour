@@ -45,7 +45,7 @@ def print_attribute(attribute, collection, out):
 
 def print_plot(out, title, composer, data, plot_fn):
     # plotting
-    directory = "doc/contour"
+    directory = "docs/contour"
     r_composer = composer.replace(" ", "-")
     r_title = title.replace(" ", "-")
     dest = _utils.unicode_normalize(os.path.join(directory, r_composer + "-" + r_title + ".png"))
@@ -83,7 +83,7 @@ def print_basic_data(out, composer, phrases, all_phrases_number):
 
 def make_basic_data_webpage(alist):
 
-    with codecs.open("doc/basic_data.rst", 'w', encoding="utf-8") as out:
+    with codecs.open("docs/basic_data.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Basic Data", 1))
         out.write('This page contains basic data of choros phrases such as time signature organized by composer. ')
         out.write('The numbers in the table\'s second column are in percent.\n\n')
@@ -115,7 +115,7 @@ def print_contour(out, composer, phrases, all_phrases_number):
 
 def make_contour_webpage(alist):
 
-    with codecs.open("doc/contour.rst", 'w', encoding="utf-8") as out:
+    with codecs.open("docs/contour.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Contour", 1))
         out.write('This page contains contour data of choros phrases such as Morris reduction organized by composer. ')
         out.write('The numbers in the table\'s second column are in percent.\n\n')
@@ -128,7 +128,12 @@ def make_contour_webpage(alist):
             print_contour(out, composer, phrases, all_phrases_number)
 
 
-if __name__ == '__main__':
+def run():
+    _utils.mkdir('docs/contour')
     collection_dict = _utils.make_composer_dict('choros-corpus')
     make_basic_data_webpage(collection_dict)
     make_contour_webpage(collection_dict)
+
+
+if __name__ == '__main__':
+    run()
