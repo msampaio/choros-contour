@@ -111,6 +111,7 @@ def print_contour(out, composer, phrases, all_phrases_number):
     out.write("Number of Phrases: {0}\n\n".format(len(phrases)))
 
     print_plot(out, 'Morris Reduction', composer, contour.contour_reduction_count(phrases), plot.simple_pie)
+    print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(phrases), plot.simple_scatter)
 
 
 def make_contour_webpage(alist):
