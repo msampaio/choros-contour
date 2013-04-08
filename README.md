@@ -16,12 +16,17 @@ For more information, http://genosmus.com/pesquisa/contornos/choro/
 # Install
 
 Install [virtualenv](http://genosmus.com/handbook/python/), create a
-`choros` environment and, inside it:
+`choros` environment, activate it and run:
 
     $ easy_install pip
     $ pip install ipython numpy
     $ pip install matplotlib
     $ pip install -r requirements.txt
+
+Initiate and update submodule
+
+    $ git submodule init
+    $ git submodule update
 
 Download `corpus` branch of
 [Kroger's Music21 fork](https://github.com/kroger/music21/tree/contour)
