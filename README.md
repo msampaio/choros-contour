@@ -35,19 +35,40 @@ You must be in `choros` virtualenv environment. Inside it, run ipython
 
     $ ipython
 
-## Save phrases in a variable
+Then, import `umazero` package
 
-    >>> import core
+    >>> import umazero
 
-    >>> pixinguinha = core.make_phrase_collection("O Melhor de Pixinguinha")
+## Create phrases and save them in a variable:
+
+    >>> pixinguinha = umazero.make_phrase_collection("O Melhor de Pixinguinha")
 
 ## Save data in a pickle file
 
-    >>> core.save_pickle('pixinguinha', pixinguinha)
+    >>> umazero.data.save_pickle('pixinguinha', pixinguinha)
 
 ## Load data from a pickle file
 
-    >>> data = core.load_pickle('pixinguinha')
+    >>> data = umazero.data.load_pickle('pixinguinha')
+
+## Create an object with all phrases to make queries
+
+If the argument is `False`, the data will be loaded from the pickle
+files. Default is to create all_phrases.
+
+    >>> phrases = umazero.make_allphrases(False)
+
+## Make queries
+
+It's possible to make several queries from an `AllPhrases` object,
+such as by composer, ambitus and Morris reduced contour:
+
+    >>> phrases.byComposer('Pixinguinha')
+
+    >>> phrases.byAmbitus(22)
+
+    >>> from music21.contour import Contour
+    >>> phrases.byMorrisReduction(Contour([0, 2, 1]))
 
 ## Create pdf file with numbered events
 
