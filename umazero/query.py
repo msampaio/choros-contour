@@ -29,8 +29,8 @@ class AllPhrases(object):
         result = [[phr for phr in song_phrases if phr.ambitus == ambitus] for song_phrases in self.songs_phrases]
         return AllPhrases([el for el in result if el], self.stream)
 
-    def getByMorrisReduction(self, morris_reduction_cseg):
-        result = [[phr for phr in song_phrases if phr.contour.reduction_morris()[0] == morris_reduction_cseg] for song_phrases in self.songs_phrases]
+    def getByContourPrime(self, contour_prime):
+        result = [[phr for phr in song_phrases if phr.contour.reduction_morris()[0] == contour_prime] for song_phrases in self.songs_phrases]
         return AllPhrases([el for el in result if el], self.stream)
 
 
