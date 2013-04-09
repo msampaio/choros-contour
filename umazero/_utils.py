@@ -108,7 +108,7 @@ def count_songs_from_phrases(phrases):
     songnames = []
     for n, phr in enumerate(phrases):
         print "Processing phrase {0} of {1}".format(n, size)
-        songname = phr.piece
+        songname = phr.title
         if songname not in songnames:
             songnames.append(songname)
     return len(songnames)
