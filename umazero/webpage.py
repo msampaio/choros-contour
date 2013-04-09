@@ -110,7 +110,7 @@ def print_contour(out, composer, phrases, all_phrases_number):
         out.write("Percentual of all phrases: {0:.2f}%\n\n".format(percentual_all_phrases))
     out.write("Number of Phrases: {0}\n\n".format(len(phrases)))
 
-    print_plot(out, 'Morris Reduction', composer, contour.contour_reduction_count(phrases), plot.simple_pie)
+    print_plot(out, 'Contour Prime', composer, contour.contour_reduction_count(phrases), plot.simple_pie)
     print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(phrases), plot.simple_scatter)
 
 
@@ -118,7 +118,7 @@ def make_contour_webpage(alist):
 
     with codecs.open("docs/contour.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Contour", 1))
-        out.write('This page contains contour data of choros phrases such as Morris reduction organized by composer. ')
+        out.write('This page contains contour data of choros phrases such as Contour Primes organized by composer. ')
         out.write('The numbers in the table\'s second column are in percent.\n\n')
 
         all_phrases = _utils.flatten(alist.values())
