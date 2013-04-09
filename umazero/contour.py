@@ -14,11 +14,9 @@ def counting(seq):
     return Counter(seq)
 
 
-def contour_reduction_count(phrases):
-    reduced_phrases = [phr.contour.reduction_morris()[0] for phr in phrases]
-    return counting(reduced_phrases)
+def contour_prime_count(phrases):
+    return counting([phr.contour.reduction_morris()[0] for phr in phrases])
 
 
 def contour_highest_cp_count(phrases):
-    highest_cp = [max(phr.contour.translation()) for phr in phrases]
-    return counting(highest_cp)
+    return counting([max(phr.contour.translation()) for phr in phrases])
