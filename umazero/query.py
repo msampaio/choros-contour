@@ -17,6 +17,9 @@ class AllPhrases(object):
     def __repr__(self):
         return "<AllPhrases: {0} songs, {1} phrases. Stream {2}>".format(self.songs_number, self.phrases_number, self.stream)
 
+    def getByIndex(self, index):
+        return self.flatten[index]
+
     def getByComposer(self, composer):
         result = [[phr for phr in song_phrases if phr.composer == composer] for song_phrases in self.songs_phrases]
         return AllPhrases([el for el in result if el], self.stream)
