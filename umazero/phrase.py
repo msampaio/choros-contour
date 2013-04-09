@@ -8,9 +8,9 @@ import _utils
 
 
 class Phrase(object):
-    def __init__(self, score=None, piece=None, composer=None, filename=None, collection=None, number=None, size=None, contour=None, contour_size=None, time_signature=None, ambitus=None, initial=None, final=None):
+    def __init__(self, score=None, title=None, composer=None, filename=None, collection=None, number=None, size=None, contour=None, contour_size=None, time_signature=None, ambitus=None, initial=None, final=None):
         self.score = score
-        self.piece = piece
+        self.title = title
         self.composer = composer
         self.filename = filename
         self.collection = collection
@@ -24,7 +24,7 @@ class Phrase(object):
         self.final = final
 
     def __repr__(self):
-        return "<Phrase: {0}. {1}:{2}>".format(self.piece, self.collection, self.number)
+        return "<Phrase: {0}. {1}:{2}>".format(self.title, self.collection, self.number)
 
     def show(self):
         if self.score:
@@ -98,7 +98,7 @@ def make_phrase(basename, music21_obj=True):
     xml_name = basename + '.xml'
 
     songObj = song.make_song(xml_name)
-    piece = songObj.piece
+    title = songObj.title
     composer = songObj.composer
     collection = songObj.collection
     time_signature = songObj.time_signature
@@ -106,7 +106,7 @@ def make_phrase(basename, music21_obj=True):
     phrase_locations = phrase_locations_parser(phrase_name)
     phrases_obj = split_phrase(songObj, phrase_locations)
     phrases_number = len(phrases_obj)
-    print "Making {0} phrases of {1}".format(phrases_number, piece)
+    print "Making {0} phrases of {1}".format(phrases_number, title)
 
     result = []
     for number, phr in enumerate(phrases_obj):
@@ -123,7 +123,7 @@ def make_phrase(basename, music21_obj=True):
         if not music21_obj:
             phr = None
 
-        result.append(Phrase(phr, piece, composer, xml_name, collection, number, size, contour, contour_size, time_signature, ambitus, initial, final))
+        result.append(Phrase(phr, title, composer, xml_name, collection, number, size, contour, contour_size, time_signature, ambitus, initial, final))
 
     return result
 

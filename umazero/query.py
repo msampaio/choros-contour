@@ -22,7 +22,7 @@ class AllPhrases(object):
         return AllPhrases([el for el in result if el], self.stream)
 
     def getByTitle(self, title):
-        result = [[phr for phr in song_phrases if phr.piece == title] for song_phrases in self.songs_phrases]
+        result = [[phr for phr in song_phrases if phr.title == title] for song_phrases in self.songs_phrases]
         return AllPhrases([el for el in result if el], self.stream)
 
     def getByAmbitus(self, ambitus):

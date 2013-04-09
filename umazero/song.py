@@ -8,7 +8,7 @@ import music21
 class Song(object):
     def __init__(self, score, collection, filename):
         self.score = score
-        self.piece = score.metadata.title
+        self.title = score.metadata.title
         self.composer = " ".join(score.metadata.composer.replace('\n', ' ').split())
         self.collection = collection
         time_signature_obj = score.flat.getElementsByClass(music21.meter.TimeSignature)[0]
@@ -16,7 +16,7 @@ class Song(object):
         self.filename = filename
 
     def __repr__(self):
-        return "<Song: {0}. {1}>".format(self.piece, self.collection)
+        return "<Song: {0}. {1}>".format(self.title, self.collection)
 
     def show(self):
         music21.parse(self.filename).show()
