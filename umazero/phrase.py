@@ -26,9 +26,9 @@ class Phrase(object):
     def __repr__(self):
         return "<Phrase: {0}. {1}:{2}>".format(self.title, self.collection, self.number)
 
-    def show(self):
+    def show(self, arg=None):
         if self.score:
-            self.score.show()
+            self.score.show(arg)
 
     def make_phrase_score(self):
         if not self.score:

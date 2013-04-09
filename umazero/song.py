@@ -18,8 +18,8 @@ class Song(object):
     def __repr__(self):
         return "<Song: {0}. {1}>".format(self.title, self.collection)
 
-    def show(self):
-        music21.parse(self.filename).show()
+    def show(self, arg=None):
+        music21.parse(self.filename).show(arg)
 
     def get_phrase(self, initial, final):
 
