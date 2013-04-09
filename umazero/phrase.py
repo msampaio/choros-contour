@@ -33,9 +33,8 @@ class Phrase(object):
     def make_phrase_score(self):
         if not self.score:
             s = song.make_song(self.filename)
-            return s.get_phrase(self.initial, self.final)
-        else:
-            return self.score
+            self.score = s.get_phrase(self.initial, self.final)
+        return self
 
 
 def phrase_locations_parser(phrase_name):
