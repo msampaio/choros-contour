@@ -116,3 +116,16 @@ def count_songs_from_phrases(phrases):
 
 def unicode_normalize(string):
     return unicodedata.normalize('NFKD', unicode(string)).encode('ascii', 'ignore')
+
+
+def group_minorities(data, percentage=0.05):
+    total = sum(data.viewvalues())
+    smallest = total * percentage
+    minors = 0
+    for k, v in data.items():
+        if v <= smallest:
+            minors += v
+            data.pop(k)
+    if minors != 0:
+        data['Others'] = minors
+    return data

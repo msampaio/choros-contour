@@ -30,7 +30,12 @@ def simple_pie(values, labels=None, title=None, filename=None):
         labels = [j + 1 for j in range_numbers]
     else:
         if type(labels[0]) == tuple:
-            labels = [Contour(el) for el in labels]
+            new = []
+            for el in labels:
+                if el != 'Others':
+                    el = Contour(el)
+                new.append(el)
+            labels = new
 
     explode_seq = [0 for k in range_numbers]
     explode_seq[values.index(max(values))] = 0.05

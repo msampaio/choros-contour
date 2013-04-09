@@ -110,7 +110,7 @@ def print_contour(out, composer, phrases, all_phrases_number):
         out.write("Percentual of all phrases: {0:.2f}%\n\n".format(percentual_all_phrases))
     out.write("Number of Phrases: {0}\n\n".format(len(phrases)))
 
-    print_plot(out, 'Contour Prime', composer, contour.contour_prime_count(phrases), plot.simple_pie)
+    print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(phrases)), plot.simple_pie)
     print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(phrases), plot.simple_scatter)
 
 
