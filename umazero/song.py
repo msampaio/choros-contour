@@ -7,13 +7,14 @@ import music21
 
 
 class Song(object):
-    def __init__(self, score, measures, params, collection, filename):
+    def __init__(self, score, measures, params, pickup, collection, filename):
         self.score = score
         self.title = score.metadata.title
         self.composer = " ".join(score.metadata.composer.replace('\n', ' ').split())
         self.collection = collection
         self.measures = measures
         self.params = params
+        self.pickup = pickup
         time_signature_obj = self.params['time_signature']
         self.time_signature = time_signature_obj.numerator, time_signature_obj.denominator
         self.key_signature = self.params['key_signature'].sharps
@@ -29,13 +30,20 @@ class Song(object):
 
         def make_measure(measure, params, keep_list, n):
             new_measure = music21.stream.Measure()
+            if measure.number == 0:
+                new_measure.pickup = True
+            else:
+                new_measure.pickup = None
             # insert params only in phrase first measure
-            if n == 1:
+            if n == 0:
                 for values in params.values():
                     new_measure.append(values)
-            for el in measure.notesAndRests:
-                if el.event_number in keep_list:
-                    new_measure.append(el)
+            for event in measure.notesAndRests:
+                if event.event_number in keep_list:
+                    new_measure.append(event)
+            if measure.notesAndRests[0] != new_measure.notesAndRests[0]:
+                new_measure.pickup = True
+
             return new_measure
 
         def make_stream(measures):
@@ -51,11 +59,19 @@ class Song(object):
         new_score = music21.stream.Stream()
         new_score.initial = initial
         new_score.final = final
+        new_score.pickup = False
+
+        new_part = music21.stream.Part()
 
         for n, measure in enumerate(measures):
             if any([(ev in keep_list) for ev in measure.events]):
-                new_score.append(make_measure(measure, params, keep_list, n))
+                new_measure = make_measure(measure, params, keep_list, n)
+                new_part.append(new_measure)
+                if new_measure.pickup:
+                    new_score.pickup = True
+                    new_measure.pickup = None
 
+        new_score.append(new_part)
         return new_score
 
 
@@ -74,15 +90,21 @@ def make_song(xml_name):
     part = score.getElementsByClass('Part')[0]
     measures = part.getElementsByClass('Measure')
     params = get_parameters(measures)
-    event = 0
+
+    if measures[0].number == 0:
+        pickup = True
+    else:
+        pickup = False
+
+    event_n = 0
     for measure in part:
         if type(measure) == music21.stream.Measure:
             measure_events = []
             for el in measure:
                 if type(el) in (music21.note.Note, music21.note.Rest):
-                    event += 1
-                    el.event_number = event
-                    measure_events.append(event)
+                    event_n += 1
+                    el.event_number = event_n
+                    measure_events.append(event_n)
             measure.events = measure_events
     collection = os.path.basename(os.path.dirname(xml_name))
-    return Song(score, measures, params, collection, xml_name)
+    return Song(score, measures, params, pickup, collection, xml_name)
