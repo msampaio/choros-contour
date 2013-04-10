@@ -79,6 +79,7 @@ def print_basic_data(out, composer, phrases, all_phrases_number):
 
     print_plot(out, 'Time signature', composer, Counter([phrase.time_signature[0] for phrase in phrases]), plot.simple_pie)
     print_plot(out, 'Ambitus in semitones', composer, Counter([phrase.ambitus for phrase in phrases]), plot.simple_scatter)
+    print_plot(out, 'Pickup measure', composer, Counter([phrase.pickup for phrase in phrases]), plot.simple_pie)
 
 
 def make_basic_data_webpage(alist):
