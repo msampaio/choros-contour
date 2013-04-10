@@ -36,6 +36,10 @@ class AllPhrases(object):
         result = [[phr for phr in song_phrases if phr.contour.reduction_morris()[0] == contour_prime] for song_phrases in self.songs_phrases]
         return AllPhrases([el for el in result if el], self.stream)
 
+    def getByPickup(self, pickup=True):
+        result = [[phr for phr in song_phrases if phr.pickup == pickup] for song_phrases in self.songs_phrases]
+        return AllPhrases([el for el in result if el], self.stream)
+
 
 def make_allphrases(stream=True):
     phrases = []
