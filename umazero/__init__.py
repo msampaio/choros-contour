@@ -13,3 +13,5 @@ from song import make_song
 from phrase import make_phrase, make_phrase_collection
 from query import make_allphrases
 
+# external
+from phrase import Contour
