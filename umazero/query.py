@@ -40,6 +40,22 @@ class AllPhrases(object):
         result = [[phr for phr in song_phrases if phr.pickup == pickup] for song_phrases in self.songs_phrases]
         return AllPhrases([el for el in result if el], self.stream)
 
+    def make_pairs(self, offset=2, attribute=None, fn=None):
+        pairs = []
+        for song_phrases in self.songs_phrases:
+            apObj = AllPhrases([song_phrases], True)
+            size = apObj.phrases_number
+            for i in range(1, size, offset):
+                if fn:
+                    pairs.append((fn(getattr(apObj.getByIndex(i - 1), attribute)),
+                                  fn(getattr(apObj.getByIndex(i), attribute))))
+                elif attribute:
+                    pairs.append((getattr(apObj.getByIndex(i - 1), attribute),
+                                  getattr(apObj.getByIndex(i), attribute)))
+                else:
+                    pairs.append((apObj.getByIndex(i - 1), apObj.getByIndex(i)))
+        return pairs
+
 
 def make_allphrases(stream=True):
     phrases = []
