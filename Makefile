@@ -1,5 +1,6 @@
 SRC_DIR = umazero
 TEST_DIR = tests
+DOCS_DIR = docs
 
 all: save_pickle view
 
@@ -11,14 +12,11 @@ docs: webpage html
 html:
 	$(MAKE) -C docs html
 
-# crashing
 webpage:
-	python ./umazero/webpage.py
+	python -c "import umazero.webpage; umazero.webpage.run()"
 
-# the saved data with save_pickle doesn't work
-# directory
 save_pickle:
-	python $(SRC_DIR)/data.py
+	python -c "import umazero; umazero.data.run()"
 
 copy:
 	python $(SRC_DIR)/copy_files.py
@@ -32,3 +30,5 @@ test:
 check:
 	pep8 *.py $(SRC_DIR)/*.py $(TEST_DIR)/*.py
 
+sync:
+	$(MAKE) -C docs sync
