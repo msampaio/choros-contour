@@ -61,17 +61,25 @@ class Song(object):
         new_score.final = final
         new_score.pickup = False
 
-        new_part = music21.stream.Part()
+        measure_number = 1
+        first_measure = 0
 
         for n, measure in enumerate(measures):
             if any([(ev in keep_list) for ev in measure.events]):
+                first_measure += 1
+                if first_measure == 1:
+                    n = 0
                 new_measure = make_measure(measure, params, keep_list, n)
-                new_part.append(new_measure)
                 if new_measure.pickup:
                     new_score.pickup = True
                     new_measure.pickup = None
+                    new_measure.number = 0
+                    measure_number = 0
+                else:
+                    new_measure.number = measure_number
+                measure_number += 1
+                new_score.append(new_measure)
 
-        new_score.append(new_part)
         return new_score
 
 
