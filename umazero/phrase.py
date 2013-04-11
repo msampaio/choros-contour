@@ -17,6 +17,7 @@ class Phrase(object):
         self.number = number
         self.size = size
         self.contour = contour
+        self.contour_prime = contour.reduction_morris()[0]
         self.contour_size = contour_size
         self.time_signature = time_signature
         self.ambitus = ambitus
