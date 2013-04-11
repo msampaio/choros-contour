@@ -113,6 +113,7 @@ def print_contour(out, composer, phrases, all_phrases_number):
 
     print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(phrases), 0.04), plot.simple_pie)
     print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(phrases), plot.simple_scatter)
+    print_plot(out, 'Passing contour', composer, contour.passing_contour(phrases), plot.simple_scatter)
 
 
 def make_contour_webpage(alist):
@@ -120,6 +121,8 @@ def make_contour_webpage(alist):
     with codecs.open("docs/contour.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Contour", 1))
         out.write('This page contains contour data of choros phrases such as Contour Primes organized by composer. ')
+        out.write('Highest contour points means the number of different contour points. ')
+        out.write('A great value of passing contour incidence means that a phrase has many successive cp in the same direction. ')
         out.write('The numbers in the table\'s second column are in percent.\n\n')
 
         all_phrases = _utils.flatten(alist.values())

@@ -20,3 +20,13 @@ def contour_prime_count(phrases):
 
 def contour_highest_cp_count(phrases):
     return counting([max(phr.contour.translation()) for phr in phrases])
+
+
+def passing_contour(phrases):
+    result = []
+    for phrase in phrases:
+        reduced = phrase.contour.reduction_bor(3)
+        size = phrase.contour_size
+        reduced_size = len(reduced)
+        result.append(1 - (reduced_size / float(size)))
+    return counting(result)
