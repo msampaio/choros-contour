@@ -83,7 +83,7 @@ class Song(object):
         return new_score
 
 
-def make_song(xml_name):
+def make_song(xml_name, number_show=False):
 
     def get_parameters(measures):
         m1 = measures[0]
@@ -112,6 +112,8 @@ def make_song(xml_name):
                 if type(el) in (music21.note.Note, music21.note.Rest):
                     event_n += 1
                     el.event_number = event_n
+                    if number_show:
+                        el.lyric = event_n
                     measure_events.append(event_n)
             measure.events = measure_events
     collection = os.path.basename(os.path.dirname(xml_name))
