@@ -26,6 +26,15 @@ class Song(object):
     def show(self, arg=None):
         self.score.show(arg)
 
+    def xml_write(self, suffix='numbered', path=None):
+        dirname = os.path.dirname(self.filename)
+        basename = os.path.basename(self.filename).split('.')[0] + ' - {0}.xml'.format(suffix)
+        if path:
+            dirname = path
+        dest = os.path.join(dirname, basename)
+        print "Writing xml file in {0}".format(dest)
+        self.score.write('musicxml', dest)
+
     def get_phrase(self, initial, final):
 
         def make_measure(measure, params, keep_list, n):
