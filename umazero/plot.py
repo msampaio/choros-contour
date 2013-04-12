@@ -67,7 +67,7 @@ def simple_scatter(y, x, labels, title=None, filename=None):
 
     # FIXME: use values between 10 and 500
     area = [i * 5 for i in y]
-    plt.scatter(x, y, s=area, c='k')
+    plt.scatter(x, _utils.percentual(y), s=area, c='k')
 
     if title:
         plt.title(title, bbox={'facecolor':'0.8', 'pad':5})

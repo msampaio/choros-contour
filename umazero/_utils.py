@@ -23,6 +23,12 @@ def sort2(dic):
     return sorted(dic.items(), reverse=True, key=lambda x: x[1])
 
 
+def percentual(seq):
+    """Return a sequence with percentual values."""
+
+    total = sum(seq)
+    return [(el * 100 / float(total)) for el in seq]
+
 def percentage(dic):
     """Return a dictionary with percent values"""
 

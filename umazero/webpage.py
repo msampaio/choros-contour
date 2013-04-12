@@ -52,7 +52,7 @@ def print_plot(out, title, composer, data, plot_fn):
     pngfile = os.path.splitext(os.path.basename(dest))[0]
     plot.clear()
     if plot_fn == plot.simple_scatter:
-        plot_fn(data.values(), data.keys(), ['Number of Phrases', title], None, dest)
+        plot_fn(data.values(), data.keys(), ['Percentual of phrases (%)', title], None, dest)
     else:
         plot_fn(data.values(), data.keys(), None, dest)
 
