@@ -196,10 +196,12 @@ def makeSong(filename, number_show=False, pickle=False):
     # music
     if not pickle:
         data['score'] = score
+        data['measures'] = measures
+        data['params'] = params
     else:
         data['score'] = None
-    data['measures'] = measures
-    data['params'] = params
+        data['params'] = None
+        data['measures'] = None
     data['time_signature'] = str(time_signature_obj)
     data['meter'] = time_signature_obj.beatCountName
     data['pickup'] = pickup
