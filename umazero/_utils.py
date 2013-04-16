@@ -5,7 +5,6 @@ import math
 import os
 import glob
 import data
-import song
 import unicodedata
 
 
@@ -46,22 +45,13 @@ def subplot_base(plots_number):
     return int((rows_columns - 1) * 100 + rows_columns * 10)
 
 
-def __path_without_extension(path):
-    """Returns a complete path of a file without extension."""
-
-    directory = os.path.dirname(path)
-    basename = os.path.basename(path)
-    songfilename = basename.split('.')[0]
-    return os.path.join(directory, songfilename)
-
-
-def filenames_list(collection, extension='phrase'):
-    """Returns a list of paths that have .phrase."""
+def filenames_list(collection, extension='form'):
+    """Returns a list of paths that have .form."""
 
     directory = os.path.join(os.getcwd(), 'choros-corpus', collection)
     phrase_files = glob.glob(os.path.join(directory, "*.{0}".format(extension)))
 
-    return [__path_without_extension(filename) for filename in phrase_files]
+    return [filename.strip(extension) + 'xml' for filename in phrase_files]
 
 
 def collections_list(path):
