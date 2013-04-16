@@ -1,17 +1,15 @@
-# # modules
-# import phrase
-# import song
-# import data
+# modules
+import unit
+import song
+import data
 
 # classes
 from song import Song
-from phrase import Phrase
-from query import AllPhrases
+from unit import MusicUnit
 
 # functions
 from song import make_song
-from phrase import make_phrase, make_phrase_collection
-from query import make_allphrases
+from unit import make_MusicUnit
 
 # external
-from phrase import Contour
+from music21.contour import Contour

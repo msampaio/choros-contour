@@ -19,7 +19,7 @@ class Song(object):
         self.score = data['score']
         self.measures = data['measures']
         self.params = data['params']
-        self.time = data['time_signature']
+        self.time_signature = data['time_signature']
         self.meter = data['meter']
         self.pickup = data['pickup']
         self.key = data['key']
@@ -40,6 +40,67 @@ class Song(object):
         print "Writing xml file in {0}".format(dest)
         self.score.write('musicxml', dest)
 
+    def getAttr(self, attribute):
+        return getattr(self, attribute)
+
+    def setAttr(self, attribute, value):
+        setattr(self, attribute, value)
+        return self
+
+    def getExcerpt(self, initial, final):
+
+        def make_measure(measure, params, keep_list, n):
+            new_measure = music21.stream.Measure()
+            if measure.number == 0:
+                new_measure.pickup = True
+            else:
+                new_measure.pickup = None
+            # insert params only in phrase first measure
+            if n == 0:
+                for values in params.values():
+                    new_measure.append(values)
+            for event in measure.notesAndRests:
+                if event.event_number in keep_list:
+                    new_measure.append(event)
+            if measure.notesAndRests[0] != new_measure.notesAndRests[0]:
+                new_measure.pickup = True
+
+            return new_measure
+
+        def make_stream(measures):
+            new_score = music21.stream.Stream()
+            for measure in measures:
+                new_score.append(measure)
+            return new_score
+
+        keep_list = range(initial, final + 1)
+        measures = self.measures
+        params = self.params
+
+        new_score = music21.stream.Stream()
+        new_score.initial = initial
+        new_score.final = final
+        new_score.pickup = False
+
+        measure_number = 1
+        first_measure = 0
+
+        for n, measure in enumerate(measures):
+            if any([(ev in keep_list) for ev in measure.events]):
+                first_measure += 1
+                if first_measure == 1:
+                    n = 0
+                new_measure = make_measure(measure, params, keep_list, n)
+                if new_measure.pickup:
+                    new_score.pickup = True
+                    new_measure.pickup = None
+                    new_measure.number = 0
+                    measure_number = 0
+                else:
+                    new_measure.number = measure_number
+                measure_number += 1
+                new_score.append(new_measure)
+        return new_score
 
 def make_song(filename, number_show=False):
 
