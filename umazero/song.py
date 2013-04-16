@@ -129,10 +129,13 @@ class Song(object):
 
     def make_score(self, number_show=False):
         if not self.score:
-            return makeSong(self.filename, number_show, False)
+            newSong = makeSong(self.filename, number_show, False)
+            self.params = newSong.params
+            self.score = newSong.score
+            self.subUnits = newSong.subUnits
+            self.measures = newSong.measures
         else:
             print "There is already a score attribute"
-            return self
 
 def makeSong(filename, number_show=False, save=False):
 
