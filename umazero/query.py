@@ -1,18 +1,33 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import phrase
+import music21
 import _utils
 import data
+import song
+
+
+def _aux_getBy(units, save):
+    d = getUnitsData(units)
+    d['units'] = units
+    return AllMusicUnits(d, save)
 
 
 class AllMusicUnits(object):
-    def __init__(self, units, save=False):
+    def __init__(self, data, save=False):
         self.save = save
-        self.units = units
-        self.units_number = len(units)
+        self.units = data['units']
+        self.units_number = len(self.units)
 
-
+        self.allComposers = data['allComposers']
+        self.allTitles = data['allTitles']
+        self.allCollections = data['allCollections']
+        self.allContours = data['allContours']
+        self.allContourSizes = data['allContourSizes']
+        self.allContourPrimes = data['allContourPrimes']
+        self.allAmbitus = data['allAmbitus']
+        self.allTimeSignatures = data['allTimeSignatures']
+        self.allMeters = data['allMeters']
 
     def __repr__(self):
         return "<AllMusicUnits: {0} units>".format(self.units_number)
@@ -21,24 +36,19 @@ class AllMusicUnits(object):
         return self.units[index]
 
     def getByComposer(self, composer):
-        result = [u for u in self.units if u.composer == composer]
-        return AllMusicUnits([el for el in result if el], self.save)
+        return _aux_getBy([u for u in self.units if u.composer == composer], self.save)
 
     def getByTitle(self, title):
-        result = [u for u in self.units if u.title == title]
-        return AllMusicUnits([el for el in result if el], self.save)
+        return _aux_getBy([u for u in self.units if u.title == title], self.save)
 
     def getByAmbitus(self, ambitus):
-        result = [u for u in self.units if u.ambitus == ambitus]
-        return AllMusicUnits([el for el in result if el], self.save)
+        return _aux_getBy([u for u in self.units if u.ambitus == ambitus], self.save)
 
-    def getByContourPrime(self, contourprime):
-        result = [u for u in self.units if u.contour_prime == contourprime]
-        return AllMusicUnits([el for el in result if el], self.save)
+    def getByContourPrime(self, contour_prime):
+        return _aux_getBy([u for u in self.units if u.contour_prime == contour_prime], self.save)
 
     def getByPickup(self, pickup=True):
-        result = [u for u in self.units if u.pickup == pickup]
-        return AllMusicUnits([el for el in result if el], self.save)
+        return _aux_getBy([u for u in self.units if u.pickup == pickup], self.save)
 
 
 def getUnitsData(units):
@@ -46,8 +56,15 @@ def getUnitsData(units):
     def getData(unit, attrib):
         s = set()
         for unit in units:
-            s.add(getattr(unit, attrib))
-        return sorted(s)
+            value = getattr(unit, attrib)
+            if type(value) == music21.contour.contour.Contour:
+                value = tuple(value)
+                s.add(value)
+                r = [music21.contour.contour.Contour(cseg) for cseg in sorted(s)]
+            else:
+                s.add(value)
+                r = sorted(s)
+        return r
 
     data = {}
     data['allComposers'] = getData(units, 'composer')
@@ -68,10 +85,14 @@ def makeAllMusicUnits(save=False):
         print "Processing collection {0}...".format(coll)
         try:
             if save:
-                songs = song.makeSongCollection(coll, save)
-            else:
                 songs = data.load_pickle(coll)
-            units.extend([s.subUnits for s in songs])
+            else:
+                songs = song.makeSongCollection(coll, save)
+            for s in songs:
+                units.extend(s.subUnits)
         except:
-            print "No .phrase or .xml phrases in collection {0}".format(coll)
-    return AllMusicUnits(units[0], save)
+            print "No .form or .xml phrases in collection {0}".format(coll)
+
+    d = getUnitsData(units)
+    d['units'] = units
+    return AllMusicUnits(d, save)
