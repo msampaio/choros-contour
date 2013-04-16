@@ -44,21 +44,17 @@ class MusicUnit(song.Song):
         print "Writing xml file in {0}".format(dest)
         self.score.write('musicxml', dest)
 
-    def addSubUnit(self, data):
-        subUnit = MusicUnit(data, self)
-        self.subUnits.append(subUnit)
-        return subUnit
-
 
 def make_MusicUnit(data_input):
     initial = data_input['initial']
     final = data_input['final']
 
-    songObj = song.make_song(data_input['filename'])
+    # songObj = song.make_song(data_input['filename'])
+    songObj = data_input['songObj']
     score = songObj.getExcerpt(initial, final)
     
     data = {}
-    
+
     data['filename'] = songObj.filename
 
     # metadata
@@ -67,7 +63,11 @@ def make_MusicUnit(data_input):
     data['composer'] = songObj.composer
 
     # music
-    data['score'] = score
+    if not data_input['pickle']:
+        data['score'] = score
+    else:
+        data['score'] = None
+
     data['time_signature'] = songObj.time_signature
     data['meter'] = songObj.meter
     data['pickup'] = score.pickup
@@ -84,7 +84,7 @@ def make_MusicUnit(data_input):
 
 
 def formParser(filename):
-    form_name = filename + '.form'
+    form_name = filename.strip('.xml') + '.form'
     with open(form_name, 'r') as f:
         seq = [el.strip('\n') for el in f.readlines() if el.strip('\n')]
     form = []
@@ -118,12 +118,3 @@ def formParser(filename):
             form.append(dic)
 
     return form
-
-
-def getSongData(filename):
-    data = formParser(filename)
-    result = []
-    for el in data:
-        el['filename'] = filename + '.xml'
-        result.append(make_MusicUnit(el))
-    return result

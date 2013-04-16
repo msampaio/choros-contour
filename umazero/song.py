@@ -3,6 +3,7 @@
 
 import os
 import music21
+import unit
 
 
 class Song(object):
@@ -25,6 +26,11 @@ class Song(object):
         self.key = data['key']
         self.mode = data['mode']
 
+        if 'subUnits' in data:
+            self.subUnits = data['subUnits']
+        else:
+            self.subUnits = []
+
     def __repr__(self):
         return "<Song: {0}. {1}>".format(self.title, self.collection)
 
@@ -39,6 +45,24 @@ class Song(object):
         dest = os.path.join(dirname, basename)
         print "Writing xml file in {0}".format(dest)
         self.score.write('musicxml', dest)
+
+    def addMusicUnit(self, subUnit):
+        self.subUnits.append(subUnit)
+        return self
+
+    def allPhrases(self):
+        return [un for un in self.subUnits if un.typeof == 'Phrase']
+
+    def showUnit(self, number, typeof='Phrase'):
+        return [un for un in self.subUnits if un.typeof == typeof and un.number == number][0]
+
+    def showBigUnit(self, number, typeof='Period'):
+        if typeof == 'Period':
+            return [un for un in self.subUnits if un.period_number == number]
+        elif typeof == 'Part':
+            return [un for un in self.subUnits if un.part_number == number]
+        else:
+            print 'Wrong typeof {0}'.format(typeof)
 
     def getAttr(self, attribute):
         return getattr(self, attribute)
@@ -102,7 +126,14 @@ class Song(object):
                 new_score.append(new_measure)
         return new_score
 
-def make_song(filename, number_show=False):
+    def make_score(self, number_show=False):
+        if not self.score:
+            return make_song(self.filename, number_show, False)
+        else:
+            print "There is already a score attribute"
+            return self
+
+def make_song(filename, number_show=False, pickle=False):
 
     def get_parameters(measures):
         m1 = measures[0]
@@ -112,6 +143,20 @@ def make_song(filename, number_show=False):
         params['key_signature'] = m1.getElementsByClass('KeySignature')[0]
         params['time_signature'] = m1.getElementsByClass('TimeSignature')[0]
         return params
+
+    def getSubUnits(filename, songObj, pickle):
+        try:
+            data = unit.formParser(filename)
+            for el in data:
+                el['filename'] = filename
+                el['songObj'] = songObj
+                el['pickle'] = pickle
+                subUnit = unit.make_MusicUnit(el)
+                songObj.addMusicUnit(subUnit)
+            return songObj
+        except:
+            print "There is no .form file"
+            return songObj
 
     score = music21.parse(filename)
     part = score.getElementsByClass('Part')[0]
@@ -134,7 +179,7 @@ def make_song(filename, number_show=False):
                 if type(el) in (music21.note.Note, music21.note.Rest):
                     event_n += 1
                     el.event_number = event_n
-                    # show enumeation as lyrics
+                    # show enumeration as lyrics
                     if number_show:
                         el.lyric = event_n
                     measure_events.append(event_n)
@@ -149,7 +194,10 @@ def make_song(filename, number_show=False):
     data['composer'] = " ".join(score.metadata.composer.replace('\n', ' ').split())
 
     # music
-    data['score'] = score
+    if not pickle:
+        data['score'] = score
+    else:
+        data['score'] = None
     data['measures'] = measures
     data['params'] = params
     data['time_signature'] = str(time_signature_obj)
@@ -158,4 +206,4 @@ def make_song(filename, number_show=False):
     data['key'] = key
     data['mode'] = mode
 
-    return Song(data)
+    return getSubUnits(filename, Song(data), pickle)
