@@ -4,6 +4,7 @@
 import os
 import music21
 import unit
+import _utils
 
 
 class Song(object):
@@ -209,3 +210,11 @@ def makeSong(filename, number_show=False, save=False):
     data['mode'] = mode
 
     return getSubUnits(filename, Song(data), save)
+
+
+def makeSongCollection(collection, save=False):
+    """Returns a list of phrases objects separated by piece.
+    """
+
+    files = _utils.filenames_list(collection)
+    return [makeSong(f, False, save) for f in files]

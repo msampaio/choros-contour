@@ -4,7 +4,7 @@
 import os
 import _utils
 import pickle
-import phrase
+import song
 
 
 def save_pickle(filename, data):
@@ -21,11 +21,11 @@ def load_pickle(filename):
 def run():
     for coll in _utils.collections_list('choros-corpus'):
         print "Processing collection {0}...".format(coll)
-        coll_data = phrase.make_phrase_collection(coll, False)
+        coll_data = song.makeSongCollection(coll, True)
         if coll_data:
             save_pickle(coll, coll_data)
         else:
-            print "No .phrase or .xml phrases in collection {0}".format(coll)
+            print "No .form or .xml files in collection {0}".format(coll)
 
 
 if __name__ == '__main__':
