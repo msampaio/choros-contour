@@ -197,22 +197,23 @@ def makeSong(filename, number_show=False, save=False):
     data['composer'] = " ".join(score.metadata.composer.replace('\n', ' ').split())
 
     # music
-    if not save:
-        data['score'] = score
-        data['measures'] = measures
-        data['params'] = params
-    else:
-        data['score'] = None
-        data['params'] = None
-        data['measures'] = None
+    data['score'] = score
+    data['measures'] = measures
+    data['params'] = params
+
     data['time_signature'] = str(time_signature_obj)
     data['meter'] = time_signature_obj.beatCountName
     data['pickup'] = pickup_test(measures)
     data['key'] = key
     data['mode'] = mode
 
-    return getSubUnits(filename, Song(data), save)
+    newSong = getSubUnits(filename, Song(data), save)
 
+    if save:
+        newSong.score = None
+        newSong.params = None
+        newSong.measures = None
+    return  newSong
 
 def makeSongCollection(collection, save=False):
     """Returns a list of phrases objects separated by piece.
