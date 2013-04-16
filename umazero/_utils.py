@@ -4,7 +4,6 @@
 import math
 import os
 import glob
-import data
 import unicodedata
 
 
@@ -68,35 +67,6 @@ def collections_list(path):
 def mkdir(directory):
     if not os.path.exists(directory):
         os.mkdir(directory)
-
-
-def make_collection_dict(path='choros-corpus'):
-    collection_dict = {}
-    for collection in collections_list(path):
-        try:
-            collection_dict[collection] = data.load_pickle(collection)
-        except:
-            print "There is no pickle file for collection {0}".format(collection)
-
-    return collection_dict
-
-
-def make_composer_dict(path='choros-corpus'):
-    phrases = []
-    for collection in collections_list(path):
-        try:
-            phrases.extend(flatten(data.load_pickle(collection)))
-        except:
-            print "There is no pickle file for collection {0}".format(collection)
-
-    composer_dict = {}
-    for phrase in phrases:
-        composer = phrase.composer
-        if not composer in composer_dict:
-            composer_dict[composer] = []
-        composer_dict[composer].append(phrase)
-
-    return composer_dict
 
 
 def count_songs_from_phrases(phrases):
