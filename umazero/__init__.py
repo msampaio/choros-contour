@@ -8,8 +8,8 @@ from song import Song
 from unit import MusicUnit
 
 # functions
-from song import make_song
-from unit import make_MusicUnit
+from song import makeSong
+from unit import makeMusicUnit
 
 # external
 from music21.contour import Contour

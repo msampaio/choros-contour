@@ -128,12 +128,12 @@ class Song(object):
 
     def make_score(self, number_show=False):
         if not self.score:
-            return make_song(self.filename, number_show, False)
+            return makeSong(self.filename, number_show, False)
         else:
             print "There is already a score attribute"
             return self
 
-def make_song(filename, number_show=False, pickle=False):
+def makeSong(filename, number_show=False, pickle=False):
 
     def get_parameters(measures):
         m1 = measures[0]
@@ -151,7 +151,7 @@ def make_song(filename, number_show=False, pickle=False):
                 el['filename'] = filename
                 el['songObj'] = songObj
                 el['pickle'] = pickle
-                subUnit = unit.make_MusicUnit(el)
+                subUnit = unit.makeMusicUnit(el)
                 songObj.addMusicUnit(subUnit)
             return songObj
         except:

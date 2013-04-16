@@ -45,7 +45,7 @@ class MusicUnit(song.Song):
         self.score.write('musicxml', dest)
 
 
-def make_MusicUnit(data_input):
+def makeMusicUnit(data_input):
     initial = data_input['initial']
     final = data_input['final']
 
