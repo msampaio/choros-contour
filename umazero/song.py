@@ -162,17 +162,16 @@ def makeSong(filename, number_show=False, save=False):
             print "There is no .form file"
             return songObj
 
+    def pickup_test(measures):
+        if measures[0].number == 0:
+            return True
+
     score = music21.parse(filename)
     part = score.getElementsByClass('Part')[0]
     measures = part.getElementsByClass('Measure')
     params = get_parameters(measures)
     time_signature_obj = params['time_signature']
     key, mode = params['key_signature'].pitchAndMode
-
-    if measures[0].number == 0:
-        pickup = True
-    else:
-        pickup = False
 
     # enumerate events
     event_n = 0
@@ -208,7 +207,7 @@ def makeSong(filename, number_show=False, save=False):
         data['measures'] = None
     data['time_signature'] = str(time_signature_obj)
     data['meter'] = time_signature_obj.beatCountName
-    data['pickup'] = pickup
+    data['pickup'] = pickup_test(measures)
     data['key'] = key
     data['mode'] = mode
 
