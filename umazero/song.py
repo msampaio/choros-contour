@@ -36,6 +36,8 @@ class Song(object):
         return "<Song: {0}. {1}>".format(self.title, self.collection)
 
     def show(self, arg=None):
+        if not self.score:
+            self.make_score()
         self.score.show(arg)
 
     def xml_write(self, suffix='numbered', path=None):
