@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from music21.contour import Contour
 import song
 
 
@@ -18,7 +19,12 @@ class MusicUnit(song.Song):
         self.score = data['score']
         self.time_signature = data['time_signature']
         self.meter = data['meter']
+        self.ambitus = data['ambitus']
         self.pickup = data['pickup']
+
+        self.contour = data['contour']
+        self.contour_prime = data['contour_prime']
+        self.contour_size = data['contour_size']
 
         self.typeof = data['typeof']
         self.number = data['number']
@@ -72,6 +78,12 @@ def makeMusicUnit(data_input):
     data['pickup'] = score.pickup
 
     # analysis
+    contour = Contour(score)
+    data['ambitus'] = score.analyze("ambitus").chromatic.directed
+    data['contour'] = contour
+    data['contour_prime'] = contour.reduction_morris()[0]
+    data['contour_size'] = len(contour)
+
     data['typeof'] = data_input['typeof']
     data['number'] = data_input['number']
     data['initial_event'] = initial
