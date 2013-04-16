@@ -20,13 +20,14 @@ class MusicUnit(song.Song):
         self.meter = data['meter']
         self.pickup = data['pickup']
 
-        self.subUnits = data['subUnits']
-
         self.typeof = data['typeof']
         self.number = data['number']
 
         self.initial_event = data['initial_event']
         self.final_event = data['final_event']
+
+        self.part_number = data['part_number']
+        self.period_number = data_['period_number']
 
     def __repr__(self):
         return "<Unit {0}: {1} - {2} ({3})>".format(self.typeof, self.title, self.composer, self.number)
@@ -49,9 +50,12 @@ class MusicUnit(song.Song):
         return subUnit
 
 
-def make_MusicUnit(filename, typeof, number, initial_event, final_event, subUnits=None):
-    songObj = song.make_song(filename)
-    score = songObj.getExcerpt(initial_event, final_event)
+def make_MusicUnit(data_input):
+    initial = data_input['initial']
+    final = data_input['final']
+
+    songObj = song.make_song(data_input['filename'])
+    score = songObj.getExcerpt(initial, final)
     
     data = {}
     
@@ -68,12 +72,13 @@ def make_MusicUnit(filename, typeof, number, initial_event, final_event, subUnit
     data['meter'] = songObj.meter
     data['pickup'] = score.pickup
 
-    data['typeof'] = typeof
-    data['number'] = number
-    data['initial_event'] = initial_event
-    data['final_event'] = final_event
-
-    data['subUnits'] = subUnits
+    # analysis
+    data['typeof'] = data_input['typeof']
+    data['number'] = data_input['number']
+    data['initial_event'] = initial
+    data['final_event'] = final
+    data['part_number'] = data_input['part_number']
+    data['period_number'] = data_input['period_number']
 
     return MusicUnit(data)
 
@@ -113,3 +118,12 @@ def formParser(filename):
             form.append(dic)
 
     return form
+
+
+def getSongData(filename):
+    data = formParser(filename)
+    result = []
+    for el in data:
+        el['filename'] = filename + '.xml'
+        result.append(make_MusicUnit(el))
+    return result
