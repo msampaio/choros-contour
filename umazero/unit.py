@@ -27,7 +27,7 @@ class MusicUnit(song.Song):
         self.final_event = data['final_event']
 
         self.part_number = data['part_number']
-        self.period_number = data_['period_number']
+        self.period_number = data['period_number']
 
     def __repr__(self):
         return "<Unit {0}: {1} - {2} ({3})>".format(self.typeof, self.title, self.composer, self.number)
