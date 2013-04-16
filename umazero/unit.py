@@ -49,7 +49,6 @@ def makeMusicUnit(data_input):
     initial = data_input['initial']
     final = data_input['final']
 
-    # songObj = song.make_song(data_input['filename'])
     songObj = data_input['songObj']
     score = songObj.getExcerpt(initial, final)
     
