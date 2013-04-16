@@ -133,7 +133,7 @@ class Song(object):
             print "There is already a score attribute"
             return self
 
-def makeSong(filename, number_show=False, pickle=False):
+def makeSong(filename, number_show=False, save=False):
 
     def get_parameters(measures):
         m1 = measures[0]
@@ -144,13 +144,13 @@ def makeSong(filename, number_show=False, pickle=False):
         params['time_signature'] = m1.getElementsByClass('TimeSignature')[0]
         return params
 
-    def getSubUnits(filename, songObj, pickle):
+    def getSubUnits(filename, songObj, save):
         try:
             data = unit.formParser(filename)
             for el in data:
                 el['filename'] = filename
                 el['songObj'] = songObj
-                el['pickle'] = pickle
+                el['save'] = save
                 subUnit = unit.makeMusicUnit(el)
                 songObj.addMusicUnit(subUnit)
             return songObj
@@ -194,7 +194,7 @@ def makeSong(filename, number_show=False, pickle=False):
     data['composer'] = " ".join(score.metadata.composer.replace('\n', ' ').split())
 
     # music
-    if not pickle:
+    if not save:
         data['score'] = score
         data['measures'] = measures
         data['params'] = params
@@ -208,4 +208,4 @@ def makeSong(filename, number_show=False, pickle=False):
     data['key'] = key
     data['mode'] = mode
 
-    return getSubUnits(filename, Song(data), pickle)
+    return getSubUnits(filename, Song(data), save)

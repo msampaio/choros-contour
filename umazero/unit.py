@@ -63,7 +63,7 @@ def makeMusicUnit(data_input):
     data['composer'] = songObj.composer
 
     # music
-    if not data_input['pickle']:
+    if not data_input['save']:
         data['score'] = score
     else:
         data['score'] = None
