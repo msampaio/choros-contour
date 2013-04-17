@@ -13,6 +13,7 @@ Contents
    :maxdepth: 2
 
    introduction.rst
+   corpus.rst
 
 Data and Analysis
 -----------------
@@ -22,19 +23,3 @@ Data and Analysis
 
    basic_data.rst
    contour.rst
-
-Documentation
--------------
-
-.. toctree::
-   :maxdepth: 2
-
-   tools.rst
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-

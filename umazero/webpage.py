@@ -136,11 +136,29 @@ def make_contour_webpage(unitObj):
             print_contour(out, composer, subunits, unitObj.units_number)
 
 
+def make_corpus_webpage(songsObj):
+
+    with codecs.open("docs/corpus.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Corpus information", 1))
+        out.write('This page contains information about analyzed corpus such as composers and song names.\n\n')
+
+        out.write(rst_header('Composers', 2))
+        for n, s in enumerate(songsObj):
+            out.write('{0}. {1}\n\n'.format(n + 1, s.composer))
+
+        out.write(rst_header('Songs', 2))
+        for n, s in enumerate(songsObj):
+            out.write('{0}. {1} ({2})\n\n'.format(n + 1, s.title, s.composer))
+
+
+
 def run():
     _utils.mkdir('docs/contour')
+    songsObj = retrieval.loadSongs()
     unitObj = retrieval.loadMusicUnits()
     make_basic_data_webpage(unitObj)
     make_contour_webpage(unitObj)
+    make_corpus_webpage(songsObj)
 
 
 if __name__ == '__main__':
