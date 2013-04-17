@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
-# Um a zero documentation build configuration file, created by
-# sphinx-quickstart on Fri Aug  3 11:39:15 2012.
+# Um a zero project build configuration file, created by
+# sphinx-quickstart on Fri Aug 3 11:39:15 2012.
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Um a zero'
-copyright = u'2012, Marcos da Silva Sampaio'
+copyright = u'2012-2013, Marcos da Silva Sampaio'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -103,7 +103,8 @@ html_theme = 'agogo'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-#html_title = None
+# html_title = None
+html_title = "Um a zero Project"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -183,7 +184,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'Umazero.tex', u'Um a zero Documentation',
+  ('index', 'Umazero.tex', u'Um a zero Project',
    u'Marcos da Silva Sampaio', 'manual'),
 ]
 
@@ -213,7 +214,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'brazilianchorosmusicalcontourrelations', u'Um a zero Documentation',
+    ('index', 'brazilianchorosmusicalcontourrelations', u'Um a zero Project',
      [u'Marcos da Silva Sampaio'], 1)
 ]
 
@@ -227,7 +228,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'Umazero', u'Um a zero Documentation',
+  ('index', 'Umazero', u'Um a zero Project',
    u'Marcos da Silva Sampaio', 'Umazero', 'One line description of project.',
    'Miscellaneous'),
 ]
