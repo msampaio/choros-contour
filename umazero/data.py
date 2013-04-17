@@ -5,6 +5,7 @@ import os
 import _utils
 import pickle
 import song
+import query
 
 
 def save_pickle(typeof, filename, data):
@@ -19,13 +20,18 @@ def load_pickle(typeof, filename):
 
 
 def run():
+    # songs
     for coll in _utils.collections_list('choros-corpus'):
         print "Processing collection {0}...".format(coll)
-        coll_data = song.makeSongCollection(coll, True)
-        if coll_data:
-            save_pickle('songs', coll, coll_data)
+        songs = song.makeSongCollection(coll, True)
+        if songs:
+            save_pickle('songs', coll, songs)
         else:
             print "No .form or .xml files in collection {0}".format(coll)
+
+    # units
+    print "Processing units...."
+    save_pickle('units', 'units', query.makeAllMusicUnits(True))
 
 
 if __name__ == '__main__':

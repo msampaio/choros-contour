@@ -11,6 +11,7 @@ from unit import MusicUnit
 from song import makeSong
 from unit import makeMusicUnit
 from query import makeAllMusicUnits
+from query import loadMusicUnits
 
 # external
 from music21.contour import Contour
