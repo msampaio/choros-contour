@@ -16,7 +16,7 @@ webpage:
 	python -c "import umazero.webpage; umazero.webpage.run()"
 
 save_pickle:
-	python -c "import umazero; umazero.data.run()"
+	python -c "import umazero; umazero.retrieval.run()"
 
 copy:
 	python $(SRC_DIR)/copy_files.py

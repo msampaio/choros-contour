@@ -3,7 +3,7 @@
 
 import music21
 import _utils
-import data
+import retrieval
 import song
 
 
@@ -87,7 +87,7 @@ def makeAllMusicUnits(save=False):
         print "Processing collection {0}...".format(coll)
         try:
             if save:
-                songs = data.load_pickle('songs')
+                songs = retrieval.load_pickle('songs')
             else:
                 songs = song.makeSongCollection(coll, save)
             for s in songs:

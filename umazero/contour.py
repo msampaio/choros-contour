@@ -4,8 +4,6 @@
 from collections import Counter
 from music21.contour import Contour
 import _utils
-import phrase
-import data
 
 
 def counting(seq):

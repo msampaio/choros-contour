@@ -1,7 +1,7 @@
 # modules
 import unit
 import song
-import data
+import retrieval
 
 # classes
 from song import Song
@@ -11,8 +11,8 @@ from unit import MusicUnit
 from song import makeSong
 from unit import makeMusicUnit
 from query import makeAllMusicUnits
-from data import loadSongs
-from data import loadMusicUnits
+from retrieval import loadSongs
+from retrieval import loadMusicUnits
 
 # external
 from music21.contour import Contour

@@ -5,7 +5,7 @@ import codecs
 import os
 from collections import Counter
 import _utils
-import data
+import retrieval
 import plot
 import contour
 import query
@@ -138,7 +138,7 @@ def make_contour_webpage(unitObj):
 
 def run():
     _utils.mkdir('docs/contour')
-    unitObj = data.loadMusicUnits()
+    unitObj = retrieval.loadMusicUnits()
     make_basic_data_webpage(unitObj)
     make_contour_webpage(unitObj)
 
