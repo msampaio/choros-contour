@@ -85,7 +85,7 @@ def makeAllMusicUnits(save=False):
         print "Processing collection {0}...".format(coll)
         try:
             if save:
-                songs = data.load_pickle(coll)
+                songs = data.load_pickle('songs', coll)
             else:
                 songs = song.makeSongCollection(coll, save)
             for s in songs:

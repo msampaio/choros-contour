@@ -136,7 +136,7 @@ def make_collection_dict(path='choros-corpus'):
     collection_dict = {}
     for collection in collections_list(path):
         try:
-            collection_dict[collection] = data.load_pickle(collection)
+            collection_dict[collection] = data.load_pickle('songs', collection)
         except:
             print "There is no pickle file for collection {0}".format(collection)
 
@@ -147,7 +147,7 @@ def make_composer_dict(path='choros-corpus'):
     phrases = []
     for collection in collections_list(path):
         try:
-            phrases.extend(flatten(data.load_pickle(collection)))
+            phrases.extend(flatten(data.load_pickle('songs', collection)))
         except:
             print "There is no pickle file for collection {0}".format(collection)
 
