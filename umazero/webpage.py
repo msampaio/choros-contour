@@ -53,7 +53,7 @@ def print_plot(out, title, composer, data, plot_fn):
     pngfile = os.path.splitext(os.path.basename(dest))[0]
     plot.clear()
     if plot_fn == plot.simple_scatter:
-        plot_fn(data.values(), data.keys(), ['Percentual of phrases (%)', title], None, dest)
+        plot_fn(data.values(), data.keys(), ['Percentual of music units (%)', title], None, dest)
     else:
         plot_fn(data.values(), data.keys(), None, dest)
 
@@ -91,7 +91,7 @@ def make_basic_data_webpage(unitObj):
 
     with codecs.open("docs/basic_data.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Basic Data", 1))
-        out.write('This page contains basic data of choros phrases such as time signature organized by composer. ')
+        out.write('This page contains basic data of choros music units such as time signature organized by composer. ')
         out.write('The numbers in the table\'s second column are in percent.\n\n')
 
         print_basic_data(out, 'All composers', unitObj, unitObj.units_number)
@@ -124,9 +124,9 @@ def make_contour_webpage(unitObj):
 
     with codecs.open("docs/contour.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Contour", 1))
-        out.write('This page contains contour data of choros phrases such as Contour Primes organized by composer. ')
+        out.write('This page contains contour data of choros music units such as Contour Primes organized by composer. ')
         out.write('Highest contour points means the number of different contour points. ')
-        out.write('A great value of passing contour incidence means that a phrase has many successive cp in the same direction. ')
+        out.write('A great value of passing contour incidence means that a music unit has many successive cp in the same direction. ')
         out.write('The numbers in the table\'s second column are in percent.\n\n')
 
         print_contour(out, 'All composers', unitObj, unitObj.units_number)
