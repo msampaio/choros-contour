@@ -8,6 +8,7 @@ import _utils
 import data
 import plot
 import contour
+import query
 
 
 class WebpageError(Exception):
@@ -63,60 +64,63 @@ def print_plot(out, title, composer, data, plot_fn):
     out.write("\n\n")
 
 
-def print_basic_data(out, composer, phrases, all_phrases_number):
+def print_basic_data(out, composer, unitObj, allUnits_number):
 
-    print "Processing phrases of composer... {0}".format(composer)
+    def count_units(unitObj, attrib):
+        return Counter((getattr(u, attrib) for u in unitObj.units))
 
-    songs_number = _utils.count_songs_from_phrases(phrases)
-    percentual_all_phrases = len(phrases) / float(all_phrases_number) * 100
+    print "Processing units of composer... {0}".format(composer)
+
+    songs_number = len(unitObj.allFilenames)
+    percentual_allUnits = unitObj.units_number / float(allUnits_number) * 100
 
     out.write(rst_header(composer, 2))
 
     out.write("Number of Songs: {0}\n\n".format(songs_number))
-    if percentual_all_phrases != 100:
-        out.write("Percentual of all phrases: {0:.2f}%\n\n".format(percentual_all_phrases))
-    out.write("Number of Phrases: {0}\n\n".format(len(phrases)))
-
-    print_plot(out, 'Time signature', composer, Counter((phrase.time_signature[0] for phrase in phrases)), plot.simple_pie)
-    print_plot(out, 'Ambitus in semitones', composer, Counter((phrase.ambitus for phrase in phrases)), plot.simple_scatter)
-    print_plot(out, 'Pickup measure', composer, Counter((phrase.pickup for phrase in phrases)), plot.simple_pie)
+    if percentual_allUnits != 100:
+        out.write("Percentual of all units: {0:.2f}%\n\n".format(percentual_allUnits))
+    out.write("Number of Units: {0}\n\n".format(unitObj.units_number))
 
 
-def make_basic_data_webpage(alist):
+    print_plot(out, 'Meter', composer, count_units(unitObj, 'meter'), plot.simple_pie)
+    print_plot(out, 'Ambitus in semitones', composer, count_units(unitObj, 'ambitus'), plot.simple_scatter)
+    print_plot(out, 'Pickup measure', composer, count_units(unitObj, 'pickup'), plot.simple_pie)
+
+
+def make_basic_data_webpage(unitObj):
 
     with codecs.open("docs/basic_data.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Basic Data", 1))
         out.write('This page contains basic data of choros phrases such as time signature organized by composer. ')
         out.write('The numbers in the table\'s second column are in percent.\n\n')
 
-        all_phrases = _utils.flatten(alist.values())
-        all_phrases_number = len(all_phrases)
-        print_basic_data(out, 'All composers', all_phrases, all_phrases_number)
+        print_basic_data(out, 'All composers', unitObj, unitObj.units_number)
 
-        for composer, phrases in sorted(alist.items()):
-            print_basic_data(out, composer, phrases, all_phrases_number)
+        for composer in unitObj.allComposers:
+            subunits = unitObj.getByComposer(composer)
+            print_basic_data(out, composer, subunits, unitObj.units_number)
 
 
-def print_contour(out, composer, phrases, all_phrases_number):
+def print_contour(out, composer, unitObj, allUnits_number):
 
-    print "Processing phrases of composer... {0}".format(composer)
+    print "Processing units of composer... {0}".format(composer)
 
-    songs_number = _utils.count_songs_from_phrases(phrases)
-    percentual_all_phrases = len(phrases) / float(all_phrases_number) * 100
+    songs_number = len(unitObj.allFilenames)
+    percentual_allUnits = unitObj.units_number / float(allUnits_number) * 100
 
     out.write(rst_header(composer, 2))
 
     out.write("Number of Songs: {0}\n\n".format(songs_number))
-    if percentual_all_phrases != 100:
-        out.write("Percentual of all phrases: {0:.2f}%\n\n".format(percentual_all_phrases))
-    out.write("Number of Phrases: {0}\n\n".format(len(phrases)))
+    if percentual_allUnits != 100:
+        out.write("Percentual of all units: {0:.2f}%\n\n".format(percentual_allUnits))
+    out.write("Number of Units: {0}\n\n".format(unitObj.units_number))
 
-    print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(phrases), 0.04), plot.simple_pie)
-    print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(phrases), plot.simple_scatter)
-    print_plot(out, 'Passing contour', composer, contour.passing_contour(phrases), plot.simple_scatter)
+    print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(unitObj.units), 0.04), plot.simple_pie)
+    print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(unitObj.units), plot.simple_scatter)
+    print_plot(out, 'Passing contour', composer, contour.passing_contour(unitObj.units), plot.simple_scatter)
 
 
-def make_contour_webpage(alist):
+def make_contour_webpage(unitObj):
 
     with codecs.open("docs/contour.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Contour", 1))
@@ -125,47 +129,18 @@ def make_contour_webpage(alist):
         out.write('A great value of passing contour incidence means that a phrase has many successive cp in the same direction. ')
         out.write('The numbers in the table\'s second column are in percent.\n\n')
 
-        all_phrases = _utils.flatten(alist.values())
-        all_phrases_number = len(all_phrases)
-        print_contour(out, 'All composers', all_phrases, all_phrases_number)
+        print_contour(out, 'All composers', unitObj, unitObj.units_number)
 
-        for composer, phrases in sorted(alist.items()):
-            print_contour(out, composer, phrases, all_phrases_number)
-
-def make_collection_dict(path='choros-corpus'):
-    collection_dict = {}
-    for collection in collections_list(path):
-        try:
-            collection_dict[collection] = data.load_pickle('songs', collection)
-        except:
-            print "There is no pickle file for collection {0}".format(collection)
-
-    return collection_dict
-
-
-def make_composer_dict(path='choros-corpus'):
-    phrases = []
-    for collection in collections_list(path):
-        try:
-            phrases.extend(flatten(data.load_pickle('songs', collection)))
-        except:
-            print "There is no pickle file for collection {0}".format(collection)
-
-    composer_dict = {}
-    for phrase in phrases:
-        composer = phrase.composer
-        if not composer in composer_dict:
-            composer_dict[composer] = []
-        composer_dict[composer].append(phrase)
-
-    return composer_dict
+        for composer in unitObj.allComposers:
+            subunits = unitObj.getByComposer(composer)
+            print_contour(out, composer, subunits, unitObj.units_number)
 
 
 def run():
     _utils.mkdir('docs/contour')
-    collection_dict = _utils.make_composer_dict('choros-corpus')
-    make_basic_data_webpage(collection_dict)
-    make_contour_webpage(collection_dict)
+    unitObj = query.loadMusicUnits()
+    make_basic_data_webpage(unitObj)
+    make_contour_webpage(unitObj)
 
 
 if __name__ == '__main__':

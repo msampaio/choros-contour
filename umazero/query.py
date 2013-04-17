@@ -28,6 +28,7 @@ class AllMusicUnits(object):
         self.allAmbitus = data['allAmbitus']
         self.allTimeSignatures = data['allTimeSignatures']
         self.allMeters = data['allMeters']
+        self.allFilenames = data['allFilenames']
 
     def __repr__(self):
         return "<AllMusicUnits: {0} units>".format(self.units_number)
@@ -76,6 +77,7 @@ def getUnitsData(units):
     data['allAmbitus'] = getData(units, 'ambitus')
     data['allTimeSignatures'] = getData(units, 'time_signature')
     data['allMeters'] = getData(units, 'meter')
+    data['allFilenames'] = getData(units, 'filename')
 
     return data
 
