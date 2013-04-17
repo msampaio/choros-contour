@@ -98,7 +98,3 @@ def makeAllMusicUnits(save=False):
     d = getUnitsData(units)
     d['units'] = units
     return AllMusicUnits(d, save)
-
-
-def loadMusicUnits():
-    return data.load_pickle('units')

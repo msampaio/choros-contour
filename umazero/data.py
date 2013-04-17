@@ -19,6 +19,14 @@ def load_pickle(typeof):
         return pickle.load(fileobj)
 
 
+def loadSongs():
+    return load_pickle('songs')
+
+
+def loadMusicUnits():
+    return load_pickle('units')
+
+
 def run():
     # songs
     songs = []

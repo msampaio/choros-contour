@@ -138,7 +138,7 @@ def make_contour_webpage(unitObj):
 
 def run():
     _utils.mkdir('docs/contour')
-    unitObj = query.loadMusicUnits()
+    unitObj = data.loadMusicUnits()
     make_basic_data_webpage(unitObj)
     make_contour_webpage(unitObj)
 
