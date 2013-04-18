@@ -5,6 +5,7 @@ import codecs
 import os
 from collections import Counter
 import json
+import datetime
 import _utils
 import retrieval
 import plot
@@ -138,11 +139,18 @@ def make_contour_webpage(unitObj):
             print_contour(out, composer, subunits, unitObj.units_number)
 
 
-def make_corpus_webpage(songsObj):
+def make_corpus_webpage(songsObj, collectionsObj):
 
     with codecs.open("docs/corpus.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Corpus information", 1))
         out.write('This page contains information about analyzed corpus such as composers and song names.\n\n')
+
+        total_songs = collectionsObj.number
+        processed_songs = len(songsObj)
+        percentual_songs = processed_songs / float(total_songs) * 100
+        date = datetime.datetime.today().date().isoformat()
+
+        out.write('Processed songs: {0} of {1} ({2:.2f}%) until {3}.\n\n'.format(processed_songs, total_songs, percentual_songs, date))
 
         out.write(rst_header('Composers', 2))
         for n, s in enumerate(songsObj):
@@ -183,7 +191,7 @@ def run():
     
     make_basic_data_webpage(unitObj)
     make_contour_webpage(unitObj)
-    make_corpus_webpage(songsObj)
+    make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
 
 
