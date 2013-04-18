@@ -67,7 +67,7 @@ def print_plot(out, title, composer, data, plot_fn):
 def print_basic_data(out, composer, unitObj, allUnits_number):
 
     def count_units(unitObj, attrib):
-        return Counter((getattr(u, attrib) for u in unitObj.units))
+        return Counter((getattr(un, attrib) for un in unitObj.units))
 
     print "Processing units of composer... {0}".format(composer)
 

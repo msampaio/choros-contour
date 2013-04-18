@@ -37,19 +37,19 @@ class AllMusicUnits(object):
         return self.units[index]
 
     def getByComposer(self, composer):
-        return _aux_getBy([u for u in self.units if u.composer == composer], self.save)
+        return _aux_getBy([un for un in self.units if u.composer == composer], self.save)
 
     def getByTitle(self, title):
-        return _aux_getBy([u for u in self.units if u.title == title], self.save)
+        return _aux_getBy([un for un in self.units if u.title == title], self.save)
 
     def getByAmbitus(self, ambitus):
-        return _aux_getBy([u for u in self.units if u.ambitus == ambitus], self.save)
+        return _aux_getBy([un for un in self.units if u.ambitus == ambitus], self.save)
 
     def getByContourPrime(self, contour_prime):
-        return _aux_getBy([u for u in self.units if u.contour_prime == contour_prime], self.save)
+        return _aux_getBy([un for un in self.units if u.contour_prime == contour_prime], self.save)
 
     def getByPickup(self, pickup=True):
-        return _aux_getBy([u for u in self.units if u.pickup == pickup], self.save)
+        return _aux_getBy([un for un in self.units if u.pickup == pickup], self.save)
 
 
 def getUnitsData(units):
