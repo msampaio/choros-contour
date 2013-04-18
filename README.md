@@ -36,7 +36,18 @@ and, inside `choros` environment:
 
 # Use
 
-You must be in `choros` virtualenv environment. Inside it, run ipython
+You must be always in `choros` virtualenv environment to use `umazero`
+package.
+
+## Save data from `choros-corpus` directory:
+
+In prompt:
+
+    $ make save_pickle
+
+## Run ipython interpreter and import `umazero` package:
+
+In prompt, run ipython:
 
     $ ipython
 
@@ -44,57 +55,36 @@ Then, import `umazero` package
 
     >>> import umazero
 
-## Create phrases and save them in a variable:
+## Load and save songs and music units in a variable:
 
-    >>> pixinguinha = umazero.make_phrase_collection("O Melhor de Pixinguinha")
+    >>> songs = umazero.loadSongs()
+    >>> units = umazero.loadMusicUnits()
 
-## Save data in a pickle file
+## Create song from a xml file:
 
-    >>> umazero.data.save_pickle('pixinguinha', pixinguinha)
-
-## Load data from a pickle file
-
-    >>> data = umazero.data.load_pickle('pixinguinha')
-
-## Create an object with all phrases to make queries
-
-If the argument is `False`, the data will be loaded from the pickle
-files. Default is to create all_phrases.
-
-    >>> phrases = umazero.make_allphrases(False)
+    >>> umazero.makeSong('file.xml')
 
 ## Make queries
 
 It's possible to make several queries from an `AllPhrases` object,
 such as by composer, ambitus and Morris reduced contour:
 
-    >>> phrases.byComposer('Pixinguinha')
+    >>> units = umazero.loadMusicUnits()
 
-    >>> phrases.byAmbitus(22)
+    >>> units.byComposer('Pixinguinha')
 
-    >>> from music21.contour import Contour
-    >>> phrases.byMorrisReduction(Contour([0, 2, 1]))
+    >>> units.byAmbitus(22)
 
-## Create pdf file with numbered events
+    >>> units.byContourPrime(umazero.Contour([0, 2, 1]))
+
+## Create a xml file with numbered events
 
 Outside ipython, run:
 
-    $ python song_enumerate.py song.xml
-
-## Create separate xml files for each phrase of a song
-
-A .phrase file of the song must be in the same directory of the song. Outside ipython run:
-
-    $ python phrases_save.py song.xml
-
-*Music21 problem*: It's not possible to save data in pickle, and
- create files for each phrase because of
- [Music21 problem with pickle](https://groups.google.com/forum/?fromgroups=#!topic/music21list/f8hUZqlhc64).
- For while, (un)comment lines in `Phrase` class, and `make_phrase_obj`
- function, in [core.py]() file.
+    $ python umazero/enumerate_events.py song.xml
 
 ## Create a xml file with colored initial and final notes of phrases
 
-A .phrase file of the song must be in the same directory of the song. Outside ipython run:
+A .form file of the song must be in the same directory of the song. Outside ipython run:
 
-    $ python phrases_color.py song.xml
+    $ python umazero/units_color.py song.xml
