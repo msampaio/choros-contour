@@ -45,6 +45,6 @@ if __name__ == '__main__':
     corpus_dir = os.path.expanduser('~/Dropbox/genos-choros/choros-corpus/expandidos')
     dirs = directories(corpus_dir)
     dest_dir = os.path.join(os.getcwd(), 'choros-corpus')
-    
-    print copy_files('xml$', dirs, dest_dir)
-    print copy_files('phrase$', dirs, dest_dir)
+
+    pattern = '^((?!numbered).)*\.(form|xml)$'
+    copy_files(pattern, dirs, dest_dir)

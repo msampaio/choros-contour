@@ -8,10 +8,12 @@ import song
 
 def get_songs_filenames(collections_dir):
     collections = os.listdir(collections_dir)
-    if '.DS_Store' in collections:
-        collections.remove('.DS_Store')
+    exclusion = ['.DS_Store', '.git', 'README.md']
+    for ex in exclusion:
+        if ex in collections:
+            collections.remove(ex)
 
-    pattern = '.*\.xml$'
+    pattern = '^((?!numbered).)*\.xml$'
 
     result = []
     for collection in collections:
@@ -22,12 +24,17 @@ def get_songs_filenames(collections_dir):
 
     return result
 
+
+def run(path):
+    for f in get_songs_filenames(path):
+        print "Processing {0}...".format(f)
+        s = song.makeSong(f, True)
+        s.xml_write('numbered')
+
+
 if __name__ == '__main__':
     if (len(sys.argv) > 1):
         collections_dir = sys.argv[1]
-        for f in get_songs_filenames(collections_dir):
-            print "Processing {0}...".format(f)
-            s = song.make_song(f, True)
-            s.xml_write('numbered')
+        run(collections_dir)
     else:
         print "Insert the correct corpus directory"
