@@ -12,8 +12,16 @@ def counting(seq):
     return Counter(seq)
 
 
+# FIXME: Update music21 with contour package to use Sampaio Prime Form Algorithm
+def sampaio(cseg):
+    i = cseg.inversion()
+    r = cseg.retrogression()
+    ri = i.retrogression()
+    return Contour(sorted([list(cseg), list(i), list(r), list(ri)])[0])
+
+
 def contour_prime_count(units):
-    return counting([un.contour.reduction_morris()[0] for un in units])
+    return counting([sampaio(un.contour.reduction_morris()[0]) for un in units])
 
 
 def contour_highest_cp_count(units):
