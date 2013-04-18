@@ -83,17 +83,13 @@ def getUnitsData(units):
 
 def makeAllMusicUnits(save=False):
     units = []
-    for coll in _utils.collections_list('choros-corpus'):
-        print "Processing collection {0}...".format(coll)
-        try:
-            if save:
-                songs = retrieval.load_pickle('songs')
-            else:
-                songs = song.makeSongCollection(coll, save)
-            for s in songs:
-                units.extend(s.subUnits)
-        except:
-            print "No .form or .xml units in collection {0}".format(coll)
+    songs = retrieval.load_pickle('songs')
+    if save:
+        songs = retrieval.load_pickle('songs')
+    else:
+        songs = song.makeSongCollection(coll, save)
+    for s in songs:
+        units.extend(s.subUnits)
 
     d = getUnitsData(units)
     d['units'] = units
