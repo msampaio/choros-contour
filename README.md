@@ -67,7 +67,7 @@ Then, import `umazero` package
 ## Make queries
 
 It's possible to make several queries from an `AllPhrases` object,
-such as by composer, ambitus and Morris reduced contour:
+such as by composer, ambitus and Contour Prime Form:
 
     >>> units = umazero.loadMusicUnits()
 
