@@ -167,9 +167,10 @@ def make_collections_webpage(collectionsObj):
         for n, composer in enumerate(collectionsObj.allComposers):
             out.write('{0}. {1}\n\n'.format(n + 1, composer))
 
+        # FIXME: use table instead of list
         out.write(rst_header('Songs', 2))
-        for n, collObj in enumerate(collectionsObj.collectionSongs):
-            out.write('{0}. {1} ({2})\n\n'.format(n + 1, collObj.title, collObj.composer))
+        for n, collObj in enumerate(sorted(collectionsObj.collectionSongs, key=lambda coll: coll.title)):
+            out.write('{0}. {1} ({2}) - {3}\n\n'.format(n + 1, collObj.title, collObj.composer, collObj.collection))
 
 
 
