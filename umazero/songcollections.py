@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import json
+
 
 class CollectionSong(object):
     def __init__(self, dic):
@@ -47,3 +49,8 @@ def makeAllCollectionSongs(jsonSeq):
     dic['number'] = len(collectionSongs)
 
     return AllCollectionSongs(dic)
+
+
+def loadSongCollections(filename='songs_map.json'):
+    collectionsSeq = json.load(open(filename))
+    return makeAllCollectionSongs(collectionsSeq)

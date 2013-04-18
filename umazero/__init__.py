@@ -13,6 +13,7 @@ from unit import makeMusicUnit
 from query import makeAllMusicUnits
 from retrieval import loadSongs
 from retrieval import loadMusicUnits
+from songcollections import loadSongCollections
 
 # external
 from music21.contour import Contour
