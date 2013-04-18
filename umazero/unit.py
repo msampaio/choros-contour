@@ -129,3 +129,30 @@ def formParser(filename):
             form.append(dic)
 
     return form
+
+
+def colorUnitObj(filename):
+    """Return a music21 stream object with colored first and last
+    MusicUnit notes."""
+
+    s = song.makeSong(filename, True)
+    measures = s.measures
+    form = formParser(filename)
+
+    beginning = []
+    ending =[]
+    for unit in form:
+        beginning.append(unit['initial'])
+        ending.append(unit['final'])
+
+    n = 0
+    for measure in measures:
+        events = measure.notesAndRests
+        for event in events:
+            n += 1
+            if n in beginning:
+                event.color = 'blue'
+            elif n in ending:
+                event.color = 'red'
+
+    return s

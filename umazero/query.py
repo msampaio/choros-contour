@@ -93,7 +93,7 @@ def makeAllMusicUnits(save=False):
             for s in songs:
                 units.extend(s.subUnits)
         except:
-            print "No .form or .xml phrases in collection {0}".format(coll)
+            print "No .form or .xml units in collection {0}".format(coll)
 
     d = getUnitsData(units)
     d['units'] = units

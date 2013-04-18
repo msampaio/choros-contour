@@ -12,19 +12,19 @@ def counting(seq):
     return Counter(seq)
 
 
-def contour_prime_count(phrases):
-    return counting([phr.contour.reduction_morris()[0] for phr in phrases])
+def contour_prime_count(units):
+    return counting([un.contour.reduction_morris()[0] for un in units])
 
 
-def contour_highest_cp_count(phrases):
-    return counting([max(phr.contour.translation()) for phr in phrases])
+def contour_highest_cp_count(units):
+    return counting([max(un.contour.translation()) for un in units])
 
 
-def passing_contour(phrases):
+def passing_contour(units):
     result = []
-    for phrase in phrases:
-        reduced = phrase.contour.reduction_bor(3)
-        size = phrase.contour_size
+    for unit in units:
+        reduced = unit.contour.reduction_bor(3)
+        size = unit.contour_size
         reduced_size = len(reduced)
         result.append(1 - (reduced_size / float(size)))
     return counting(result)

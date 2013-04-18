@@ -82,7 +82,7 @@ class Song(object):
                 new_measure.pickup = True
             else:
                 new_measure.pickup = None
-            # insert params only in phrase first measure
+            # insert params only in unit first measure
             if n == 0:
                 for values in params.values():
                     new_measure.append(values)
