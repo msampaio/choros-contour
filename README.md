@@ -4,11 +4,11 @@ choros-contour
 Brazilian choros musical contour analysis
 
 This repository contains the code to analyze musical contour relations
-in a large corpus of Brazilian choros using Music21 and
-MusiContour.
+in a large corpus of Brazilian choros using Music21 and MusiContour.
+The data visualization is available at http://umazero.genosmus.com
 
-For more information, http://genosmus.com/pesquisa/contornos/choro/
-(in portuguese)
+For more information about the project, see
+http://genosmus.com/pesquisa/contornos/choro/ (in portuguese)
 
 *Corpus limitations*: Our corpus of songs is not available because of
  copyright questions.
@@ -66,7 +66,7 @@ Then, import `umazero` package
 
 ## Make queries
 
-It's possible to make several queries from an `AllPhrases` object,
+It's possible to make several queries from an `AllMusicUnits` object,
 such as by composer, ambitus and Contour Prime Form:
 
     >>> units = umazero.loadMusicUnits()
@@ -76,6 +76,15 @@ such as by composer, ambitus and Contour Prime Form:
     >>> units.byAmbitus(22)
 
     >>> units.byContourPrime(umazero.Contour([0, 2, 1]))
+
+It's also possible to list all composers, ambitus and contour prime
+forms:
+
+    >>> units.allComposers()
+    
+    >>> units.allAmbitus()
+    
+    >>> units.allContourPrime()
 
 ## Create a xml file with numbered events
 
