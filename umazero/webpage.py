@@ -4,6 +4,7 @@
 import codecs
 import os
 from collections import Counter
+import json
 import _utils
 import retrieval
 import plot
@@ -151,14 +152,43 @@ def make_corpus_webpage(songsObj):
             out.write('{0}. {1} ({2})\n\n'.format(n + 1, s.title, s.composer))
 
 
+def make_collections_webpage(jsonSeq):
+
+    with codecs.open("docs/collections.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Collections information", 1))
+        out.write('This page contains information about all collections to be analysed such as composers and song names.\n\n')
+
+        collections = set()
+        composers = set()
+        songs = set()
+        for el in jsonSeq:
+            collections.add(el['Collection'])
+            composers.add(el['Composer'])
+            songs.add(el['Title'])
+
+        out.write(rst_header('Collections', 2))
+        for n, collection in enumerate(sorted(collections)):
+            out.write('{0}. {1}\n\n'.format(n + 1, collection))
+
+        out.write(rst_header('Composers', 2))
+        for n, composer in enumerate(sorted(composers)):
+            out.write('{0}. {1}\n\n'.format(n + 1, composer))
+
+        out.write(rst_header('Songs', 2))
+        for n, song in enumerate(sorted(songs)):
+            out.write('{0}. {1}\n\n'.format(n + 1, song))
+
+
 
 def run():
     _utils.mkdir('docs/contour')
     songsObj = retrieval.loadSongs()
     unitObj = retrieval.loadMusicUnits()
+    jsonSeq = json.load(open('songs_map.json'))
     make_basic_data_webpage(unitObj)
     make_contour_webpage(unitObj)
     make_corpus_webpage(songsObj)
+    make_collections_webpage(jsonSeq)
 
 
 if __name__ == '__main__':

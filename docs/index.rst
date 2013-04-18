@@ -11,6 +11,7 @@ Contents
 
    introduction.rst
    corpus.rst
+   collections.rst
 
 Data and Analysis
 -----------------
