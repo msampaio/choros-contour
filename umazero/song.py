@@ -168,7 +168,7 @@ def makeSong(filename, number_show=False, save=False):
         if measures[0].number == 0:
             return True
 
-    score = music21.parse(filename)
+    score = music21.converter.parse(filename)
     part = score.getElementsByClass('Part')[0]
     measures = part.getElementsByClass('Measure')
     params = get_parameters(measures)
