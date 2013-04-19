@@ -28,12 +28,12 @@ def contour_highest_cp_count(MusicUnitsList):
     return counting([max(un.contour.translation()) for un in MusicUnitsList])
 
 
-def passing_contour_single(MusicUnitObj):
+def passing_contour(MusicUnitObj):
     reduced = MusicUnitObj.contour.reduction_bor(3)
     size = MusicUnitObj.contour_size
     reduced_size = len(reduced)
     return 1 - (reduced_size / float(size))
 
 
-def passing_contour(MusicUnitsList):
-    return counting([passing_contour_single(un) for un in MusicUnitsList])
+def multicount(MusicUnitsList, fn):
+    return counting([fn(MusicUnitObj) for MusicUnitObj in MusicUnitsList])
