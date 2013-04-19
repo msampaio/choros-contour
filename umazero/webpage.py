@@ -121,7 +121,7 @@ def print_contour(out, composer, AllMusicUnitsObj, allUnits_number):
     print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(AllMusicUnitsObj.units), 0.04), plot.simple_pie)
     print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(AllMusicUnitsObj.units), plot.simple_scatter)
     print_plot(out, 'Passing contour', composer, contour.multicount(AllMusicUnitsObj.units, contour.passing_contour), plot.simple_scatter)
-    print_plot(out, 'Oscillation contour', composer, contour.contour_oscillation_count(AllMusicUnitsObj.units), plot.simple_scatter)
+    print_plot(out, 'Contour oscillation index', composer, contour.contour_oscillation_count(AllMusicUnitsObj.units), plot.simple_scatter)
 
 
 def make_contour_webpage(AllMusicUnitsObj):
