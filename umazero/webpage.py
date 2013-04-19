@@ -233,9 +233,9 @@ def make_special_cases_webpage(AllMusicUnitsObj):
 
         out.write(rst_header('Contour oscillation index', 2))
         out.write(rst_header('Most oscillated', 3))
-        print_lily(out, higher_oscillation[1], '{0} %'.format(round(higher_oscillation[0], 2)))
+        print_lily(out, higher_oscillation[1], '{0} (from 0 to 1)'.format(round(higher_oscillation[0], 2)))
         out.write(rst_header('Least oscillated', 3))
-        print_lily(out, lower_oscillation[1], '{0} %'.format(round(lower_oscillation[0], 2)))
+        print_lily(out, lower_oscillation[1], '{0} (from 0 to 1)'.format(round(lower_oscillation[0], 2)))
 
 
 def run():
