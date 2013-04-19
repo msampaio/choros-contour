@@ -28,6 +28,10 @@ def contour_highest_cp_count(MusicUnitsList):
     return counting([max(un.contour.translation()) for un in MusicUnitsList])
 
 
+def contour_oscillation_count(MusicUnitsList):
+    return counting([MusicUnitObj.contour.oscillation_index() for MusicUnitObj in MusicUnitsList])
+
+
 def passing_contour(MusicUnitObj):
     reduced = MusicUnitObj.contour.reduction_bor(3)
     size = MusicUnitObj.contour_size
