@@ -5,6 +5,7 @@ import math
 import os
 import glob
 import unicodedata
+import subprocess
 
 
 def flatten(seq):
@@ -95,3 +96,7 @@ def group_minorities(data, percentage=0.05):
     if minors != 0:
         data['Others'] = minors
     return data
+
+
+def trim(im):
+    subprocess.call('convert {0} -crop +0-100 -trim {0}'.format(im), shell=True)
