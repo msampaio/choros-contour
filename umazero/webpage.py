@@ -181,6 +181,42 @@ def make_collections_webpage(collectionsObj):
             out.write('{0}. {1} ({2}) - {3}\n\n'.format(n + 1, collObj.title, collObj.composer, collObj.collection))
 
 
+def print_lily(out, unitObj, subtitle):
+    # plotting
+    directory = "docs/contour"
+    r_composer = unitObj.composer.replace(" ", "-")
+    r_title = unitObj.title.replace(" ", "-")
+    dest = _utils.unicode_normalize(os.path.join(directory, r_composer + "-" + r_title + ".png"))
+    pngfile = os.path.splitext(os.path.basename(dest))[0]
+    unitObj.make_score()
+    unitObj.score.write('png', dest)
+
+    title = ", ".join([unitObj.title, unitObj.composer, " ".join([unitObj.typeof, str(unitObj.number)]), subtitle])
+    # print in rst
+    out.write(rst_header(title, 4))
+    out.write(rst_image(pngfile, "contour", 90))
+    out.write("\n\n")
+
+
+def make_special_cases_webpage(unitObj):
+
+    with codecs.open("docs/special_cases.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Special cases", 1))
+        out.write('This page contains units with data such as higher and lower ambitus.\n\n')
+
+        # ambitus
+        allAmbitus = unitObj.allAmbitus
+        higher_ambitus = max(allAmbitus)
+        lower_ambitus = min(allAmbitus)
+
+        higher_ambitus_unit = unitObj.getByAmbitus(higher_ambitus).units[0]
+        lower_ambitus_unit = unitObj.getByAmbitus(lower_ambitus).units[0]
+
+        out.write(rst_header('Higher ambitus', 3))
+        print_lily(out, higher_ambitus_unit, '{0} semitones'.format(higher_ambitus))
+        out.write(rst_header('Lower ambitus', 3))
+        print_lily(out, lower_ambitus_unit, '{0} semitones'.format(lower_ambitus))
+
 
 def run():
     _utils.mkdir('docs/contour')
@@ -193,6 +229,7 @@ def run():
     make_contour_webpage(unitObj)
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
+    make_special_cases_webpage(unitObj)
 
 
 if __name__ == '__main__':

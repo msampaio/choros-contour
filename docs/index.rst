@@ -21,3 +21,4 @@ Data and Analysis
 
    basic_data.rst
    contour.rst
+   special_cases.rst
