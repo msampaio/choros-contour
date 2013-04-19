@@ -186,10 +186,14 @@ def print_lily(out, MusicUnitObj, subtitle):
     directory = "docs/contour"
     r_composer = MusicUnitObj.composer.replace(" ", "-")
     r_title = MusicUnitObj.title.replace(" ", "-")
-    dest = _utils.unicode_normalize(os.path.join(directory, r_composer + "-" + r_title + ".png"))
+    r_typeof = MusicUnitObj.typeof
+    r_number = str(MusicUnitObj.number)
+    filename = "-".join([r_composer, r_title, r_typeof, r_number])
+    dest = _utils.unicode_normalize(os.path.join(directory, filename +  ".png"))
     pngfile = os.path.splitext(os.path.basename(dest))[0]
     MusicUnitObj.make_score()
     MusicUnitObj.score.write('png', dest)
+    _utils.trim(dest)
 
     title = ", ".join([MusicUnitObj.title, MusicUnitObj.composer, " ".join([MusicUnitObj.typeof, str(MusicUnitObj.number)]), subtitle])
     # print in rst
