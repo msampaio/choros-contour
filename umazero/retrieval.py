@@ -40,8 +40,8 @@ def run():
 
     save_pickle('songs', songs)
 
-    # units
-    print "Processing units...."
+    # Music Units
+    print "Processing Music Units...."
     save_pickle('units', query.makeAllMusicUnits(True))
 
 

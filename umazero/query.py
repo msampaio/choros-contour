@@ -8,7 +8,7 @@ import song
 
 
 def _aux_getBy(units, save):
-    d = getUnitsData(units)
+    d = getMusicUnitsData(units)
     d['units'] = units
     return AllMusicUnits(d, save)
 
@@ -52,12 +52,12 @@ class AllMusicUnits(object):
         return _aux_getBy([un for un in self.units if un.pickup == pickup], self.save)
 
 
-def getUnitsData(units):
+def getMusicUnitsData(MusicUnitsList):
 
-    def getData(unit, attrib):
+    def getData(MusicUnitsList, attrib):
         s = set()
-        for unit in units:
-            value = getattr(unit, attrib)
+        for MusicUnitObj in MusicUnitsList:
+            value = getattr(MusicUnitObj, attrib)
             if type(value) == music21.contour.contour.Contour:
                 value = tuple(value)
                 s.add(value)
@@ -68,29 +68,29 @@ def getUnitsData(units):
         return r
 
     data = {}
-    data['allComposers'] = getData(units, 'composer')
-    data['allTitles'] = getData(units, 'title')
-    data['allCollections'] = getData(units, 'collection')
-    data['allContours'] = getData(units, 'contour')
-    data['allContourSizes'] = getData(units, 'contour_size')
-    data['allContourPrimes'] = getData(units, 'contour_prime')
-    data['allAmbitus'] = getData(units, 'ambitus')
-    data['allTimeSignatures'] = getData(units, 'time_signature')
-    data['allMeters'] = getData(units, 'meter')
-    data['allFilenames'] = getData(units, 'filename')
+    data['allComposers'] = getData(MusicUnitsList, 'composer')
+    data['allTitles'] = getData(MusicUnitsList, 'title')
+    data['allCollections'] = getData(MusicUnitsList, 'collection')
+    data['allContours'] = getData(MusicUnitsList, 'contour')
+    data['allContourSizes'] = getData(MusicUnitsList, 'contour_size')
+    data['allContourPrimes'] = getData(MusicUnitsList, 'contour_prime')
+    data['allAmbitus'] = getData(MusicUnitsList, 'ambitus')
+    data['allTimeSignatures'] = getData(MusicUnitsList, 'time_signature')
+    data['allMeters'] = getData(MusicUnitsList, 'meter')
+    data['allFilenames'] = getData(MusicUnitsList, 'filename')
 
     return data
 
 def makeAllMusicUnits(save=False):
-    units = []
+    MusicUnitsList = []
     songs = retrieval.load_pickle('songs')
     if save:
         songs = retrieval.load_pickle('songs')
     else:
         songs = song.makeSongCollection(coll, save)
     for s in songs:
-        units.extend(s.subUnits)
+        MusicUnitsList.extend(s.subUnits)
 
-    d = getUnitsData(units)
-    d['units'] = units
+    d = getMusicUnitsData(MusicUnitsList)
+    d['units'] = MusicUnitsList
     return AllMusicUnits(d, save)

@@ -67,63 +67,63 @@ def print_plot(out, title, composer, data, plot_fn):
     out.write("\n\n")
 
 
-def print_basic_data(out, composer, unitObj, allUnits_number):
+def print_basic_data(out, composer, AllMusicUnitsObj, allUnits_number):
 
-    def count_units(unitObj, attrib):
-        return Counter((getattr(un, attrib) for un in unitObj.units))
+    def count_units(AllMusicUnitsObj, attrib):
+        return Counter((getattr(un, attrib) for un in AllMusicUnitsObj.units))
 
-    print "Processing units of composer... {0}".format(composer)
+    print "Processing music units of composer... {0}".format(composer)
 
-    songs_number = len(unitObj.allFilenames)
-    percentual_allUnits = unitObj.units_number / float(allUnits_number) * 100
+    songs_number = len(AllMusicUnitsObj.allFilenames)
+    percentual_allUnits = AllMusicUnitsObj.units_number / float(allUnits_number) * 100
 
     out.write(rst_header(composer, 2))
 
     out.write("Number of Songs: {0}\n\n".format(songs_number))
     if percentual_allUnits != 100:
-        out.write("Percentual of all units: {0:.2f}%\n\n".format(percentual_allUnits))
-    out.write("Number of Units: {0}\n\n".format(unitObj.units_number))
+        out.write("Percentual of all music units: {0:.2f}%\n\n".format(percentual_allUnits))
+    out.write("Number of music units: {0}\n\n".format(AllMusicUnitsObj.units_number))
 
 
-    print_plot(out, 'Meter', composer, count_units(unitObj, 'meter'), plot.simple_pie)
-    print_plot(out, 'Ambitus in semitones', composer, count_units(unitObj, 'ambitus'), plot.simple_scatter)
-    print_plot(out, 'Pickup measure', composer, count_units(unitObj, 'pickup'), plot.simple_pie)
+    print_plot(out, 'Meter', composer, count_units(AllMusicUnitsObj, 'meter'), plot.simple_pie)
+    print_plot(out, 'Ambitus in semitones', composer, count_units(AllMusicUnitsObj, 'ambitus'), plot.simple_scatter)
+    print_plot(out, 'Pickup measure', composer, count_units(AllMusicUnitsObj, 'pickup'), plot.simple_pie)
 
 
-def make_basic_data_webpage(unitObj):
+def make_basic_data_webpage(AllMusicUnitsObj):
 
     with codecs.open("docs/basic_data.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Basic Data", 1))
         out.write('This page contains basic data of choros music units such as time signature organized by composer. ')
         out.write('The numbers in the table\'s second column are in percent.\n\n')
 
-        print_basic_data(out, 'All composers', unitObj, unitObj.units_number)
+        print_basic_data(out, 'All composers', AllMusicUnitsObj, AllMusicUnitsObj.units_number)
 
-        for composer in unitObj.allComposers:
-            subunits = unitObj.getByComposer(composer)
-            print_basic_data(out, composer, subunits, unitObj.units_number)
+        for composer in AllMusicUnitsObj.allComposers:
+            subunits = AllMusicUnitsObj.getByComposer(composer)
+            print_basic_data(out, composer, subunits, AllMusicUnitsObj.units_number)
 
 
-def print_contour(out, composer, unitObj, allUnits_number):
+def print_contour(out, composer, AllMusicUnitsObj, allUnits_number):
 
     print "Processing units of composer... {0}".format(composer)
 
-    songs_number = len(unitObj.allFilenames)
-    percentual_allUnits = unitObj.units_number / float(allUnits_number) * 100
+    songs_number = len(AllMusicUnitsObj.allFilenames)
+    percentual_allUnits = AllMusicUnitsObj.units_number / float(allUnits_number) * 100
 
     out.write(rst_header(composer, 2))
 
     out.write("Number of Songs: {0}\n\n".format(songs_number))
     if percentual_allUnits != 100:
         out.write("Percentual of all units: {0:.2f}%\n\n".format(percentual_allUnits))
-    out.write("Number of Units: {0}\n\n".format(unitObj.units_number))
+    out.write("Number of Units: {0}\n\n".format(AllMusicUnitsObj.units_number))
 
-    print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(unitObj.units), 0.04), plot.simple_pie)
-    print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(unitObj.units), plot.simple_scatter)
-    print_plot(out, 'Passing contour', composer, contour.passing_contour(unitObj.units), plot.simple_scatter)
+    print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(AllMusicUnitsObj.units), 0.04), plot.simple_pie)
+    print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(AllMusicUnitsObj.units), plot.simple_scatter)
+    print_plot(out, 'Passing contour', composer, contour.passing_contour(AllMusicUnitsObj.units), plot.simple_scatter)
 
 
-def make_contour_webpage(unitObj):
+def make_contour_webpage(AllMusicUnitsObj):
 
     with codecs.open("docs/contour.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Contour", 1))
@@ -132,11 +132,11 @@ def make_contour_webpage(unitObj):
         out.write('A great value of passing contour incidence means that a music unit has many successive cp in the same direction. ')
         out.write('The numbers in the table\'s second column are in percent.\n\n')
 
-        print_contour(out, 'All composers', unitObj, unitObj.units_number)
+        print_contour(out, 'All composers', AllMusicUnitsObj, AllMusicUnitsObj.units_number)
 
-        for composer in unitObj.allComposers:
-            subunits = unitObj.getByComposer(composer)
-            print_contour(out, composer, subunits, unitObj.units_number)
+        for composer in AllMusicUnitsObj.allComposers:
+            subunits = AllMusicUnitsObj.getByComposer(composer)
+            print_contour(out, composer, subunits, AllMusicUnitsObj.units_number)
 
 
 def make_corpus_webpage(songsObj, collectionsObj):
@@ -181,36 +181,36 @@ def make_collections_webpage(collectionsObj):
             out.write('{0}. {1} ({2}) - {3}\n\n'.format(n + 1, collObj.title, collObj.composer, collObj.collection))
 
 
-def print_lily(out, unitObj, subtitle):
+def print_lily(out, MusicUnitObj, subtitle):
     # plotting
     directory = "docs/contour"
-    r_composer = unitObj.composer.replace(" ", "-")
-    r_title = unitObj.title.replace(" ", "-")
+    r_composer = MusicUnitObj.composer.replace(" ", "-")
+    r_title = MusicUnitObj.title.replace(" ", "-")
     dest = _utils.unicode_normalize(os.path.join(directory, r_composer + "-" + r_title + ".png"))
     pngfile = os.path.splitext(os.path.basename(dest))[0]
-    unitObj.make_score()
-    unitObj.score.write('png', dest)
+    MusicUnitObj.make_score()
+    MusicUnitObj.score.write('png', dest)
 
-    title = ", ".join([unitObj.title, unitObj.composer, " ".join([unitObj.typeof, str(unitObj.number)]), subtitle])
+    title = ", ".join([MusicUnitObj.title, MusicUnitObj.composer, " ".join([MusicUnitObj.typeof, str(MusicUnitObj.number)]), subtitle])
     # print in rst
     out.write(rst_header(title, 4))
     out.write(rst_image(pngfile, "contour", 90))
     out.write("\n\n")
 
 
-def make_special_cases_webpage(unitObj):
+def make_special_cases_webpage(AllMusicUnitsObj):
 
     with codecs.open("docs/special_cases.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Special cases", 1))
-        out.write('This page contains units with data such as higher and lower ambitus.\n\n')
+        out.write('This page contains music units with data such as higher and lower ambitus.\n\n')
 
         # ambitus
-        allAmbitus = unitObj.allAmbitus
+        allAmbitus = AllMusicUnitsObj.allAmbitus
         higher_ambitus = max(allAmbitus)
         lower_ambitus = min(allAmbitus)
 
-        higher_ambitus_unit = unitObj.getByAmbitus(higher_ambitus).units[0]
-        lower_ambitus_unit = unitObj.getByAmbitus(lower_ambitus).units[0]
+        higher_ambitus_unit = AllMusicUnitsObj.getByAmbitus(higher_ambitus).units[0]
+        lower_ambitus_unit = AllMusicUnitsObj.getByAmbitus(lower_ambitus).units[0]
 
         out.write(rst_header('Higher ambitus', 3))
         print_lily(out, higher_ambitus_unit, '{0} semitones'.format(higher_ambitus))
@@ -221,15 +221,15 @@ def make_special_cases_webpage(unitObj):
 def run():
     _utils.mkdir('docs/contour')
     songsObj = retrieval.loadSongs()
-    unitObj = retrieval.loadMusicUnits()
+    AllMusicUnitsObj = retrieval.loadMusicUnits()
     collectionsSeq = json.load(open('songs_map.json'))
     collectionsObj = songcollections.makeAllCollectionSongs(collectionsSeq)
     
-    make_basic_data_webpage(unitObj)
-    make_contour_webpage(unitObj)
+    make_basic_data_webpage(AllMusicUnitsObj)
+    make_contour_webpage(AllMusicUnitsObj)
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
-    make_special_cases_webpage(unitObj)
+    make_special_cases_webpage(AllMusicUnitsObj)
 
 
 if __name__ == '__main__':

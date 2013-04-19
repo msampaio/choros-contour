@@ -20,19 +20,20 @@ def sampaio(cseg):
     return Contour(sorted([list(cseg), list(i), list(r), list(ri)])[0])
 
 
-def contour_prime_count(units):
-    return counting([sampaio(un.contour.reduction_morris()[0]) for un in units])
+def contour_prime_count(MusicUnitsList):
+    return counting([sampaio(un.contour.reduction_morris()[0]) for un in MusicUnitsList])
 
 
-def contour_highest_cp_count(units):
-    return counting([max(un.contour.translation()) for un in units])
+def contour_highest_cp_count(MusicUnitsList):
+    return counting([max(un.contour.translation()) for un in MusicUnitsList])
 
 
-def passing_contour(units):
-    result = []
-    for unit in units:
-        reduced = unit.contour.reduction_bor(3)
-        size = unit.contour_size
-        reduced_size = len(reduced)
-        result.append(1 - (reduced_size / float(size)))
-    return counting(result)
+def passing_contour_single(MusicUnitObj):
+    reduced = MusicUnitObj.contour.reduction_bor(3)
+    size = MusicUnitObj.contour_size
+    reduced_size = len(reduced)
+    return 1 - (reduced_size / float(size))
+
+
+def passing_contour(MusicUnitsList):
+    return counting([passing_contour_single(un) for un in MusicUnitsList])

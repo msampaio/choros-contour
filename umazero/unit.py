@@ -148,9 +148,9 @@ def colorUnitObj(filename):
 
     beginning = []
     ending =[]
-    for unit in form:
-        beginning.append(unit['initial'])
-        ending.append(unit['final'])
+    for un in form:
+        beginning.append(un['initial'])
+        ending.append(un['final'])
 
     n = 0
     for measure in measures:
