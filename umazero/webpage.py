@@ -221,6 +221,19 @@ def make_special_cases_webpage(AllMusicUnitsObj):
         out.write(rst_header('Lower ambitus', 3))
         print_lily(out, lower_ambitus_unit, '{0} semitones'.format(lower_ambitus))
 
+        # oscillation contour
+        oscillation_list = []
+        for MusicUnitObj in AllMusicUnitsObj.units:
+            oscillation_value = MusicUnitObj.contour.oscillation_index()
+            oscillation_list.append((oscillation_value, MusicUnitObj))
+        higher_oscillation = sorted(oscillation_list, key = lambda el: el[0], reverse=True)[0]
+        lower_oscillation = sorted(oscillation_list, key = lambda el: el[0])[0]
+
+        out.write(rst_header('Most oscillated contour', 3))
+        print_lily(out, higher_oscillation[1], '{0} %'.format(round(higher_oscillation[0], 2)))
+        out.write(rst_header('Less oscillated contour', 3))
+        print_lily(out, lower_oscillation[1], '{0} %'.format(round(lower_oscillation[0], 2)))
+
 
 def run():
     _utils.mkdir('docs/contour')
