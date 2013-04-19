@@ -77,20 +77,32 @@ class Song(object):
     def getExcerpt(self, initial, final):
 
         def make_measure(measure, params, keep_list, n):
+            events = [event for event in measure.notesAndRests if event.event_number in keep_list]
             new_measure = music21.stream.Measure()
-            if measure.number == 0:
+
+            # padding value for small length measures. Pickup measures or not
+            events_length = sum((event.quarterLength for event in events))
+            measure_length = params['time_signature'].totalLength
+            pad = measure_length - events_length
+
+            # tests if measure has pickup
+            if measure.notesAndRests[0] != events[0]:
                 new_measure.pickup = True
+                if pad != 0:
+                    new_measure.paddingLeft = pad
             else:
                 new_measure.pickup = None
+
             # insert params only in unit first measure
             if n == 0:
                 for values in params.values():
                     new_measure.append(values)
-            for event in measure.notesAndRests:
-                if event.event_number in keep_list:
-                    new_measure.append(event)
-            if measure.notesAndRests[0] != new_measure.notesAndRests[0]:
-                new_measure.pickup = True
+
+            for event in events:
+                new_measure.append(event)
+
+            if pad != 0 and not new_measure.pickup:
+                new_measure.paddingRight = pad
 
             return new_measure
 
