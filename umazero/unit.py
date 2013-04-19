@@ -50,6 +50,13 @@ class MusicUnit(song.Song):
         print "Writing xml file in {0}".format(dest)
         self.score.write('musicxml', dest)
 
+    def make_score(self, number_show=False):
+        if not self.score:
+            newSong = song.makeSong(self.filename, number_show, False)
+            newUnit = newSong.getExcerpt(self.initial_event, self.final_event)
+            self.score = newUnit
+        else:
+            print "There is already a score attribute"
 
 def makeMusicUnit(data_input):
     initial = data_input['initial']
