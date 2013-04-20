@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 
+import numpy
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 import pylab
 from music21.contour import Contour
-import _utils
 from collections import Counter
+import copy
+import _utils
 
 
 def __explode_max(data):
@@ -79,3 +82,70 @@ def simple_scatter(y, x, labels, title=None, filename=None):
     if not filename:
         filename = '/tmp/foo.png'
     plt.savefig(filename, dpi=72)
+
+
+def stacked_bars(stacked_bar_data):
+
+    values = stacked_bar_data['values']
+    legend_labels = stacked_bar_data['legend_labels']
+    bars_legend = stacked_bar_data['bars_legend']
+    size = len(values[0])
+
+    higher_bar = max([sum([line[i] for line in values]) for i in range(size)])
+
+    for bl in bars_legend:
+        if len(bl) > 40:
+            splitted = bl.split()
+            words = len(splitted)
+            half = words / 2
+            word_ind = bars_legend.index(bl)
+            bars_legend[word_ind] = "\n".join([" ".join(splitted[:half]), " ".join(splitted[half:])])
+
+    title = 'Scores by group and gender'
+    ylabel = 'Scores'
+
+    ind = numpy.arange(size)    # the x locations for the groups
+    width = 0.35       # the width of the bars: can also be len(x) sequence
+
+    c = 0
+    legend = []
+    for val in values:
+        p = plt.bar(ind, val, width, color=cm.jet(c))
+        c += 20
+        legend.append(p[0])
+
+    plt.ylabel(ylabel)
+    plt.title(title)
+
+    plt.xticks(ind+width/2., bars_legend, rotation=90, fontsize=10)
+    plt.yticks(numpy.arange(0,81,10))
+    plt.legend(legend, legend_labels)
+    plt.subplots_adjust(left=None, right=None, bottom=0.4, top=0.9, wspace=None, hspace=None)
+    plt.ylim(0, higher_bar * 1.2)
+    plt.show()
+
+
+def generate_stacked_bar_data(AllMusicUnitsObj, attrib):
+    AllMusicUnitsObj = copy.deepcopy(AllMusicUnitsObj)
+    attrib_values = []
+    composers = AllMusicUnitsObj.allComposers
+    composers_values = {}
+    for MusicUnitObj in AllMusicUnitsObj.units:
+        value = getattr(MusicUnitObj, attrib)
+        composer = MusicUnitObj.composer
+        if not value in composers_values:
+            composers_values[value] = [0 for c in composers]
+        ind = composers.index(composer)
+        composers_values[value][ind] += 1
+        attrib_values.append(value)
+    ordered_attrib_values = [val[0] for val in Counter(attrib_values).most_common()]
+    stacked_bar_data = {}
+    stacked_bar_data['bars_legend'] = composers
+    stacked_bar_data['legend_labels'] = ordered_attrib_values
+    stacked_bar_data['values'] = []
+    for val in ordered_attrib_values:
+        stacked_bar_data['values'].append(composers_values[val])
+    return stacked_bar_data
+
+def stacked_bar_chart(AllMusicUnitsObj, attrib):
+    stacked_bars(generate_stacked_bar_data(AllMusicUnitsObj, attrib))
