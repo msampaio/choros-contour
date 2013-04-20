@@ -5,7 +5,7 @@ import math
 import os
 import glob
 import unicodedata
-import subprocess
+from PIL import Image, ImageChops
 
 
 def flatten(seq):
@@ -98,5 +98,12 @@ def group_minorities(data, percentage=0.05):
     return data
 
 
-def trim(im):
-    subprocess.call('convert {0} -crop +0-100 -trim {0}'.format(im), shell=True)
+def image_trim(filename):
+    im = Image.open(filename)
+    im = im.crop((0, 0, 776, 1000))
+    bg = Image.new(im.mode, im.size, im.getpixel((0,0)))
+    diff = ImageChops.difference(im, bg)
+    bbox = diff.getbbox()
+    if bbox:
+        im = im.crop(bbox)
+        im.save(filename)

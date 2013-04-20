@@ -194,7 +194,7 @@ def print_lily(out, MusicUnitObj, subtitle):
     pngfile = os.path.splitext(os.path.basename(dest))[0]
     MusicUnitObj.make_score()
     MusicUnitObj.score.write('png', dest)
-    _utils.trim(dest)
+    _utils.image_trim(dest)
 
     title = ", ".join([MusicUnitObj.title, MusicUnitObj.composer, " ".join([MusicUnitObj.typeof, str(MusicUnitObj.number)]), subtitle])
     # print in rst
