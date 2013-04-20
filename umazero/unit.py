@@ -39,9 +39,13 @@ class MusicUnit(song.Song):
         return "<Unit {0}: {1} - {2} ({3})>".format(self.typeof, self.title, self.composer, self.number)
 
     def show(self, arg=None):
+        if not self.score:
+            self.make_score()
         self.score.show(arg)
 
     def xml_write(self, suffix='numbered', path=None):
+        if not self.score:
+            self.make_score()
         dirname = os.path.dirname(self.filename)
         basename = os.path.basename(self.filename).split('.')[0] + ' - {0}.xml'.format(suffix)
         if path:

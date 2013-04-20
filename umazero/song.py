@@ -41,6 +41,8 @@ class Song(object):
         self.score.show(arg)
 
     def xml_write(self, suffix='numbered', path=None):
+        if not self.score:
+            self.make_score()
         dirname = os.path.dirname(self.filename)
         basename = os.path.basename(self.filename).split('.')[0] + ' - {0}.xml'.format(suffix)
         if path:
