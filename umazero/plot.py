@@ -101,16 +101,18 @@ def stacked_bars(stacked_bar_data):
             word_ind = bars_legend.index(bl)
             bars_legend[word_ind] = "\n".join([" ".join(splitted[:half]), " ".join(splitted[half:])])
 
-    title = 'Scores by group and gender'
-    ylabel = 'Scores'
+    title = stacked_bar_data['title']
+    ylabel = stacked_bar_data['ylabel']
 
     ind = numpy.arange(size)    # the x locations for the groups
     width = 0.35       # the width of the bars: can also be len(x) sequence
 
     c = 0
     legend = []
+    plt.figure(1, figsize=(10,8))
     for val in values:
         p = plt.bar(ind, val, width, color=cm.jet(c))
+        # FIXME: improve increment
         c += 20
         legend.append(p[0])
 
@@ -140,11 +142,15 @@ def generate_stacked_bar_data(AllMusicUnitsObj, attrib):
         attrib_values.append(value)
     ordered_attrib_values = [val[0] for val in Counter(attrib_values).most_common()]
     stacked_bar_data = {}
+    stacked_bar_data['title'] = attrib[0].upper() + attrib[1:]
+    stacked_bar_data['ylabel'] = 'MusicUnits'
     stacked_bar_data['bars_legend'] = composers
     stacked_bar_data['legend_labels'] = ordered_attrib_values
     stacked_bar_data['values'] = []
     for val in ordered_attrib_values:
         stacked_bar_data['values'].append(composers_values[val])
+    # FIXME: create all and other categories
+
     return stacked_bar_data
 
 def stacked_bar_chart(AllMusicUnitsObj, attrib):
