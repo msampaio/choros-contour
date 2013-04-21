@@ -130,10 +130,8 @@ def make_contour_webpage(AllMusicUnitsObj):
 
     with codecs.open("docs/contour.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Contour", 1))
-        out.write('This page contains contour data of choros music units such as Contour Primes organized by composer. ')
-        out.write('Highest contour points means the number of different contour points. ')
-        out.write('A great value of passing contour incidence means that a music unit has many successive cp in the same direction. ')
-        out.write('The numbers in the table\'s second column are in percent.\n\n')
+        out.write('This page contains contour data of choros music units such as Contour Primes organized by composer.\n\n')
+        out.write('The explanation about the charts below are in `glossary <glossary.html>`_.\n\n')
 
         print_contour(out, 'All composers', AllMusicUnitsObj, AllMusicUnitsObj.units_number)
 
