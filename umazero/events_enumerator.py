@@ -33,11 +33,21 @@ def get_songs_filenames(collections_dir):
     return result
 
 
+def save(filename):
+    print "Processing {0}...".format(filename)
+    s = song.makeSong(filename, True)
+    s.xml_write('numbered')
+
+
 def enumerator(path):
-    for f in get_songs_filenames(path):
-        print "Processing {0}...".format(f)
-        s = song.makeSong(f, True)
-        s.xml_write('numbered')
+    if os.path.isfile(path):
+        save(path)
+    else:
+        songs = [x for x in get_songs(path)]
+        if not songs:
+            songs = get_songs_filenames(path)
+        for f in songs:
+            save(f)
 
 
 if __name__ == '__main__':
