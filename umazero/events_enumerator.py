@@ -6,26 +6,34 @@ import re
 import song
 
 
-def get_songs_filenames(collections_dir):
-    collections = os.listdir(collections_dir)
-    exclusion = ['.DS_Store', '.git', 'README.md']
-    for ex in exclusion:
-        if ex in collections:
-            collections.remove(ex)
+def file_exclusion(path, exclusions=['.DS_Store', '.git', 'README.md']):
+    files = os.listdir(path)
+    for ex in exclusions:
+        if ex in files:
+            files.remove(ex)
+    return files
 
+
+def get_songs(path, pattern='^((?!numbered).)*\.xml$'):
+    files = os.listdir(path)
+    songs = (os.path.join(path, re.search(pattern, f).string) for f in files if re.search(pattern, f))
+    return songs
+
+
+def get_songs_filenames(collections_dir):
+    exclusions = ['.DS_Store', '.git', 'README.md']
     pattern = '^((?!numbered).)*\.xml$'
+    collections = file_exclusion(collections_dir, exclusions)
 
     result = []
     for collection in collections:
-        collpath = os.path.join(collections_dir, collection)
-        files = os.listdir(collpath)
-        songs = (os.path.join(collpath, re.search(pattern, f).string) for f in files if re.search(pattern, f))
+        songs = get_songs(os.path.join(collections_dir, collection), pattern)
         result.extend(songs)
 
     return result
 
 
-def run(path):
+def enumerator(path):
     for f in get_songs_filenames(path):
         print "Processing {0}...".format(f)
         s = song.makeSong(f, True)
@@ -35,6 +43,6 @@ def run(path):
 if __name__ == '__main__':
     if (len(sys.argv) > 1):
         collections_dir = sys.argv[1]
-        run(collections_dir)
+        enumerator(collections_dir)
     else:
         print "Insert the correct corpus directory"
