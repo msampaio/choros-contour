@@ -97,7 +97,7 @@ It's possible to enumerate an entire collection of songs:
 
 It's also possible to enumerate all collections of songs:
 
-    >>> umazero.enumerator('choros-contour')
+    >>> umazero.enumerator('choros-corpus')
 
 ## Create a xml file with colored initial and final notes of phrases
 
