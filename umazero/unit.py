@@ -6,8 +6,10 @@ import song
 
 
 class MusicUnit(song.Song):
-    def __init__(self, data):
+    """Class for Music unit classes. A music unit is a phrase or link
+    of a song."""
 
+    def __init__(self, data):
         self.filename = data['filename']
 
         # metadata
@@ -39,11 +41,15 @@ class MusicUnit(song.Song):
         return "<Unit {0}: {1} - {2} ({3})>".format(self.typeof, self.title, self.composer, self.number)
 
     def show(self, arg=None):
+        """Shortcut for music21.stream.show."""
+
         if not self.score:
             self.make_score()
         self.score.show(arg)
 
     def xml_write(self, suffix='numbered', path=None):
+        """Save a score object in a xml file."""
+
         if not self.score:
             self.make_score()
         dirname = os.path.dirname(self.filename)
@@ -55,6 +61,9 @@ class MusicUnit(song.Song):
         self.score.write('musicxml', dest)
 
     def make_score(self, number_show=False):
+        """Return a score (music21.stream.Stream) object of the
+        MusicUnit object."""
+
         if not self.score:
             newSong = song.makeSong(self.filename, number_show, False)
             newUnit = newSong.getExcerpt(self.initial_event, self.final_event)
@@ -62,7 +71,11 @@ class MusicUnit(song.Song):
         else:
             print "There is already a score attribute"
 
+
 def makeMusicUnit(data_input):
+    """Return a MusicUnit object from a dictionary with specific data,
+    including metadata."""
+
     initial = data_input['initial']
     final = data_input['final']
 
@@ -106,6 +119,10 @@ def makeMusicUnit(data_input):
 
 
 def formParser(filename):
+    """Returns a dictionary with the formal structure of a song
+    parsed. The argument is the name of xml file, but the function
+    parses the .form file in the same directory of the xml one."""
+
     form_name = filename.strip('.xml') + '.form'
     with open(form_name, 'r') as f:
         seq = [el.strip('\n') for el in f.readlines() if el.strip('\n')]
