@@ -88,9 +88,16 @@ forms:
 
 ## Create a xml file with numbered events
 
-Outside ipython, run:
 
-    $ python umazero/enumerate_events.py song.xml
+    >>> umazero.enumerator('song.xml')
+
+It's possible to enumerate an entire collection of songs:
+
+    >>> umazero.enumerator('/tmp/collection')
+
+It's also possible to enumerate all collections of songs:
+
+    >>> umazero.enumerator('choros-contour')
 
 ## Create a xml file with colored initial and final notes of phrases
 
