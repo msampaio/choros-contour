@@ -8,6 +8,8 @@ import _utils
 
 
 class Song(object):
+    """Class for song objects."""
+
     def __init__(self, data):
 
         self.filename = data['filename']
@@ -36,11 +38,15 @@ class Song(object):
         return "<Song: {0}. {1}>".format(self.title, self.collection)
 
     def show(self, arg=None):
+        """Shortcut for music21.stream.show."""
+
         if not self.score:
             self.make_score()
         self.score.show(arg)
 
     def xml_write(self, suffix='numbered', path=None):
+        """Save a score object in a xml file."""
+
         if not self.score:
             self.make_score()
         dirname = os.path.dirname(self.filename)
@@ -52,16 +58,28 @@ class Song(object):
         self.score.write('musicxml', dest)
 
     def addMusicUnit(self, subUnit):
+        """Add MusicUnit objects in subUnit attribute."""
+
         self.subUnits.append(subUnit)
         return self
 
     def allPhrases(self):
+        """Return all the subUnits of type Phrase from the Song
+        object."""
+
         return [un for un in self.subUnits if un.typeof == 'Phrase']
 
     def showUnit(self, number, typeof='Phrase'):
+        """Return a list os all MusicUnit objects from the Song object
+        with a given type. Phrase is the default type."""
+
         return [un for un in self.subUnits if un.typeof == typeof and un.number == number][0]
 
     def showBigUnit(self, number, typeof='Period'):
+        """Return a list with all MusicUnit objects of a given big
+        unit structures such as Part or Period. The methods arguments
+        are the number and type of big structure."""
+
         if typeof == 'Period':
             return [un for un in self.subUnits if un.period_number == number]
         elif typeof == 'Part':
@@ -77,8 +95,15 @@ class Song(object):
         return self
 
     def getExcerpt(self, initial, final):
+        """Return a score (music21.stream.Stream) object with a
+        portion of the Song. The portion includes all numbered music
+        events between initial and final values."""
 
         def make_measure(measure, params, keep_list, n):
+            """Returns a music21.stream.Measure object from a given
+            measure and list of numbers of the events that will be
+            kept in the new object."""
+
             events = [event for event in measure.notesAndRests if event.event_number in keep_list]
             new_measure = music21.stream.Measure()
 
@@ -109,6 +134,9 @@ class Song(object):
             return new_measure
 
         def make_stream(measures):
+            """Return a music21.stream.Stream object with the given
+            measures."""
+
             new_score = music21.stream.Stream()
             for measure in measures:
                 new_score.append(measure)
@@ -144,6 +172,9 @@ class Song(object):
         return new_score
 
     def make_score(self, number_show=False):
+        """Return a score (music21.stream.Stream) object of the song
+        object."""
+
         if not self.score:
             newSong = makeSong(self.filename, number_show, False)
             self.params = newSong.params
@@ -154,8 +185,15 @@ class Song(object):
             print "There is already a score attribute"
 
 def makeSong(filename, number_show=False, save=False):
+    """Return a Song object from a xml file. The argument number_show
+    means the enumbered numbers will be included in score object, and
+    the save argument means the object can be saved in a pickle file,
+    that is, the score object will not be included in Song object."""
 
     def get_parameters(measures):
+        """Return a dictionary with clef, key and time parameters of
+        the given measures."""
+
         m1 = measures[0]
         # song data
         params = {}
@@ -165,6 +203,9 @@ def makeSong(filename, number_show=False, save=False):
         return params
 
     def getSubUnits(filename, songObj, save):
+        """Return the Song object with all its MusicUnits in subUnit
+        attribute."""
+
         try:
             data = unit.formParser(filename)
             for el in data:
@@ -179,6 +220,8 @@ def makeSong(filename, number_show=False, save=False):
             return songObj
 
     def pickup_test(measures):
+        """Test if the given measures have pickup."""
+
         if measures[0].number == 0:
             return True
 
@@ -232,8 +275,7 @@ def makeSong(filename, number_show=False, save=False):
     return  newSong
 
 def makeSongCollection(collection, save=False):
-    """Returns a list of phrases objects separated by piece.
-    """
+    """Returns a list of phrases objects separated by piece."""
 
     files = _utils.filenames_list(collection)
     return [makeSong(f, False, save) for f in files]
