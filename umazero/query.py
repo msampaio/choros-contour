@@ -14,6 +14,10 @@ def _aux_getBy(units, save):
 
 
 class AllMusicUnits(object):
+    """Class for a set of MusicUnit objects. This class has attributes
+    and methods to return information about MusicUnit objects
+    parameters."""
+
     def __init__(self, data, save=False):
         self.save = save
         self.units = data['units']
@@ -34,25 +38,44 @@ class AllMusicUnits(object):
         return "<AllMusicUnits: {0} units>".format(self.units_number)
 
     def getByIndex(self, index):
+        """Return a MusicUnit object by a given index number."""
+
         return self.units[index]
 
     def getByComposer(self, composer):
+        """Return a new AllMusicUnit object with all MusicUnit objects
+        with a given composer as attribute."""
+
         return _aux_getBy([un for un in self.units if un.composer == composer], self.save)
 
     def getByTitle(self, title):
+        """Return a new AllMusicUnit object with all MusicUnit objects
+        with a given song title as attribute."""
+
         return _aux_getBy([un for un in self.units if un.title == title], self.save)
 
     def getByAmbitus(self, ambitus):
+        """Return a new AllMusicUnit object with all MusicUnit objects
+        with a given ambitus value as attribute."""
+
         return _aux_getBy([un for un in self.units if un.ambitus == ambitus], self.save)
 
     def getByContourPrime(self, contour_prime):
+        """Return a new AllMusicUnit object with all MusicUnit objects
+        with a given Contour Prime value as attribute."""
+
         return _aux_getBy([un for un in self.units if un.contour_prime == contour_prime], self.save)
 
     def getByPickup(self, pickup=True):
+        """Return a new AllMusicUnit object with all MusicUnit objects
+        with pickup measure."""
+
         return _aux_getBy([un for un in self.units if un.pickup == pickup], self.save)
 
 
 def getMusicUnitsData(MusicUnitsList):
+    """Return a dictionary with the data raised in MusicUnit
+    objects."""
 
     def getData(MusicUnitsList, attrib):
         s = set()
@@ -82,6 +105,9 @@ def getMusicUnitsData(MusicUnitsList):
     return data
 
 def makeAllMusicUnits(save=False):
+    """Return an AllMusicUnit object with all MusicUnit objects saved
+    in a pickle or in available collections."""
+
     MusicUnitsList = []
     songs = retrieval.load_pickle('songs')
     if save:
