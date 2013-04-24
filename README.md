@@ -103,4 +103,4 @@ It's also possible to enumerate all collections of songs:
 
 A .form file of the song must be in the same directory of the song.
 
-    >>> umazero.colorize('song.xml)
+    >>> umazero.colorize('song.xml')
