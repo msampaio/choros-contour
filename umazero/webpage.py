@@ -19,6 +19,8 @@ class WebpageError(Exception):
 
 
 def rst_header(title, level=1):
+    """Return a string formatted for rst code header."""
+
     levels = u"* = - ^".split()
 
     if level > 4 or level < 1:
@@ -29,10 +31,15 @@ def rst_header(title, level=1):
 
 
 def rst_image(filename, directory, scale_factor=100):
+    """Return a string formatted for rst code figure."""
+
     return u".. image:: {0}/{1}.png\n   :scale: {2}\n".format(directory, filename, scale_factor)
 
 
 def rst_table(dic, size=8):
+    """Return a string formatted for rst code table. The input data is
+    a dictionary such as {'a': 2, 'b': 4, 'c': 6}."""
+
     mark = "{0} {0}".format("=" * size)
     result = [mark]
     for key, val in _utils.sort2(dic):
@@ -48,6 +55,9 @@ def print_attribute(attribute, collection, out):
 
 
 def print_plot(out, title, composer, data, plot_fn):
+    """Write header, chart and table in a given codecs.open object
+    with a given data of a given composer."""
+
     # plotting
     directory = "docs/contour"
     r_composer = composer.replace(" ", "-")
@@ -68,6 +78,7 @@ def print_plot(out, title, composer, data, plot_fn):
 
 
 def print_basic_data(out, composer, AllMusicUnitsObj, allUnits_number):
+    """Write data in a codecs.open object for basic_data page."""
 
     def count_units(AllMusicUnitsObj, attrib):
         return Counter((getattr(un, attrib) for un in AllMusicUnitsObj.units))
@@ -91,6 +102,8 @@ def print_basic_data(out, composer, AllMusicUnitsObj, allUnits_number):
 
 
 def make_basic_data_webpage(AllMusicUnitsObj):
+    """Create and save data of basic_data webpage. The input data is
+    an AllMusicUnits object."""
 
     with codecs.open("docs/basic_data.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Basic Data", 1))
@@ -105,6 +118,7 @@ def make_basic_data_webpage(AllMusicUnitsObj):
 
 
 def print_contour(out, composer, AllMusicUnitsObj, allUnits_number):
+    """Write data in a codecs.open object for contour page."""
 
     print "Processing units of composer... {0}".format(composer)
 
@@ -127,6 +141,8 @@ def print_contour(out, composer, AllMusicUnitsObj, allUnits_number):
 
 
 def make_contour_webpage(AllMusicUnitsObj):
+    """Create and save data of contour webpage. The input data is an
+    AllMusicUnits object."""
 
     with codecs.open("docs/contour.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Contour", 1))
@@ -141,6 +157,8 @@ def make_contour_webpage(AllMusicUnitsObj):
 
 
 def make_corpus_webpage(songsObj, collectionsObj):
+    """Create and save data of corpus webpage. The input data is an
+    AllMusicUnits object."""
 
     with codecs.open("docs/corpus.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Corpus information", 1))
@@ -163,6 +181,8 @@ def make_corpus_webpage(songsObj, collectionsObj):
 
 
 def make_collections_webpage(collectionsObj):
+    """Create and save data of collections webpage. The input data is
+    an AllMusicUnits object."""
 
     with codecs.open("docs/collections.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Collections information", 1))
@@ -183,6 +203,9 @@ def make_collections_webpage(collectionsObj):
 
 
 def print_lily(out, MusicUnitObj, subtitle):
+    """Write data in a codecs.open object for special_cases page,
+    including lilypond file generation."""
+
     # plotting
     directory = "docs/contour"
     r_composer = MusicUnitObj.composer.replace(" ", "-")
@@ -204,6 +227,8 @@ def print_lily(out, MusicUnitObj, subtitle):
 
 
 def make_special_cases_webpage(AllMusicUnitsObj):
+    """Create and save data of special_cases webpage. The input data
+    is an AllMusicUnits object."""
 
     with codecs.open("docs/special_cases.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Special cases", 1))

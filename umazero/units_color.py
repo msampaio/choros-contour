@@ -6,6 +6,10 @@ import unit
 
 
 def color_run(filename):
+    """Save a given filename in xml file with 'color' suffix and the
+    first and last notes of each MusicUnit colored. The '.form' file
+    must be in the same directory of xml file (filename)."""
+
     print "Precessing song... {0}".format(os.path.basename(filename))
     unit.colorUnitObj(filename).xml_write('color')
 

@@ -5,6 +5,9 @@ import json
 
 
 class CollectionSong(object):
+    """Class for song objects. This class is specific for the metadata
+    organized in json file."""
+
     def __init__(self, dic):
 
         self.title = dic['Title']
@@ -18,6 +21,10 @@ class CollectionSong(object):
 
 
 class AllCollectionSongs(object):
+    """Class for a set of CollectionSong objects. This class has
+    attributes and methods to return information about CollectionSong
+    objects parameters."""
+
     def __init__(self, dic):
 
         self.collectionSongs = dic['collectionSongs']
@@ -31,6 +38,9 @@ class AllCollectionSongs(object):
 
 
 def makeAllCollectionSongs(jsonSeq):
+    """Return an AllCollectionSongs object from a sequence loaded from
+    a json file."""
+
     dic = {}
 
     collections = set()
@@ -52,5 +62,7 @@ def makeAllCollectionSongs(jsonSeq):
 
 
 def loadSongCollections(filename='songs_map.json'):
+    """Return an AllCollectionSongs object from a json file."""
+
     collectionsSeq = json.load(open(filename))
     return makeAllCollectionSongs(collectionsSeq)

@@ -19,6 +19,8 @@ def flatten(seq):
 
 
 def sort2(dic):
+    """Return a sorted sequence from a dictionary organized by the dictionary values."""
+
     return sorted(dic.items(), reverse=True, key=lambda x: x[1])
 
 
@@ -27,6 +29,7 @@ def percentual(seq):
 
     total = sum(seq)
     return [(el * 100 / float(total)) for el in seq]
+
 
 def percentage(dic):
     """Return a dictionary with percent values"""
@@ -54,6 +57,8 @@ def filenames_list(collection, extension='form'):
     return [filename.strip(extension) + 'xml' for filename in phrase_files]
 
 
+# FIXME: remove this function and move
+# events_enumerator.file_exclusion.
 def collections_list(path):
     exclusion = ['.DS_Store', '.git', 'README.md']
     collections = os.listdir(path)
@@ -65,9 +70,8 @@ def collections_list(path):
     return collections
 
 
-def mkdir(directory):
-    if not os.path.exists(directory):
-        os.mkdir(directory)
+def mkdir(path):
+    """Make a path of a given path, if it doesn't exist."""
 
 
 def count_songs_from_phrases(phrases):
@@ -79,26 +83,40 @@ def count_songs_from_phrases(phrases):
         if songname not in songnames:
             songnames.append(songname)
     return len(songnames)
+    if not os.path.exists(path):
+        os.mkdir(path)
 
 
 def unicode_normalize(string):
+    """Return a normalized string. It's useful to process filenames
+    with special characters."""
+
     return unicodedata.normalize('NFKD', unicode(string)).encode('ascii', 'ignore')
 
 
-def group_minorities(data, percentage=0.05):
-    total = sum(data.viewvalues())
+def group_minorities(dic, percentage=0.05):
+    """Return a given dictionary of values, such as {'a': 2, 'b': 4}
+    with the keys with the smallest values grouped as 'Others' key.
+    The percentage argument defines how small these values must be to
+    be grouped."""
+
+    total = sum(dic.viewvalues())
     smallest = total * percentage
     minors = 0
-    for k, v in data.items():
+    for k, v in dic.items():
         if v <= smallest:
             minors += v
-            data.pop(k)
+            dic.pop(k)
     if minors != 0:
-        data['Others'] = minors
-    return data
+        dic['Others'] = minors
+    return dic
 
 
 def image_trim(filename):
+    """Save a given image cropped and trimmed. It's useful to remove
+    Lilypond tagline and to eliminate blank paper area from the
+    image."""
+
     im = Image.open(filename)
     im = im.crop((0, 0, 776, 1000))
     bg = Image.new(im.mode, im.size, im.getpixel((0,0)))

@@ -9,6 +9,9 @@ import _utils
 
 
 def directories(path):
+    """Return a sequence of subdirectories in a complete form of a
+    given path."""
+
     r = []
     for d in os.listdir(path):
         absolute = os.path.join(path, d)
@@ -17,6 +20,9 @@ def directories(path):
     return r
 
 def filename_pattern(pattern, directory):
+    """Return a sequence of all files of a given directory with
+    filenames matching with a given regular expression."""
+
     def aux(pattern, directory, f):
         return os.path.join(directory, re.search(pattern, f).string)
     
@@ -25,8 +31,9 @@ def filename_pattern(pattern, directory):
 
 
 def copy_files(pattern, dirs, dest_dir):
+    """Copy files with filenames matching with a given regular
+    expression from a dirs directory for a dest_dir directory."""
 
-    
     for directory in dirs:
         files = filename_pattern(pattern, directory)
         base_dir = os.path.basename(directory)

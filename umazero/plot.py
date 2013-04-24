@@ -11,9 +11,12 @@ import copy
 import _utils
 
 
-def __explode_max(data):
-    maximum = max(data)
-    return [0.05 if el == maximum else 0 for el in data]
+def __explode_max(seq):
+    """Return a sequence of values for pie chart explode from a given
+    sequence."""
+
+    maximum = max(seq)
+    return [0.05 if el == maximum else 0 for el in seq]
 
 
 def clear():
@@ -23,7 +26,7 @@ def clear():
 
 
 def simple_pie(values, labels=None, title=None, filename=None):
-    """Accepts a sequence of values."""
+    """Plot a pie chart. The input data is a sequence of values."""
     
     range_numbers = range(len(values))
     # make a square figure and axes
@@ -62,7 +65,8 @@ def simple_pie(values, labels=None, title=None, filename=None):
 
 
 def simple_scatter(y, x, labels, title=None, filename=None):
-    """Accepts a sequence of two sequences of values."""
+    """Plot a scatter chart. The input data is two sequences of
+    values, and a sequence of labels for y and x axis."""
 
     range_numbers = range(len(x))
     # make a square figure and axes
@@ -85,6 +89,8 @@ def simple_scatter(y, x, labels, title=None, filename=None):
 
 
 def stacked_bars(stacked_bar_data):
+    """Plot a chart with stacked bars. The input data is a dictionary
+    with values, legend_labels, bas_legend, title and ylabel data."""
 
     values = stacked_bar_data['values']
     legend_labels = stacked_bar_data['legend_labels']
@@ -128,6 +134,10 @@ def stacked_bars(stacked_bar_data):
 
 
 def generate_stacked_bar_data(AllMusicUnitsObj, attrib):
+    """Return a dictionary with data for stacked_bars function. The
+    input data is an AllMusicUnits object and the attribute from this
+    object to be plotted in stacked bars."""
+
     AllMusicUnitsObj = copy.deepcopy(AllMusicUnitsObj)
     attrib_values = []
     composers = AllMusicUnitsObj.allComposers
@@ -154,4 +164,8 @@ def generate_stacked_bar_data(AllMusicUnitsObj, attrib):
     return stacked_bar_data
 
 def stacked_bar_chart(AllMusicUnitsObj, attrib):
+    """Return a stacked bar chart from a given AllMusicUnits object
+    and a given attribute name from this object to be plotted in
+    stacked bars."""
+
     stacked_bars(generate_stacked_bar_data(AllMusicUnitsObj, attrib))
