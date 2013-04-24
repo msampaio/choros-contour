@@ -172,11 +172,14 @@ def make_corpus_webpage(songsObj, collectionsObj):
         out.write('Processed songs: {0} of {1} ({2:.2f}%) until {3}.\n\n'.format(processed_songs, total_songs, percentual_songs, date))
 
         out.write(rst_header('Composers', 2))
-        for n, s in enumerate(songsObj):
-            out.write('{0}. {1}\n\n'.format(n + 1, s.composer))
+        composers = set()
+        for s in songsObj:
+            composers.add(s.composer)
+        for n, composer in enumerate(sorted(composers)):
+            out.write('{0}. {1}\n\n'.format(n + 1, composer))
 
         out.write(rst_header('Songs', 2))
-        for n, s in enumerate(songsObj):
+        for n, s in enumerate(sorted(songsObj, key=lambda x: x.title)):
             out.write('{0}. {1} ({2})\n\n'.format(n + 1, s.title, s.composer))
 
 
