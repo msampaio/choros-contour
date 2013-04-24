@@ -113,3 +113,9 @@ def image_trim(filename):
     if bbox:
         im = im.crop(bbox)
         im.save(filename)
+
+
+def remove_endline(string):
+    """Return a given string without new line or crlf."""
+
+    return string.strip('\n').strip('\r')

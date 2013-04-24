@@ -3,6 +3,7 @@
 
 from music21.contour import Contour
 import song
+import _utils
 
 
 class Segment(song.Song):
@@ -125,7 +126,7 @@ def formParser(filename):
 
     form_name = filename.strip('.xml') + '.form'
     with open(form_name, 'r') as f:
-        seq = [el.strip('\n') for el in f.readlines() if el.strip('\n')]
+        seq = [_utils.remove_endline(el) for el in f.readlines() if _utils.remove_endline(el)]
     form = []
     part_number = 0
     period_number = 0

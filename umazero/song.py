@@ -207,7 +207,8 @@ def makeSong(filename, number_show=False, save=False):
         """Return the Song object with all its Segments in subSegment
         attribute."""
 
-        try:
+        formname = filename.split('.xml')[0] + '.form'
+        if os.path.exists(formname):
             data = segment.formParser(filename)
             for el in data:
                 el['filename'] = filename
@@ -216,8 +217,8 @@ def makeSong(filename, number_show=False, save=False):
                 subSegment = segment.makeSegment(el)
                 songObj.addSegment(subSegment)
             return songObj
-        except:
-            print "There is no .form file"
+        else:
+            print "There is no file {0}".format(formname)
             return songObj
 
     def pickup_test(measures):
