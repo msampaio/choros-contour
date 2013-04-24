@@ -55,10 +55,10 @@ Then, import `umazero` package
 
     >>> import umazero
 
-## Load and save songs and music units in a variable:
+## Load and save songs and segments in a variable:
 
     >>> songs = umazero.loadSongs()
-    >>> units = umazero.loadMusicUnits()
+    >>> segments = umazero.loadSegments()
 
 ## Create song from a xml file:
 
@@ -66,25 +66,25 @@ Then, import `umazero` package
 
 ## Make queries
 
-It's possible to make several queries from an `AllMusicUnits` object,
+It's possible to make several queries from an `AllSegments` object,
 such as by composer, ambitus and Contour Prime Form:
 
-    >>> units = umazero.loadMusicUnits()
+    >>> segments = umazero.loadSegments()
 
-    >>> units.byComposer('Pixinguinha')
+    >>> segments.byComposer('Pixinguinha')
 
-    >>> units.byAmbitus(22)
+    >>> segments.byAmbitus(22)
 
-    >>> units.byContourPrime(umazero.Contour([0, 2, 1]))
+    >>> segments.byContourPrime(umazero.Contour([0, 2, 1]))
 
 It's also possible to list all composers, ambitus and contour prime
 forms:
 
-    >>> units.allComposers()
+    >>> segments.allComposers()
     
-    >>> units.allAmbitus()
+    >>> segments.allAmbitus()
     
-    >>> units.allContourPrime()
+    >>> segments.allContourPrime()
 
 ## Create a xml file with numbered events
 
