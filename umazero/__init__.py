@@ -15,6 +15,7 @@ from retrieval import loadSongs
 from retrieval import loadMusicUnits
 from songcollections import loadSongCollections
 from events_enumerator import enumerator
+from units_color import colorize
 
 # external
 from music21.contour import Contour

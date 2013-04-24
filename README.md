@@ -101,6 +101,6 @@ It's also possible to enumerate all collections of songs:
 
 ## Create a xml file with colored initial and final notes of phrases
 
-A .form file of the song must be in the same directory of the song. Outside ipython run:
+A .form file of the song must be in the same directory of the song.
 
-    $ python umazero/units_color.py song.xml
+    >>> umazero.colorize('song.xml)
