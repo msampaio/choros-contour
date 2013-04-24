@@ -7,21 +7,21 @@ import retrieval
 import song
 
 
-def _aux_getBy(units, save):
-    d = getMusicUnitsData(units)
-    d['units'] = units
-    return AllMusicUnits(d, save)
+def _aux_getBy(segments, save):
+    d = getSegmentsData(segments)
+    d['segments'] = segments
+    return AllSegments(d, save)
 
 
-class AllMusicUnits(object):
-    """Class for a set of MusicUnit objects. This class has attributes
-    and methods to return information about MusicUnit objects
+class AllSegments(object):
+    """Class for a set of Segment objects. This class has attributes
+    and methods to return information about Segment objects
     parameters."""
 
     def __init__(self, data, save=False):
         self.save = save
-        self.units = data['units']
-        self.units_number = len(self.units)
+        self.segments = data['segments']
+        self.segments_number = len(self.segments)
 
         self.allComposers = data['allComposers']
         self.allTitles = data['allTitles']
@@ -35,52 +35,51 @@ class AllMusicUnits(object):
         self.allFilenames = data['allFilenames']
 
     def __repr__(self):
-        return "<AllMusicUnits: {0} units>".format(self.units_number)
+        return "<AllSegments: {0} segments>".format(self.segments_number)
 
     def getByIndex(self, index):
-        """Return a MusicUnit object by a given index number."""
+        """Return a Segment object by a given index number."""
 
-        return self.units[index]
+        return self.segments[index]
 
     def getByComposer(self, composer):
-        """Return a new AllMusicUnit object with all MusicUnit objects
+        """Return a new AllSegment object with all Segment objects
         with a given composer as attribute."""
 
-        return _aux_getBy([un for un in self.units if un.composer == composer], self.save)
+        return _aux_getBy([un for un in self.segments if un.composer == composer], self.save)
 
     def getByTitle(self, title):
-        """Return a new AllMusicUnit object with all MusicUnit objects
+        """Return a new AllSegment object with all Segment objects
         with a given song title as attribute."""
 
-        return _aux_getBy([un for un in self.units if un.title == title], self.save)
+        return _aux_getBy([un for un in self.segments if un.title == title], self.save)
 
     def getByAmbitus(self, ambitus):
-        """Return a new AllMusicUnit object with all MusicUnit objects
+        """Return a new AllSegment object with all Segment objects
         with a given ambitus value as attribute."""
 
-        return _aux_getBy([un for un in self.units if un.ambitus == ambitus], self.save)
+        return _aux_getBy([un for un in self.segments if un.ambitus == ambitus], self.save)
 
     def getByContourPrime(self, contour_prime):
-        """Return a new AllMusicUnit object with all MusicUnit objects
+        """Return a new AllSegment object with all Segment objects
         with a given Contour Prime value as attribute."""
 
-        return _aux_getBy([un for un in self.units if un.contour_prime == contour_prime], self.save)
+        return _aux_getBy([un for un in self.segments if un.contour_prime == contour_prime], self.save)
 
     def getByPickup(self, pickup=True):
-        """Return a new AllMusicUnit object with all MusicUnit objects
+        """Return a new AllSegment object with all Segment objects
         with pickup measure."""
 
-        return _aux_getBy([un for un in self.units if un.pickup == pickup], self.save)
+        return _aux_getBy([un for un in self.segments if un.pickup == pickup], self.save)
 
 
-def getMusicUnitsData(MusicUnitsList):
-    """Return a dictionary with the data raised in MusicUnit
-    objects."""
+def getSegmentsData(SegmentsList):
+    """Return a dictionary with the data raised in Segment objects."""
 
-    def getData(MusicUnitsList, attrib):
+    def getData(SegmentsList, attrib):
         s = set()
-        for MusicUnitObj in MusicUnitsList:
-            value = getattr(MusicUnitObj, attrib)
+        for SegmentObj in SegmentsList:
+            value = getattr(SegmentObj, attrib)
             if type(value) == music21.contour.contour.Contour:
                 value = tuple(value)
                 s.add(value)
@@ -91,32 +90,32 @@ def getMusicUnitsData(MusicUnitsList):
         return r
 
     data = {}
-    data['allComposers'] = getData(MusicUnitsList, 'composer')
-    data['allTitles'] = getData(MusicUnitsList, 'title')
-    data['allCollections'] = getData(MusicUnitsList, 'collection')
-    data['allContours'] = getData(MusicUnitsList, 'contour')
-    data['allContourSizes'] = getData(MusicUnitsList, 'contour_size')
-    data['allContourPrimes'] = getData(MusicUnitsList, 'contour_prime')
-    data['allAmbitus'] = getData(MusicUnitsList, 'ambitus')
-    data['allTimeSignatures'] = getData(MusicUnitsList, 'time_signature')
-    data['allMeters'] = getData(MusicUnitsList, 'meter')
-    data['allFilenames'] = getData(MusicUnitsList, 'filename')
+    data['allComposers'] = getData(SegmentsList, 'composer')
+    data['allTitles'] = getData(SegmentsList, 'title')
+    data['allCollections'] = getData(SegmentsList, 'collection')
+    data['allContours'] = getData(SegmentsList, 'contour')
+    data['allContourSizes'] = getData(SegmentsList, 'contour_size')
+    data['allContourPrimes'] = getData(SegmentsList, 'contour_prime')
+    data['allAmbitus'] = getData(SegmentsList, 'ambitus')
+    data['allTimeSignatures'] = getData(SegmentsList, 'time_signature')
+    data['allMeters'] = getData(SegmentsList, 'meter')
+    data['allFilenames'] = getData(SegmentsList, 'filename')
 
     return data
 
-def makeAllMusicUnits(save=False):
-    """Return an AllMusicUnit object with all MusicUnit objects saved
-    in a pickle or in available collections."""
+def makeAllSegments(save=False):
+    """Return an AllSegment object with all Segment objects saved in a
+    pickle or in available collections."""
 
-    MusicUnitsList = []
+    SegmentsList = []
     songs = retrieval.load_pickle('songs')
     if save:
         songs = retrieval.load_pickle('songs')
     else:
         songs = song.makeSongCollection(coll, save)
     for s in songs:
-        MusicUnitsList.extend(s.subUnits)
+        SegmentsList.extend(s.subSegments)
 
-    d = getMusicUnitsData(MusicUnitsList)
-    d['units'] = MusicUnitsList
-    return AllMusicUnits(d, save)
+    d = getSegmentsData(SegmentsList)
+    d['segments'] = SegmentsList
+    return AllSegments(d, save)

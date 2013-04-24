@@ -19,7 +19,7 @@ save_pickle:
 	python -c "import umazero; umazero.retrieval.run()"
 
 copy:
-	python $(SRC_DIR)/copy_files.py
+	python -c "import umazero; umazero.copyfiles()"
 
 clean:
 	find . -name "*.pyc" | xargs rm

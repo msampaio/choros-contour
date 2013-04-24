@@ -1,21 +1,22 @@
 # modules
-import unit
+import segment
 import song
 import retrieval
 
 # classes
 from song import Song
-from unit import MusicUnit
+from segment import Segment
 
 # functions
 from song import makeSong
-from unit import makeMusicUnit
-from query import makeAllMusicUnits
+from segment import makeSegment
+from query import makeAllSegments
 from retrieval import loadSongs
-from retrieval import loadMusicUnits
+from retrieval import loadSegments
 from songcollections import loadSongCollections
-from events_enumerator import enumerator
-from units_color import colorize
+from files import enumerator
+from files import colorize
+from files import copyfiles
 
 # external
 from music21.contour import Contour

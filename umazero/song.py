@@ -3,7 +3,7 @@
 
 import os
 import music21
-import unit
+import segment
 import _utils
 
 
@@ -29,10 +29,10 @@ class Song(object):
         self.key = data['key']
         self.mode = data['mode']
 
-        if 'subUnits' in data:
-            self.subUnits = data['subUnits']
+        if 'subSegments' in data:
+            self.subSegments = data['subSegments']
         else:
-            self.subUnits = []
+            self.subSegments = []
 
     def __repr__(self):
         return "<Song: {0}. {1}>".format(self.title, self.collection)
@@ -57,33 +57,34 @@ class Song(object):
         print "Writing xml file in {0}".format(dest)
         self.score.write('musicxml', dest)
 
-    def addMusicUnit(self, subUnit):
-        """Add MusicUnit objects in subUnit attribute."""
+    def addSegment(self, subSegment):
+        """Add Segment objects in subSegment attribute."""
 
-        self.subUnits.append(subUnit)
+        self.subSegments.append(subSegment)
         return self
 
     def allPhrases(self):
-        """Return all the subUnits of type Phrase from the Song
+        """Return all the subSegments of type Phrase from the Song
         object."""
 
-        return [un for un in self.subUnits if un.typeof == 'Phrase']
+        return [un for un in self.subSegments if un.typeof == 'Phrase']
 
-    def showUnit(self, number, typeof='Phrase'):
-        """Return a list os all MusicUnit objects from the Song object
+    def showSegment(self, number, typeof='Phrase'):
+        """Return a list os all Segment objects from the Song object
         with a given type. Phrase is the default type."""
 
-        return [un for un in self.subUnits if un.typeof == typeof and un.number == number][0]
+        return [un for un in self.subSegments if un.typeof == typeof and un.number == number][0]
 
-    def showBigUnit(self, number, typeof='Period'):
-        """Return a list with all MusicUnit objects of a given big
-        unit structures such as Part or Period. The methods arguments
-        are the number and type of big structure."""
+    # FIXME: rethink the method name
+    def showBigSegment(self, number, typeof='Period'):
+        """Return a list with all Segment objects of a given big
+        segment structures such as Part or Period. The methods
+        arguments are the number and type of big structure."""
 
         if typeof == 'Period':
-            return [un for un in self.subUnits if un.period_number == number]
+            return [un for un in self.subSegments if un.period_number == number]
         elif typeof == 'Part':
-            return [un for un in self.subUnits if un.part_number == number]
+            return [un for un in self.subSegments if un.part_number == number]
         else:
             print 'Wrong typeof {0}'.format(typeof)
 
@@ -120,7 +121,7 @@ class Song(object):
             else:
                 new_measure.pickup = None
 
-            # insert params only in unit first measure
+            # insert params only in segment first measure
             if n == 0:
                 for values in params.values():
                     new_measure.append(values)
@@ -179,7 +180,7 @@ class Song(object):
             newSong = makeSong(self.filename, number_show, False)
             self.params = newSong.params
             self.score = newSong.score
-            self.subUnits = newSong.subUnits
+            self.subSegments = newSong.subSegments
             self.measures = newSong.measures
         else:
             print "There is already a score attribute"
@@ -202,18 +203,18 @@ def makeSong(filename, number_show=False, save=False):
         params['time_signature'] = m1.getElementsByClass('TimeSignature')[0]
         return params
 
-    def getSubUnits(filename, songObj, save):
-        """Return the Song object with all its MusicUnits in subUnit
+    def getSubSegments(filename, songObj, save):
+        """Return the Song object with all its Segments in subSegment
         attribute."""
 
         try:
-            data = unit.formParser(filename)
+            data = segment.formParser(filename)
             for el in data:
                 el['filename'] = filename
                 el['songObj'] = songObj
                 el['save'] = save
-                subUnit = unit.makeMusicUnit(el)
-                songObj.addMusicUnit(subUnit)
+                subSegment = segment.makeSegment(el)
+                songObj.addSegment(subSegment)
             return songObj
         except:
             print "There is no .form file"
@@ -266,7 +267,7 @@ def makeSong(filename, number_show=False, save=False):
     data['key'] = key
     data['mode'] = mode
 
-    newSong = getSubUnits(filename, Song(data), save)
+    newSong = getSubSegments(filename, Song(data), save)
 
     if save:
         newSong.score = None

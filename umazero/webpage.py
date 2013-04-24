@@ -60,7 +60,7 @@ def print_plot(out, title, composer, data, plot_fn):
     pngfile = os.path.splitext(os.path.basename(dest))[0]
     plot.clear()
     if plot_fn == plot.simple_scatter:
-        plot_fn(data.values(), data.keys(), ['Percentual of music units (%)', title], None, dest)
+        plot_fn(data.values(), data.keys(), ['Percentual of segments (%)', title], None, dest)
     else:
         plot_fn(data.values(), data.keys(), None, dest)
 
@@ -71,92 +71,92 @@ def print_plot(out, title, composer, data, plot_fn):
     out.write("\n\n")
 
 
-def print_basic_data(out, composer, AllMusicUnitsObj, allUnits_number):
+def print_basic_data(out, composer, AllSegmentsObj, allSegments_number):
     """Write data in a codecs.open object for basic_data page."""
 
-    def count_units(AllMusicUnitsObj, attrib):
-        return Counter((getattr(un, attrib) for un in AllMusicUnitsObj.units))
+    def count_segments(AllSegmentsObj, attrib):
+        return Counter((getattr(un, attrib) for un in AllSegmentsObj.segments))
 
-    print "Processing music units of composer... {0}".format(composer)
+    print "Processing segments of composer... {0}".format(composer)
 
-    songs_number = len(AllMusicUnitsObj.allFilenames)
-    percentual_allUnits = AllMusicUnitsObj.units_number / float(allUnits_number) * 100
+    songs_number = len(AllSegmentsObj.allFilenames)
+    percentual_allSegments = AllSegmentsObj.segments_number / float(allSegments_number) * 100
 
     out.write(rst_header(composer, 2))
 
     out.write("Number of Songs: {0}\n\n".format(songs_number))
-    if percentual_allUnits != 100:
-        out.write("Percentual of all music units: {0:.2f}%\n\n".format(percentual_allUnits))
-    out.write("Number of music units: {0}\n\n".format(AllMusicUnitsObj.units_number))
+    if percentual_allSegments != 100:
+        out.write("Percentual of all segments: {0:.2f}%\n\n".format(percentual_allSegments))
+    out.write("Number of segments: {0}\n\n".format(AllSegmentsObj.segments_number))
 
 
-    print_plot(out, 'Meter', composer, count_units(AllMusicUnitsObj, 'meter'), plot.simple_pie)
-    print_plot(out, 'Ambitus in semitones', composer, count_units(AllMusicUnitsObj, 'ambitus'), plot.simple_scatter)
-    print_plot(out, 'Pickup measure', composer, count_units(AllMusicUnitsObj, 'pickup'), plot.simple_pie)
+    print_plot(out, 'Meter', composer, count_segments(AllSegmentsObj, 'meter'), plot.simple_pie)
+    print_plot(out, 'Ambitus in semitones', composer, count_segments(AllSegmentsObj, 'ambitus'), plot.simple_scatter)
+    print_plot(out, 'Pickup measure', composer, count_segments(AllSegmentsObj, 'pickup'), plot.simple_pie)
 
 
-def make_basic_data_webpage(AllMusicUnitsObj):
+def make_basic_data_webpage(AllSegmentsObj):
     """Create and save data of basic_data webpage. The input data is
-    an AllMusicUnits object."""
+    an AllSegments object."""
 
     print "Creating basic data webpage..."
 
     with codecs.open("docs/basic_data.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Basic Data", 1))
-        out.write('This page contains basic data of choros music units such as time signature organized by composer. ')
+        out.write('This page contains basic data of choros segments such as time signature organized by composer. ')
         out.write('The numbers in the table\'s second column are in percent.\n\n')
 
-        print_basic_data(out, 'All composers', AllMusicUnitsObj, AllMusicUnitsObj.units_number)
+        print_basic_data(out, 'All composers', AllSegmentsObj, AllSegmentsObj.segments_number)
 
-        for composer in AllMusicUnitsObj.allComposers:
-            subunits = AllMusicUnitsObj.getByComposer(composer)
-            print_basic_data(out, composer, subunits, AllMusicUnitsObj.units_number)
+        for composer in AllSegmentsObj.allComposers:
+            subsegments = AllSegmentsObj.getByComposer(composer)
+            print_basic_data(out, composer, subsegments, AllSegmentsObj.segments_number)
 
 
-def print_contour(out, composer, AllMusicUnitsObj, allUnits_number):
+def print_contour(out, composer, AllSegmentsObj, allSegments_number):
     """Write data in a codecs.open object for contour page."""
 
-    print "Processing music units of composer... {0}".format(composer)
+    print "Processing segments of composer... {0}".format(composer)
 
-    songs_number = len(AllMusicUnitsObj.allFilenames)
-    percentual_allUnits = AllMusicUnitsObj.units_number / float(allUnits_number) * 100
+    songs_number = len(AllSegmentsObj.allFilenames)
+    percentual_allSegments = AllSegmentsObj.segments_number / float(allSegments_number) * 100
 
     out.write(rst_header(composer, 2))
 
     out.write("Number of Songs: {0}\n\n".format(songs_number))
-    if percentual_allUnits != 100:
-        out.write("Percentual of all units: {0:.2f}%\n\n".format(percentual_allUnits))
-    out.write("Number of Units: {0}\n\n".format(AllMusicUnitsObj.units_number))
+    if percentual_allSegments != 100:
+        out.write("Percentual of all segments: {0:.2f}%\n\n".format(percentual_allSegments))
+    out.write("Number of Segments: {0}\n\n".format(AllSegmentsObj.segments_number))
 
-    print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(AllMusicUnitsObj.units), 0.04), plot.simple_pie)
-    print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(AllMusicUnitsObj.units), plot.simple_scatter)
-    print_plot(out, 'Passing contour', composer, contour.multicount(AllMusicUnitsObj.units, contour.passing_contour), plot.simple_scatter)
-    print_plot(out, 'Contour oscillation index', composer, contour.contour_oscillation_count(AllMusicUnitsObj.units), plot.simple_scatter)
-    print_plot(out, 'Contour first movement', composer, contour.first_movement(AllMusicUnitsObj.units), plot.simple_pie)
-    print_plot(out, 'Contour last movement', composer, contour.last_movement(AllMusicUnitsObj.units), plot.simple_pie)
+    print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(AllSegmentsObj.segments), 0.04), plot.simple_pie)
+    print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(AllSegmentsObj.segments), plot.simple_scatter)
+    print_plot(out, 'Passing contour', composer, contour.multicount(AllSegmentsObj.segments, contour.passing_contour), plot.simple_scatter)
+    print_plot(out, 'Contour oscillation index', composer, contour.contour_oscillation_count(AllSegmentsObj.segments), plot.simple_scatter)
+    print_plot(out, 'Contour first movement', composer, contour.first_movement(AllSegmentsObj.segments), plot.simple_pie)
+    print_plot(out, 'Contour last movement', composer, contour.last_movement(AllSegmentsObj.segments), plot.simple_pie)
 
 
-def make_contour_webpage(AllMusicUnitsObj):
+def make_contour_webpage(AllSegmentsObj):
     """Create and save data of contour webpage. The input data is an
-    AllMusicUnits object."""
+    AllSegments object."""
 
     print "Creating contour webpage..."
 
     with codecs.open("docs/contour.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Contour", 1))
-        out.write('This page contains contour data of choros music units such as Contour Primes organized by composer.\n\n')
+        out.write('This page contains contour data of choros segments such as Contour Primes organized by composer.\n\n')
         out.write('The explanation about the charts below are in `glossary <glossary.html>`_.\n\n')
 
-        print_contour(out, 'All composers', AllMusicUnitsObj, AllMusicUnitsObj.units_number)
+        print_contour(out, 'All composers', AllSegmentsObj, AllSegmentsObj.segments_number)
 
-        for composer in AllMusicUnitsObj.allComposers:
-            subunits = AllMusicUnitsObj.getByComposer(composer)
-            print_contour(out, composer, subunits, AllMusicUnitsObj.units_number)
+        for composer in AllSegmentsObj.allComposers:
+            subsegments = AllSegmentsObj.getByComposer(composer)
+            print_contour(out, composer, subsegments, AllSegmentsObj.segments_number)
 
 
 def make_corpus_webpage(songsObj, collectionsObj):
     """Create and save data of corpus webpage. The input data is an
-    AllMusicUnits object."""
+    AllSegments object."""
 
     print "Creating corpus webpage..."
 
@@ -182,7 +182,7 @@ def make_corpus_webpage(songsObj, collectionsObj):
 
 def make_collections_webpage(collectionsObj):
     """Create and save data of collections webpage. The input data is
-    an AllMusicUnits object."""
+    an AllSegments object."""
 
     print "Creating collections webpage..."
 
@@ -204,59 +204,59 @@ def make_collections_webpage(collectionsObj):
             out.write('{0}. {1} ({2}) - {3}\n\n'.format(n + 1, collObj.title, collObj.composer, collObj.collection))
 
 
-def print_lily(out, MusicUnitObj, subtitle):
+def print_lily(out, SegmentObj, subtitle):
     """Write data in a codecs.open object for special_cases page,
     including lilypond file generation."""
 
     # plotting
     directory = "docs/contour"
-    r_composer = MusicUnitObj.composer.replace(" ", "-")
-    r_title = MusicUnitObj.title.replace(" ", "-")
-    r_typeof = MusicUnitObj.typeof
-    r_number = str(MusicUnitObj.number)
+    r_composer = SegmentObj.composer.replace(" ", "-")
+    r_title = SegmentObj.title.replace(" ", "-")
+    r_typeof = SegmentObj.typeof
+    r_number = str(SegmentObj.number)
     filename = "-".join([r_composer, r_title, r_typeof, r_number])
     dest = _utils.unicode_normalize(os.path.join(directory, filename +  ".png"))
     pngfile = os.path.splitext(os.path.basename(dest))[0]
-    MusicUnitObj.make_score()
-    MusicUnitObj.score.write('png', dest)
+    SegmentObj.make_score()
+    SegmentObj.score.write('png', dest)
     _utils.image_trim(dest)
 
-    title = ", ".join([MusicUnitObj.title, MusicUnitObj.composer, " ".join([MusicUnitObj.typeof, str(MusicUnitObj.number)]), subtitle])
+    title = ", ".join([SegmentObj.title, SegmentObj.composer, " ".join([SegmentObj.typeof, str(SegmentObj.number)]), subtitle])
     # print in rst
     out.write(rst_header(title, 4))
     out.write(rst_image(pngfile, "contour", 90))
     out.write("\n\n")
 
 
-def make_special_cases_webpage(AllMusicUnitsObj):
+def make_special_cases_webpage(AllSegmentsObj):
     """Create and save data of special_cases webpage. The input data
-    is an AllMusicUnits object."""
+    is an AllSegments object."""
 
     print "Creating special cases webpage..."
 
     with codecs.open("docs/special_cases.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Special cases", 1))
-        out.write('This page contains music units with data such as higher and lower ambitus.\n\n')
+        out.write('This page contains segments with data such as higher and lower ambitus.\n\n')
 
         # ambitus
-        allAmbitus = AllMusicUnitsObj.allAmbitus
+        allAmbitus = AllSegmentsObj.allAmbitus
         higher_ambitus = max(allAmbitus)
         lower_ambitus = min(allAmbitus)
 
-        higher_ambitus_unit = AllMusicUnitsObj.getByAmbitus(higher_ambitus).units[0]
-        lower_ambitus_unit = AllMusicUnitsObj.getByAmbitus(lower_ambitus).units[0]
+        higher_ambitus_segment = AllSegmentsObj.getByAmbitus(higher_ambitus).segments[0]
+        lower_ambitus_segment = AllSegmentsObj.getByAmbitus(lower_ambitus).segments[0]
 
         out.write(rst_header('Ambitus', 2))
         out.write(rst_header('Higher', 3))
-        print_lily(out, higher_ambitus_unit, '{0} semitones'.format(higher_ambitus))
+        print_lily(out, higher_ambitus_segment, '{0} semitones'.format(higher_ambitus))
         out.write(rst_header('Lower', 3))
-        print_lily(out, lower_ambitus_unit, '{0} semitones'.format(lower_ambitus))
+        print_lily(out, lower_ambitus_segment, '{0} semitones'.format(lower_ambitus))
 
         # oscillation contour
         oscillation_list = []
-        for MusicUnitObj in AllMusicUnitsObj.units:
-            oscillation_value = MusicUnitObj.contour.oscillation_index()
-            oscillation_list.append((oscillation_value, MusicUnitObj))
+        for SegmentObj in AllSegmentsObj.segments:
+            oscillation_value = SegmentObj.contour.oscillation_index()
+            oscillation_list.append((oscillation_value, SegmentObj))
         higher_oscillation = sorted(oscillation_list, key = lambda el: el[0], reverse=True)[0]
         lower_oscillation = sorted(oscillation_list, key = lambda el: el[0])[0]
 
@@ -270,15 +270,15 @@ def make_special_cases_webpage(AllMusicUnitsObj):
 def run():
     _utils.mkdir('docs/contour')
     songsObj = retrieval.loadSongs()
-    AllMusicUnitsObj = retrieval.loadMusicUnits()
+    AllSegmentsObj = retrieval.loadSegments()
     collectionsSeq = json.load(open('songs_map.json'))
     collectionsObj = songcollections.makeAllCollectionSongs(collectionsSeq)
     
-    make_basic_data_webpage(AllMusicUnitsObj)
-    make_contour_webpage(AllMusicUnitsObj)
+    make_basic_data_webpage(AllSegmentsObj)
+    make_contour_webpage(AllSegmentsObj)
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
-    make_special_cases_webpage(AllMusicUnitsObj)
+    make_special_cases_webpage(AllSegmentsObj)
 
 
 if __name__ == '__main__':

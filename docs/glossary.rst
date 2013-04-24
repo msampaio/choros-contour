@@ -43,11 +43,11 @@ this value, greater is the number of direction changes in a contour.
 Contour first movement
 ----------------------
 
-The movement between the first two contour points in a Music Unit. 1
-for ascent, -1 for descent.
+The movement between the first two contour points in a Segment. 1 for
+ascent, -1 for descent.
 
 Contour last movement
 ---------------------
 
-The movement between the last two contour points in a Music Unit. 1
-for ascent, -1 for descent.
+The movement between the last two contour points in a Segment. 1 for
+ascent, -1 for descent.

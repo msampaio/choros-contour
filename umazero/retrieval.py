@@ -24,20 +24,20 @@ def load_pickle(typeof):
 
 
 def loadSongs():
-    """Load all Song objects saved in 'songs' pickle file"""
+    """Load all Song objects saved in 'songs' pickle file."""
 
     return load_pickle('songs')
 
 
-def loadMusicUnits():
-    """Load all MusicUnits objects saved in 'units' pickle file"""
+def loadSegments():
+    """Load all Segments objects saved in 'segments' pickle file."""
 
-    return load_pickle('units')
+    return load_pickle('segments')
 
 
 def run():
-    """Save pickle files for Song and MusicUnit objects of all files
-    in collections in 'choros-corpus' directory."""
+    """Save pickle files for Song and Segment objects of all files in
+    collections in 'choros-corpus' directory."""
 
     # songs
     songs = []
@@ -51,9 +51,9 @@ def run():
 
     save_pickle('songs', songs)
 
-    # Music Units
-    print "Processing Music Units...."
-    save_pickle('units', query.makeAllMusicUnits(True))
+    # Segments
+    print "Processing Segments...."
+    save_pickle('segments', query.makeAllSegments(True))
 
 
 if __name__ == '__main__':

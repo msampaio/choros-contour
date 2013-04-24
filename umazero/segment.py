@@ -5,9 +5,9 @@ from music21.contour import Contour
 import song
 
 
-class MusicUnit(song.Song):
-    """Class for Music unit classes. A music unit is a phrase or link
-    of a song."""
+class Segment(song.Song):
+    """Class for Segment classes. A segment is a phrase or link of a
+    song."""
 
     def __init__(self, data):
         self.filename = data['filename']
@@ -38,7 +38,7 @@ class MusicUnit(song.Song):
         self.period_number = data['period_number']
 
     def __repr__(self):
-        return "<Unit {0}: {1} - {2} ({3})>".format(self.typeof, self.title, self.composer, self.number)
+        return "<Segment {0}: {1} - {2} ({3})>".format(self.typeof, self.title, self.composer, self.number)
 
     def show(self, arg=None):
         """Shortcut for music21.stream.show."""
@@ -62,18 +62,18 @@ class MusicUnit(song.Song):
 
     def make_score(self, number_show=False):
         """Return a score (music21.stream.Stream) object of the
-        MusicUnit object."""
+        Segment object."""
 
         if not self.score:
             newSong = song.makeSong(self.filename, number_show, False)
-            newUnit = newSong.getExcerpt(self.initial_event, self.final_event)
-            self.score = newUnit
+            newSegment = newSong.getExcerpt(self.initial_event, self.final_event)
+            self.score = newSegment
         else:
             print "There is already a score attribute"
 
 
-def makeMusicUnit(data_input):
-    """Return a MusicUnit object from a dictionary with specific data,
+def makeSegment(data_input):
+    """Return a Segment object from a dictionary with specific data,
     including metadata."""
 
     initial = data_input['initial']
@@ -115,7 +115,7 @@ def makeMusicUnit(data_input):
     data['part_number'] = data_input['part_number']
     data['period_number'] = data_input['period_number']
 
-    return MusicUnit(data)
+    return Segment(data)
 
 
 def formParser(filename):
@@ -159,9 +159,9 @@ def formParser(filename):
     return form
 
 
-def colorUnitObj(filename):
+def colorSegmentObj(filename):
     """Return a music21 stream object with colored first and last
-    MusicUnit notes."""
+    Segment notes."""
 
     s = song.makeSong(filename, True)
     measures = s.measures

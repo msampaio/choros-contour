@@ -133,18 +133,18 @@ def stacked_bars(stacked_bar_data):
     plt.show()
 
 
-def generate_stacked_bar_data(AllMusicUnitsObj, attrib):
+def generate_stacked_bar_data(AllSegmentsObj, attrib):
     """Return a dictionary with data for stacked_bars function. The
-    input data is an AllMusicUnits object and the attribute from this
+    input data is an AllSegments object and the attribute from this
     object to be plotted in stacked bars."""
 
-    AllMusicUnitsObj = copy.deepcopy(AllMusicUnitsObj)
+    AllSegmentsObj = copy.deepcopy(AllSegmentsObj)
     attrib_values = []
-    composers = AllMusicUnitsObj.allComposers
+    composers = AllSegmentsObj.allComposers
     composers_values = {}
-    for MusicUnitObj in AllMusicUnitsObj.units:
-        value = getattr(MusicUnitObj, attrib)
-        composer = MusicUnitObj.composer
+    for SegmentObj in AllSegmentsObj.segments:
+        value = getattr(SegmentObj, attrib)
+        composer = SegmentObj.composer
         if not value in composers_values:
             composers_values[value] = [0 for c in composers]
         ind = composers.index(composer)
@@ -153,7 +153,7 @@ def generate_stacked_bar_data(AllMusicUnitsObj, attrib):
     ordered_attrib_values = [val[0] for val in Counter(attrib_values).most_common()]
     stacked_bar_data = {}
     stacked_bar_data['title'] = attrib[0].upper() + attrib[1:]
-    stacked_bar_data['ylabel'] = 'MusicUnits'
+    stacked_bar_data['ylabel'] = 'Segments'
     stacked_bar_data['bars_legend'] = composers
     stacked_bar_data['legend_labels'] = ordered_attrib_values
     stacked_bar_data['values'] = []
@@ -163,9 +163,9 @@ def generate_stacked_bar_data(AllMusicUnitsObj, attrib):
 
     return stacked_bar_data
 
-def stacked_bar_chart(AllMusicUnitsObj, attrib):
-    """Return a stacked bar chart from a given AllMusicUnits object
-    and a given attribute name from this object to be plotted in
-    stacked bars."""
+def stacked_bar_chart(AllSegmentsObj, attrib):
+    """Return a stacked bar chart from a given AllSegments object and
+    a given attribute name from this object to be plotted in stacked
+    bars."""
 
-    stacked_bars(generate_stacked_bar_data(AllMusicUnitsObj, attrib))
+    stacked_bars(generate_stacked_bar_data(AllSegmentsObj, attrib))
