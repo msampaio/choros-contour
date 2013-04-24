@@ -99,6 +99,8 @@ def make_basic_data_webpage(AllMusicUnitsObj):
     """Create and save data of basic_data webpage. The input data is
     an AllMusicUnits object."""
 
+    print "Creating basic data webpage..."
+
     with codecs.open("docs/basic_data.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Basic Data", 1))
         out.write('This page contains basic data of choros music units such as time signature organized by composer. ')
@@ -114,7 +116,7 @@ def make_basic_data_webpage(AllMusicUnitsObj):
 def print_contour(out, composer, AllMusicUnitsObj, allUnits_number):
     """Write data in a codecs.open object for contour page."""
 
-    print "Processing units of composer... {0}".format(composer)
+    print "Processing music units of composer... {0}".format(composer)
 
     songs_number = len(AllMusicUnitsObj.allFilenames)
     percentual_allUnits = AllMusicUnitsObj.units_number / float(allUnits_number) * 100
@@ -138,6 +140,8 @@ def make_contour_webpage(AllMusicUnitsObj):
     """Create and save data of contour webpage. The input data is an
     AllMusicUnits object."""
 
+    print "Creating contour webpage..."
+
     with codecs.open("docs/contour.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Contour", 1))
         out.write('This page contains contour data of choros music units such as Contour Primes organized by composer.\n\n')
@@ -153,6 +157,8 @@ def make_contour_webpage(AllMusicUnitsObj):
 def make_corpus_webpage(songsObj, collectionsObj):
     """Create and save data of corpus webpage. The input data is an
     AllMusicUnits object."""
+
+    print "Creating corpus webpage..."
 
     with codecs.open("docs/corpus.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Corpus information", 1))
@@ -177,6 +183,8 @@ def make_corpus_webpage(songsObj, collectionsObj):
 def make_collections_webpage(collectionsObj):
     """Create and save data of collections webpage. The input data is
     an AllMusicUnits object."""
+
+    print "Creating collections webpage..."
 
     with codecs.open("docs/collections.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Collections information", 1))
@@ -223,6 +231,8 @@ def print_lily(out, MusicUnitObj, subtitle):
 def make_special_cases_webpage(AllMusicUnitsObj):
     """Create and save data of special_cases webpage. The input data
     is an AllMusicUnits object."""
+
+    print "Creating special cases webpage..."
 
     with codecs.open("docs/special_cases.rst", 'w', encoding="utf-8") as out:
         out.write(rst_header(u"Special cases", 1))
