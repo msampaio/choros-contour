@@ -4,17 +4,7 @@ import os
 import sys
 import re
 import song
-
-
-def file_exclusion(path, exclusions=['.DS_Store', '.git', 'README.md']):
-    """Return a sequence of files from a path without the files given
-    in exclusions sequence."""
-
-    files = os.listdir(path)
-    for ex in exclusions:
-        if ex in files:
-            files.remove(ex)
-    return files
+import _utils
 
 
 def get_songs(path, pattern='^((?!numbered).)*\.xml$'):
@@ -33,7 +23,7 @@ def get_songs_filenames(collections_dir):
 
     exclusions = ['.DS_Store', '.git', 'README.md']
     pattern = '^((?!numbered).)*\.xml$'
-    collections = file_exclusion(collections_dir, exclusions)
+    collections = _utils.filename_exclusion(collections_dir, exclusions)
 
     result = []
     for collection in collections:

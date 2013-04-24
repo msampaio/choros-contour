@@ -41,7 +41,7 @@ def run():
 
     # songs
     songs = []
-    for coll in _utils.collections_list('choros-corpus'):
+    for coll in _utils.filename_exclusion('choros-corpus'):
         print "Processing collection {0}...".format(coll)
         s = song.makeSongCollection(coll, True)
         if s:

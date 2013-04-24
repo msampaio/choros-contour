@@ -57,17 +57,15 @@ def filenames_list(collection, extension='form'):
     return [filename.strip(extension) + 'xml' for filename in phrase_files]
 
 
-# FIXME: remove this function and move
-# events_enumerator.file_exclusion.
-def collections_list(path):
-    exclusion = ['.DS_Store', '.git', 'README.md']
-    collections = os.listdir(path)
-    for el in exclusion:
-        try:
-            collections.remove(el)
-        except:
-            print 'The file {0} is not in path {1}'.format(el, path)
-    return collections
+def filename_exclusion(path, exclusions=['.DS_Store', '.git', 'README.md']):
+    """Return a sequence of files from a path without the files given
+    in exclusions sequence."""
+
+    files = os.listdir(path)
+    for ex in exclusions:
+        if ex in files:
+            files.remove(ex)
+    return files
 
 
 def mkdir(path):
