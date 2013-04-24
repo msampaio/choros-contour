@@ -154,9 +154,9 @@ def make_contour_webpage(AllSegmentsObj):
             print_contour(out, composer, subsegments, AllSegmentsObj.segments_number)
 
 
-def make_corpus_webpage(songsObj, collectionsObj):
-    """Create and save data of corpus webpage. The input data is an
-    AllSegments object."""
+def make_corpus_webpage(songsList, collectionsObj):
+    """Create and save data of corpus webpage. The input data is a
+    list of Song objects and a SongCollections object."""
 
     print "Creating corpus webpage..."
 
@@ -165,21 +165,30 @@ def make_corpus_webpage(songsObj, collectionsObj):
         out.write('This page contains information about analyzed corpus such as composers and song names.\n\n')
 
         total_songs = collectionsObj.number
-        processed_songs = len(songsObj)
+        processed_songs = len(songsList)
         percentual_songs = processed_songs / float(total_songs) * 100
         date = datetime.datetime.today().date().isoformat()
 
         out.write('Processed songs: {0} of {1} ({2:.2f}%) until {3}.\n\n'.format(processed_songs, total_songs, percentual_songs, date))
 
         out.write(rst_header('Composers', 2))
-        composers = set()
-        for s in songsObj:
-            composers.add(s.composer)
-        for n, composer in enumerate(sorted(composers)):
-            out.write('{0}. {1}\n\n'.format(n + 1, composer))
+        composers_dic = {}
+        for s in songsList:
+            composer = s.composer
+            if composer not in composers_dic:
+                composers_dic[composer] = 0
+            composers_dic[composer] += 1
+        n = 0
+        for composer, songs in sorted(composers_dic.items()):
+            if songs > 1:
+                plural = 's'
+            else:
+                plural = ''
+            out.write('{0}. {1} ({2} song{3})\n\n'.format(n + 1, composer, songs, plural))
+            n += 1
 
         out.write(rst_header('Songs', 2))
-        for n, s in enumerate(sorted(songsObj, key=lambda x: x.title)):
+        for n, s in enumerate(sorted(songsList, key=lambda x: x.title)):
             out.write('{0}. {1} ({2})\n\n'.format(n + 1, s.title, s.composer))
 
 
