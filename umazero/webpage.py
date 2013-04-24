@@ -48,12 +48,6 @@ def rst_table(dic, size=8):
     return "\n".join(result)
 
 
-def print_attribute(attribute, collection, out):
-    counter = Counter([getattr(song, attribute) for song in collection])
-    out.write(rst_table(_utils.percentage(counter)))
-    out.write("\n\n")
-
-
 def print_plot(out, title, composer, data, plot_fn):
     """Write header, chart and table in a given codecs.open object
     with a given data of a given composer."""

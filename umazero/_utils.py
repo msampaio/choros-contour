@@ -73,16 +73,6 @@ def collections_list(path):
 def mkdir(path):
     """Make a path of a given path, if it doesn't exist."""
 
-
-def count_songs_from_phrases(phrases):
-    size = len(phrases)
-    songnames = []
-    for n, phr in enumerate(phrases):
-        print "Processing phrase {0} of {1}".format(n, size)
-        songname = phr.title
-        if songname not in songnames:
-            songnames.append(songname)
-    return len(songnames)
     if not os.path.exists(path):
         os.mkdir(path)
 

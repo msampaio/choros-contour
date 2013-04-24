@@ -44,10 +44,6 @@ def copy_files(pattern, dirs, dest_dir):
             shutil.copy(f, dest)
             
 
-def count_patterns(pattern, directory):
-    return [len(filename_pattern(pattern, d)) for d in directory]
-
-
 if __name__ == '__main__':
     corpus_dir = os.path.expanduser('~/Dropbox/genos-choros/choros-corpus/expandidos')
     dirs = directories(corpus_dir)
