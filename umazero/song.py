@@ -75,11 +75,10 @@ class Song(object):
 
         return [un for un in self.subSegments if un.typeof == typeof and un.number == number][0]
 
-    # FIXME: rethink the method name
-    def showBigSegment(self, number, typeof='Period'):
-        """Return a list with all Segment objects of a given big
-        segment structures such as Part or Period. The methods
-        arguments are the number and type of big structure."""
+    def showStructure(self, number, typeof='Period'):
+        """Return a list with all Segment objects of a given structure
+        such as Part or Period. The methods arguments are the number
+        and type of big structure."""
 
         if typeof == 'Period':
             return [un for un in self.subSegments if un.period_number == number]
