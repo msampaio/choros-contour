@@ -49,6 +49,13 @@ def rst_table(dic, size=8):
     return "\n".join(result)
 
 
+def rst_link(link):
+    """Return a string formatted for rst code link. The input is a
+    link path."""
+
+    return ":download:`MIDI <{0}>`".format(link)
+
+
 def print_plot(out, title, composer, data, plot_fn):
     """Write header, chart and table in a given codecs.open object
     with a given data of a given composer."""
@@ -234,10 +241,15 @@ def print_lily(out, SegmentObj, subtitle):
     SegmentObj.score.write('png', dest)
     _utils.image_trim(dest)
 
+    midiname = _utils.unicode_normalize(os.path.join(directory, filename +  ".mid"))
+    midifile = _utils.unicode_normalize(os.path.join(os.path.basename(directory), filename + ".mid"))
+    SegmentObj.midi_save(midiname)
+
     title = ", ".join([SegmentObj.title, SegmentObj.composer, " ".join([SegmentObj.typeof, str(SegmentObj.number)]), subtitle])
     # print in rst
     out.write(rst_header(title, 4))
     out.write(rst_image(pngfile, "contour", 90))
+    out.write(rst_link(midifile))
     out.write("\n\n")
 
 
