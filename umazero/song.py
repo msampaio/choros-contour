@@ -69,13 +69,13 @@ class Song(object):
 
         return [un for un in self.subSegments if un.typeof == 'Phrase']
 
-    def showSegment(self, number, typeof='Phrase'):
+    def getSegment(self, number, typeof='Phrase'):
         """Return a list os all Segment objects from the Song object
         with a given type. Phrase is the default type."""
 
         return [un for un in self.subSegments if un.typeof == typeof and un.number == number][0]
 
-    def showStructure(self, number, typeof='Period'):
+    def getStructure(self, number, typeof='Period'):
         """Return a list with all Segment objects of a given structure
         such as Part or Period. The methods arguments are the number
         and type of big structure."""
@@ -87,7 +87,7 @@ class Song(object):
         else:
             print 'Wrong typeof {0}'.format(typeof)
 
-    def showStrutureSegmentsList(self, typeof='Period'):
+    def getStrutureSegmentsList(self, typeof='Period'):
         """Return a list of all segments of all structures of a given typeof."""
 
         segments = self.subSegments
@@ -97,7 +97,7 @@ class Song(object):
             structure_number = last_segment.period_number
         elif typeof == 'Part':
             structure_number = last_segment.part_number
-        return [self.showStructure(n) for n in range(1, structure_number)]
+        return [self.getStructure(n) for n in range(1, structure_number)]
 
     def getAttr(self, attribute):
         return getattr(self, attribute)
@@ -299,4 +299,4 @@ def makeSongCollection(collection, save=False):
 def makeStructuresList(SongObjList, typeof='Period'):
     """Return a list of lists of a given typeof structures."""
 
-    return _utils.flatten([SongObj.showStrutureSegmentsList(typeof) for SongObj in SongObjList])
+    return _utils.flatten([SongObj.getStrutureSegmentsList(typeof) for SongObj in SongObjList])
