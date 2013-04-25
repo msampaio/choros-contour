@@ -241,7 +241,7 @@ def print_lily(out, SegmentObj, subtitle):
     out.write("\n\n")
 
 
-def make_special_cases_webpage(AllSegmentsObj):
+def make_special_cases_webpage(AllSegmentsObj, songsObj):
     """Create and save data of special_cases webpage. The input data
     is an AllSegments object."""
 
@@ -279,6 +279,23 @@ def make_special_cases_webpage(AllSegmentsObj):
         out.write(rst_header('Least oscillated', 3))
         print_lily(out, lower_oscillation[1], '{0} (from 0 to 1)'.format(round(lower_oscillation[0], 2)))
 
+        # period similarity
+        periods = song.makeStructuresList(songsObj)
+        comparison_list = contour.period_comparison(periods)
+        acmemb_values = [x[1] for x in comparison_list]
+
+        higher_similarity = sorted(comparison_list, key = lambda el: el[1], reverse=True)[0]
+        lower_similarity = sorted(comparison_list, key = lambda el: el[1])[0]
+
+        print higher_similarity[0][0]
+        out.write(rst_header('Prime contour similarity index', 2))
+        out.write(rst_header('Most similar', 3))
+        print_lily(out, higher_similarity[0][0], '{0} (from 0 to 1)'.format(round(higher_similarity[1], 2)))
+        print_lily(out, higher_similarity[0][1], '{0} (from 0 to 1)'.format(round(higher_similarity[1], 2)))
+        out.write(rst_header('Least similar', 3))
+        print_lily(out, lower_similarity[0][0], '{0} (from 0 to 1)'.format(round(lower_similarity[1], 2)))
+        print_lily(out, lower_similarity[0][1], '{0} (from 0 to 1)'.format(round(lower_similarity[1], 2)))
+
 
 def print_period(out, composer, ComposerSongObjList, number_of_periods):
     """Write data in a codecs.open object for contour page."""
@@ -297,7 +314,7 @@ def print_period(out, composer, ComposerSongObjList, number_of_periods):
         out.write("Percentual of all periods: {0:.2f}%\n\n".format(percentual_allPeriods))
     out.write("Number of periods: {0}\n\n".format(n))
 
-    print_plot(out, 'All Mutually Embedded Contour value', composer, Counter(acmemb_values), plot.simple_scatter)
+    print_plot(out, 'All Mutually Embedded Contour', composer, Counter(acmemb_values), plot.simple_scatter)
 
 
 def make_periods_webpage(songsObj):
@@ -336,7 +353,7 @@ def run():
     make_contour_webpage(AllSegmentsObj)
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
-    make_special_cases_webpage(AllSegmentsObj)
+    make_special_cases_webpage(AllSegmentsObj, songsObj)
     make_periods_webpage(songsObj)
 
 
