@@ -3,6 +3,7 @@
 
 from collections import Counter
 from music21.contour import Contour
+from music21.contour import comparison
 import _utils
 
 
@@ -81,3 +82,20 @@ def multicount(SegmentsList, fn):
     with the 'fn' function in a list of Segment objects."""
 
     return counting([fn(SegmentObj) for SegmentObj in SegmentsList])
+
+
+def period_comparison(periodsList):
+    """Return a list of tuples with phrases period and acmemb value
+    between them. The input data is a list of periods."""
+
+    result = []
+    for period in periodsList:
+        phrases = [segment for segment in period if segment.typeof == 'Phrase']
+        # FIXME: improve acmemb algorithm to compare contours instead of primes
+        primes = [phrase.contour.reduction_morris()[0] for phrase in phrases]
+        # FIXME: use Schultz instead of reduction_morris to remove this condition
+        if len(primes[0]) < 10 and len(primes[1]) < 10:
+            acmemb = comparison.all_contour_mutually_embedded(*primes)
+            if acmemb != 1:
+                result.append((phrases, acmemb))
+    return sorted(result, key=lambda x: x[1])

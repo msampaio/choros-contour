@@ -10,6 +10,7 @@ import _utils
 import retrieval
 import plot
 import contour
+import song
 import query
 import songcollections
 
@@ -279,6 +280,51 @@ def make_special_cases_webpage(AllSegmentsObj):
         print_lily(out, lower_oscillation[1], '{0} (from 0 to 1)'.format(round(lower_oscillation[0], 2)))
 
 
+def print_period(out, composer, ComposerSongObjList, number_of_periods):
+    """Write data in a codecs.open object for contour page."""
+
+    print "Processing segments of composer... {0}".format(composer)
+
+    periods = song.makeStructuresList(ComposerSongObjList)
+    comparison_list = contour.period_comparison(periods)
+    acmemb_values = [x[1] for x in comparison_list]
+
+    n = len(periods)
+    percentual_allPeriods = n * 100 / float(number_of_periods)
+
+    out.write(rst_header(composer, 2))
+    if percentual_allPeriods != 100:
+        out.write("Percentual of all periods: {0:.2f}%\n\n".format(percentual_allPeriods))
+    out.write("Number of periods: {0}\n\n".format(n))
+
+    print_plot(out, 'All Mutually Embedded Contour value', composer, Counter(acmemb_values), plot.simple_scatter)
+
+
+def make_periods_webpage(songsObj):
+    """Create and save data of periods webpage. The input data is a
+    list of Song objects."""
+
+    print "Creating periods webpage..."
+
+    with codecs.open("docs/periods.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Periods", 1))
+        out.write('This page contains data of choros periods such as contour similarity organized by composer.\n\n')
+
+        number_of_periods = len(song.makeStructuresList(songsObj))
+
+        print_period(out, 'All composers', songsObj, number_of_periods)
+
+        composers_dic = {}
+        for songObj in songsObj:
+            composer = songObj.composer
+            if composer not in composers_dic:
+                composers_dic[composer] = []
+            composers_dic[composer].append(songObj)
+
+        for composer in sorted(composers_dic.keys()):
+            print_period(out, composer, composers_dic[composer], number_of_periods)
+
+
 def run():
     _utils.mkdir('docs/contour')
     songsObj = retrieval.loadSongs()
@@ -291,6 +337,7 @@ def run():
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
     make_special_cases_webpage(AllSegmentsObj)
+    make_periods_webpage(songsObj)
 
 
 if __name__ == '__main__':
