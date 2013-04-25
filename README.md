@@ -43,7 +43,7 @@ package.
 
 In prompt:
 
-    $ make save_pickle
+    $ make save
 
 ## Run ipython interpreter and import `umazero` package:
 

@@ -15,8 +15,8 @@ html:
 webpage:
 	python -c "import umazero.webpage; umazero.webpage.run()"
 
-save_pickle:
-	python -c "import umazero; umazero.retrieval.run()"
+save:
+	python -c "import umazero; umazero.saveAll()"
 
 copy:
 	python -c "import umazero; umazero.copyfiles()"

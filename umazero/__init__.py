@@ -13,6 +13,7 @@ from segment import makeSegment
 from query import makeAllSegments
 from retrieval import loadSongs
 from retrieval import loadSegments
+from retrieval import saveAll
 from songcollections import loadSongCollections
 from files import enumerator
 from files import colorize

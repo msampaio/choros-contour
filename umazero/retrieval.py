@@ -35,7 +35,7 @@ def loadSegments():
     return load_pickle('segments')
 
 
-def run():
+def saveAll():
     """Save pickle files for Song and Segment objects of all files in
     collections in 'choros-corpus' directory."""
 
@@ -57,4 +57,4 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    saveAll()
