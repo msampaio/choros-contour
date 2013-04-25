@@ -112,7 +112,7 @@ def makeAllSegments(save=False):
     if save:
         songs = retrieval.load_pickle('songs')
     else:
-        songs = song.makeSongCollection(coll, save)
+        songs = song.makeSongAllCollections(save)
     for s in songs:
         SegmentsList.extend(s.segments)
 

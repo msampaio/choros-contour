@@ -40,15 +40,7 @@ def saveAll():
     collections in 'choros-corpus' directory."""
 
     # songs
-    songs = []
-    for coll in _utils.filename_exclusion('choros-corpus'):
-        print "Processing collection {0}...".format(coll)
-        s = song.makeSongCollection(coll, True)
-        if s:
-            songs.extend(s)
-        else:
-            print "No .form or .xml files in collection {0}".format(coll)
-
+    songs = song.makeSongAllCollections(True, 'choros-corpus')
     save_pickle('songs', songs)
 
     # Segments

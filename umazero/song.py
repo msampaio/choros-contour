@@ -290,10 +290,25 @@ def makeSong(filename, number_show=False, save=False):
 
 
 def makeSongCollection(collection, save=False):
-    """Returns a list of phrases objects separated by piece."""
+    """Returns a list of Song objects from a given collection."""
 
     files = _utils.filenames_list(collection)
     return [makeSong(f, False, save) for f in files]
+
+
+def makeSongAllCollections(save=True, path='choros-corpus'):
+    """Return a list of Song objects from all collections files in a
+    given directory."""
+
+    songs = []
+    for coll in _utils.filename_exclusion(path):
+        print "Processing collection {0}...".format(coll)
+        s = makeSongCollection(coll, save)
+        if s:
+            songs.extend(s)
+        else:
+            print "No .form or .xml files in collection {0}".format(coll)
+    return songs
 
 
 def makeStructuresList(SongObjList, typeof='Period'):
