@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+import music21
 from music21.contour import Contour
 import song
 import _utils
@@ -71,6 +73,24 @@ class Segment(song.Song):
             self.score = newSegment
         else:
             print "There is already a score attribute"
+
+    def midi_save(self, path=None):
+        """Save score as midi file in a given path."""
+
+        if not self.score:
+            self.make_score()
+
+        if path == None:
+            basename = os.path.basename(self.filename)
+            dirname = os.path.dirname(self.filename)
+            midiname = " - ".join([basename.split('.')[0], self.typeof, str(self.number)]) + '.mid'
+            path = os.path.join(dirname, midiname)
+
+        print "Saving object {0} as midi file in path {1}".format(self, path)
+        mf = music21.midi.translate.streamToMidiFile(self.score)
+        mf.open(path, 'wb')
+        mf.write()
+        mf.close()
 
 
 def makeSegment(data_input):

@@ -196,6 +196,23 @@ class Song(object):
         else:
             print "There is already a score attribute"
 
+    def midi_save(self, path=None):
+        """Save score as midi file in a given path."""
+
+        if not self.score:
+            self.make_score()
+
+        if path == None:
+            basename = os.path.basename(self.filename)
+            dirname = os.path.dirname(self.filename)
+            midiname = basename.split('.')[0] + '.mid'
+            path = os.path.join(dirname, midiname)
+
+        print "Saving object {0} as midi file in path {1}".format(self, path)
+        mf = music21.midi.translate.streamToMidiFile(self.score)
+        mf.open(path, 'wb')
+        mf.write()
+        mf.close()
 
 def makeSong(filename, number_show=False, save=False):
     """Return a Song object from a xml file. The argument number_show
