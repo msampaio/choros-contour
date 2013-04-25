@@ -9,6 +9,7 @@ from segment import Segment
 
 # functions
 from song import makeSong
+from song import makeSongAllCollections
 from segment import makeSegment
 from query import makeAllSegments
 from retrieval import loadSongs
