@@ -75,7 +75,7 @@ def print_basic_data(out, composer, AllSegmentsObj, allSegments_number):
     """Write data in a codecs.open object for basic_data page."""
 
     def count_segments(AllSegmentsObj, attrib):
-        return Counter((getattr(un, attrib) for un in AllSegmentsObj.segments))
+        return Counter((getattr(seg, attrib) for seg in AllSegmentsObj.segments))
 
     print "Processing segments of composer... {0}".format(composer)
 

@@ -170,9 +170,9 @@ def colorSegmentObj(filename):
 
     beginning = []
     ending =[]
-    for un in form:
-        beginning.append(un['initial'])
-        ending.append(un['final'])
+    for seg in form:
+        beginning.append(seg['initial'])
+        ending.append(seg['final'])
 
     n = 0
     for measure in measures:

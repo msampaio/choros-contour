@@ -67,13 +67,13 @@ class Song(object):
         """Return all the segments of type Phrase from the Song
         object."""
 
-        return [un for un in self.segments if un.typeof == 'Phrase']
+        return [seg for seg in self.segments if seg.typeof == 'Phrase']
 
     def getSegment(self, number, typeof='Phrase'):
         """Return a list os all Segment objects from the Song object
         with a given type. Phrase is the default type."""
 
-        return [un for un in self.segments if un.typeof == typeof and un.number == number][0]
+        return [seg for seg in self.segments if seg.typeof == typeof and seg.number == number][0]
 
     def getStructure(self, number, typeof='Period'):
         """Return a list with all Segment objects of a given structure
@@ -81,9 +81,9 @@ class Song(object):
         and type of big structure."""
 
         if typeof == 'Period':
-            return [un for un in self.segments if un.period_number == number]
+            return [seg for seg in self.segments if seg.period_number == number]
         elif typeof == 'Part':
-            return [un for un in self.segments if un.part_number == number]
+            return [seg for seg in self.segments if seg.part_number == number]
         else:
             print 'Wrong typeof {0}'.format(typeof)
 

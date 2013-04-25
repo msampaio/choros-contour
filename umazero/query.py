@@ -46,31 +46,31 @@ class AllSegments(object):
         """Return a new AllSegment object with all Segment objects
         with a given composer as attribute."""
 
-        return _aux_getBy([un for un in self.segments if un.composer == composer], self.save)
+        return _aux_getBy([seg for seg in self.segments if seg.composer == composer], self.save)
 
     def getByTitle(self, title):
         """Return a new AllSegment object with all Segment objects
         with a given song title as attribute."""
 
-        return _aux_getBy([un for un in self.segments if un.title == title], self.save)
+        return _aux_getBy([seg for seg in self.segments if seg.title == title], self.save)
 
     def getByAmbitus(self, ambitus):
         """Return a new AllSegment object with all Segment objects
         with a given ambitus value as attribute."""
 
-        return _aux_getBy([un for un in self.segments if un.ambitus == ambitus], self.save)
+        return _aux_getBy([seg for seg in self.segments if seg.ambitus == ambitus], self.save)
 
     def getByContourPrime(self, contour_prime):
         """Return a new AllSegment object with all Segment objects
         with a given Contour Prime value as attribute."""
 
-        return _aux_getBy([un for un in self.segments if un.contour_prime == contour_prime], self.save)
+        return _aux_getBy([seg for seg in self.segments if seg.contour_prime == contour_prime], self.save)
 
     def getByPickup(self, pickup=True):
         """Return a new AllSegment object with all Segment objects
         with pickup measure."""
 
-        return _aux_getBy([un for un in self.segments if un.pickup == pickup], self.save)
+        return _aux_getBy([seg for seg in self.segments if seg.pickup == pickup], self.save)
 
 
 def getSegmentsData(SegmentsList):
