@@ -29,10 +29,10 @@ class Song(object):
         self.key = data['key']
         self.mode = data['mode']
 
-        if 'subSegments' in data:
-            self.subSegments = data['subSegments']
+        if 'segments' in data:
+            self.segments = data['segments']
         else:
-            self.subSegments = []
+            self.segments = []
 
     def __repr__(self):
         return "<Song: {0}. {1}>".format(self.title, self.collection)
@@ -57,23 +57,23 @@ class Song(object):
         print "Writing xml file in {0}".format(dest)
         self.score.write('musicxml', dest)
 
-    def addSegment(self, subSegment):
-        """Add Segment objects in subSegment attribute."""
+    def addSegment(self, seg):
+        """Add Segment objects in segment attribute."""
 
-        self.subSegments.append(subSegment)
+        self.segments.append(seg)
         return self
 
     def allPhrases(self):
-        """Return all the subSegments of type Phrase from the Song
+        """Return all the segments of type Phrase from the Song
         object."""
 
-        return [un for un in self.subSegments if un.typeof == 'Phrase']
+        return [un for un in self.segments if un.typeof == 'Phrase']
 
     def getSegment(self, number, typeof='Phrase'):
         """Return a list os all Segment objects from the Song object
         with a given type. Phrase is the default type."""
 
-        return [un for un in self.subSegments if un.typeof == typeof and un.number == number][0]
+        return [un for un in self.segments if un.typeof == typeof and un.number == number][0]
 
     def getStructure(self, number, typeof='Period'):
         """Return a list with all Segment objects of a given structure
@@ -81,16 +81,16 @@ class Song(object):
         and type of big structure."""
 
         if typeof == 'Period':
-            return [un for un in self.subSegments if un.period_number == number]
+            return [un for un in self.segments if un.period_number == number]
         elif typeof == 'Part':
-            return [un for un in self.subSegments if un.part_number == number]
+            return [un for un in self.segments if un.part_number == number]
         else:
             print 'Wrong typeof {0}'.format(typeof)
 
     def getStrutureSegmentsList(self, typeof='Period'):
         """Return a list of all segments of all structures of a given typeof."""
 
-        segments = self.subSegments
+        segments = self.segments
         last_segment = segments[-1]
 
         if typeof == 'Period':
@@ -191,7 +191,7 @@ class Song(object):
             newSong = makeSong(self.filename, number_show, False)
             self.params = newSong.params
             self.score = newSong.score
-            self.subSegments = newSong.subSegments
+            self.segments = newSong.segments
             self.measures = newSong.measures
         else:
             print "There is already a score attribute"
@@ -215,8 +215,8 @@ def makeSong(filename, number_show=False, save=False):
         params['time_signature'] = m1.getElementsByClass('TimeSignature')[0]
         return params
 
-    def getSubSegments(filename, songObj, save):
-        """Return the Song object with all its Segments in subSegment
+    def getSegments(filename, songObj, save):
+        """Return the Song object with all its Segments in segment
         attribute."""
 
         formname = filename.split('.xml')[0] + '.form'
@@ -226,8 +226,8 @@ def makeSong(filename, number_show=False, save=False):
                 el['filename'] = filename
                 el['songObj'] = songObj
                 el['save'] = save
-                subSegment = segment.makeSegment(el)
-                songObj.addSegment(subSegment)
+                seg = segment.makeSegment(el)
+                songObj.addSegment(seg)
             return songObj
         else:
             print "There is no file {0}".format(formname)
@@ -280,7 +280,7 @@ def makeSong(filename, number_show=False, save=False):
     data['key'] = key
     data['mode'] = mode
 
-    newSong = getSubSegments(filename, Song(data), save)
+    newSong = getSegments(filename, Song(data), save)
 
     if save:
         newSong.score = None

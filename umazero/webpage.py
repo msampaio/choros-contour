@@ -109,8 +109,8 @@ def make_basic_data_webpage(AllSegmentsObj):
         print_basic_data(out, 'All composers', AllSegmentsObj, AllSegmentsObj.segments_number)
 
         for composer in AllSegmentsObj.allComposers:
-            subsegments = AllSegmentsObj.getByComposer(composer)
-            print_basic_data(out, composer, subsegments, AllSegmentsObj.segments_number)
+            segments = AllSegmentsObj.getByComposer(composer)
+            print_basic_data(out, composer, segments, AllSegmentsObj.segments_number)
 
 
 def print_contour(out, composer, AllSegmentsObj, allSegments_number):
@@ -150,8 +150,8 @@ def make_contour_webpage(AllSegmentsObj):
         print_contour(out, 'All composers', AllSegmentsObj, AllSegmentsObj.segments_number)
 
         for composer in AllSegmentsObj.allComposers:
-            subsegments = AllSegmentsObj.getByComposer(composer)
-            print_contour(out, composer, subsegments, AllSegmentsObj.segments_number)
+            segments = AllSegmentsObj.getByComposer(composer)
+            print_contour(out, composer, segments, AllSegmentsObj.segments_number)
 
 
 def make_corpus_webpage(songsList, collectionsObj):

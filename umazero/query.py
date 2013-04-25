@@ -114,7 +114,7 @@ def makeAllSegments(save=False):
     else:
         songs = song.makeSongCollection(coll, save)
     for s in songs:
-        SegmentsList.extend(s.subSegments)
+        SegmentsList.extend(s.segments)
 
     d = getSegmentsData(SegmentsList)
     d['segments'] = SegmentsList
