@@ -2,7 +2,7 @@ SRC_DIR = umazero
 TEST_DIR = tests
 DOCS_DIR = docs
 
-all: save_pickle view
+all: save view
 
 view: docs
 	open docs/_build/html/index.html
