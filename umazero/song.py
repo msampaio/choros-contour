@@ -87,6 +87,18 @@ class Song(object):
         else:
             print 'Wrong typeof {0}'.format(typeof)
 
+    def showStrutureSegmentsList(self, typeof='Period'):
+        """Return a list of all segments of all structures of a given typeof."""
+
+        segments = self.subSegments
+        last_segment = segments[-1]
+
+        if typeof == 'Period':
+            structure_number = last_segment.period_number
+        elif typeof == 'Part':
+            structure_number = last_segment.part_number
+        return [self.showStructure(n) for n in range(1, structure_number)]
+
     def getAttr(self, attribute):
         return getattr(self, attribute)
 
@@ -184,6 +196,7 @@ class Song(object):
         else:
             print "There is already a score attribute"
 
+
 def makeSong(filename, number_show=False, save=False):
     """Return a Song object from a xml file. The argument number_show
     means the enumbered numbers will be included in score object, and
@@ -275,8 +288,15 @@ def makeSong(filename, number_show=False, save=False):
         newSong.measures = None
     return  newSong
 
+
 def makeSongCollection(collection, save=False):
     """Returns a list of phrases objects separated by piece."""
 
     files = _utils.filenames_list(collection)
     return [makeSong(f, False, save) for f in files]
+
+
+def makeStructuresList(SongObjList, typeof='Period'):
+    """Return a list of lists of a given typeof structures."""
+
+    return _utils.flatten([SongObj.showStrutureSegmentsList(typeof) for SongObj in SongObjList])
