@@ -21,6 +21,11 @@ save:
 copy:
 	python -c "import umazero; umazero.copyfiles()"
 
+allclean: clean
+	rm -rf data ;\
+	rm -rf docs/contour/* ;\
+	rm -rf docs/_build/* ;\
+
 clean:
 	find . -name "*.pyc" | xargs rm
 
