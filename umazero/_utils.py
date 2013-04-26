@@ -80,7 +80,7 @@ def unicode_normalize(string):
     with special characters."""
 
     new_string = unicodedata.normalize('NFKD', unicode(string)).encode('ascii', 'ignore')
-    return new_string.replace(',', '').replace('?', '')
+    return new_string.replace(',', '').replace('?', '').replace('(', '').replace(')', '')
 
 
 def group_minorities(dic, percentage=0.05):
