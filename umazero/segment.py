@@ -139,6 +139,8 @@ def makeSegment(data_input):
     return Segment(data)
 
 
+# FIXME: period enumeration when a subsequent part doesn't contain a
+# period.
 def formParser(filename):
     """Returns a dictionary with the formal structure of a song
     parsed. The argument is the name of xml file, but the function
