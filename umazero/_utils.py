@@ -79,7 +79,8 @@ def unicode_normalize(string):
     """Return a normalized string. It's useful to process filenames
     with special characters."""
 
-    return unicodedata.normalize('NFKD', unicode(string)).encode('ascii', 'ignore')
+    new_string = unicodedata.normalize('NFKD', unicode(string)).encode('ascii', 'ignore')
+    return new_string.replace(',', '').replace('?', '')
 
 
 def group_minorities(dic, percentage=0.05):
