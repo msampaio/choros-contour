@@ -54,7 +54,7 @@ def filenames_list(collection, extension='form'):
     directory = os.path.join(os.getcwd(), 'choros-corpus', collection)
     phrase_files = glob.glob(os.path.join(directory, "*.{0}".format(extension)))
 
-    return [filename.strip(extension) + 'xml' for filename in phrase_files]
+    return [filename.replace(extension, 'xml') for filename in phrase_files]
 
 
 def filename_exclusion(path, exclusions=['.DS_Store', '.git', 'README.md']):
@@ -119,4 +119,4 @@ def image_trim(filename):
 def remove_endline(string):
     """Return a given string without new line or crlf."""
 
-    return string.strip('\n').strip('\r')
+    return string.replace('\n', '').replace('\r', '')

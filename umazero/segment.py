@@ -146,7 +146,7 @@ def formParser(filename):
     parsed. The argument is the name of xml file, but the function
     parses the .form file in the same directory of the xml one."""
 
-    form_name = filename.strip('.xml') + '.form'
+    form_name = filename.replace('.xml', '.form')
     with open(form_name, 'r') as f:
         seq = [_utils.remove_endline(el) for el in f.readlines() if _utils.remove_endline(el)]
     form = []
