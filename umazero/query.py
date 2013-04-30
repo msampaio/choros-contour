@@ -8,9 +8,11 @@ import song
 
 
 def _aux_getBy(segments, save):
-    d = getSegmentsData(segments)
-    d['segments'] = segments
-    return AllSegments(d, save)
+    allseg = getSegmentsData(segments)
+    allseg.segments = segments
+    allseg.segments_number = len(allseg.segments)
+    allseg.save = save
+    return allseg
 
 
 class AllSegments(object):
@@ -18,21 +20,21 @@ class AllSegments(object):
     and methods to return information about Segment objects
     parameters."""
 
-    def __init__(self, data, save=False):
-        self.save = save
-        self.segments = data['segments']
-        self.segments_number = len(self.segments)
+    def __init__(self):
+        self.save = None
+        self.segments = None
+        self.segments_number = None
 
-        self.allComposers = data['allComposers']
-        self.allTitles = data['allTitles']
-        self.allCollections = data['allCollections']
-        self.allContours = data['allContours']
-        self.allContourSizes = data['allContourSizes']
-        self.allContourPrimes = data['allContourPrimes']
-        self.allAmbitus = data['allAmbitus']
-        self.allTimeSignatures = data['allTimeSignatures']
-        self.allMeters = data['allMeters']
-        self.allFilenames = data['allFilenames']
+        self.allComposers = None
+        self.allTitles = None
+        self.allCollections = None
+        self.allContours = None
+        self.allContourSizes = None
+        self.allContourPrimes = None
+        self.allAmbitus = None
+        self.allTimeSignatures = None
+        self.allMeters = None
+        self.allFilenames = None
 
     def __repr__(self):
         return "<AllSegments: {0} segments>".format(self.segments_number)
@@ -87,21 +89,22 @@ def getSegmentsData(SegmentsList):
             else:
                 s.add(value)
                 r = sorted(s)
+        # FIXME: local variable 'r' referenced before assignment
         return r
 
-    data = {}
-    data['allComposers'] = getData(SegmentsList, 'composer')
-    data['allTitles'] = getData(SegmentsList, 'title')
-    data['allCollections'] = getData(SegmentsList, 'collection')
-    data['allContours'] = getData(SegmentsList, 'contour')
-    data['allContourSizes'] = getData(SegmentsList, 'contour_size')
-    data['allContourPrimes'] = getData(SegmentsList, 'contour_prime')
-    data['allAmbitus'] = getData(SegmentsList, 'ambitus')
-    data['allTimeSignatures'] = getData(SegmentsList, 'time_signature')
-    data['allMeters'] = getData(SegmentsList, 'meter')
-    data['allFilenames'] = getData(SegmentsList, 'filename')
+    allseg = AllSegments()
+    allseg.allComposers = getData(SegmentsList, 'composer')
+    allseg.allTitles = getData(SegmentsList, 'title')
+    allseg.allCollections = getData(SegmentsList, 'collection')
+    allseg.allContours = getData(SegmentsList, 'contour')
+    allseg.allContourSizes = getData(SegmentsList, 'contour_size')
+    allseg.allContourPrimes = getData(SegmentsList, 'contour_prime')
+    allseg.allAmbitus = getData(SegmentsList, 'ambitus')
+    allseg.allTimeSignatures = getData(SegmentsList, 'time_signature')
+    allseg.allMeters = getData(SegmentsList, 'meter')
+    allseg.allFilenames = getData(SegmentsList, 'filename')
 
-    return data
+    return allseg
 
 def makeAllSegments(save=False):
     """Return an AllSegment object with all Segment objects saved in a
@@ -116,6 +119,8 @@ def makeAllSegments(save=False):
     for s in songs:
         SegmentsList.extend(s.segments)
 
-    d = getSegmentsData(SegmentsList)
-    d['segments'] = SegmentsList
-    return AllSegments(d, save)
+    allseg = getSegmentsData(SegmentsList)
+    allseg.segments = SegmentsList
+    allseg.segments_number = len(allseg.segments)
+    allseg.save = save
+    return allseg

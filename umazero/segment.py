@@ -12,33 +12,33 @@ class Segment(song.Song):
     """Class for Segment classes. A segment is a phrase or link of a
     song."""
 
-    def __init__(self, data):
-        self.filename = data['filename']
+    def __init__(self):
+        self.filename = None
 
         # metadata
-        self.collection = data['collection']
-        self.title = data['title']
-        self.composer = data['composer']
+        self.collection = None
+        self.title = None
+        self.composer = None
 
         # music
-        self.score = data['score']
-        self.time_signature = data['time_signature']
-        self.meter = data['meter']
-        self.ambitus = data['ambitus']
-        self.pickup = data['pickup']
+        self.score = None
+        self.time_signature = None
+        self.meter = None
+        self.ambitus = None
+        self.pickup = None
 
-        self.contour = data['contour']
-        self.contour_prime = data['contour_prime']
-        self.contour_size = data['contour_size']
+        self.contour = None
+        self.contour_prime = None
+        self.contour_size = None
 
-        self.typeof = data['typeof']
-        self.number = data['number']
+        self.typeof = None
+        self.number = None
 
-        self.initial_event = data['initial_event']
-        self.final_event = data['final_event']
+        self.initial_event = None
+        self.final_event = None
 
-        self.part_number = data['part_number']
-        self.period_number = data['period_number']
+        self.part_number = None
+        self.period_number = None
 
     def __repr__(self):
         return "<Segment {0}: {1} - {2} ({3})>".format(self.typeof, self.title, self.composer, self.number)
@@ -93,50 +93,47 @@ class Segment(song.Song):
         mf.close()
 
 
-def makeSegment(data_input):
-    """Return a Segment object from a dictionary with specific data,
-    including metadata."""
+def makeSegment(segment_form):
+    """Return a Segment object from a dictionary with specific data
+    about the segment, including metadata."""
 
-    initial = data_input['initial']
-    final = data_input['final']
+    seg = Segment()
+    initial = segment_form['initial']
+    final = segment_form['final']
 
-    songObj = data_input['songObj']
+    songObj = segment_form['songObj']
     score = songObj.getExcerpt(initial, final)
     
-    data = {}
-
-    data['filename'] = songObj.filename
+    seg.filename = songObj.filename
 
     # metadata
-    data['collection'] = songObj.collection
-    data['title'] = songObj.title
-    data['composer'] = songObj.composer
+    seg.collection = songObj.collection
+    seg.title = songObj.title
+    seg.composer = songObj.composer
 
     # music
-    if not data_input['save']:
-        data['score'] = score
-    else:
-        data['score'] = None
+    if not segment_form['save']:
+        seg.score = score
 
-    data['time_signature'] = songObj.time_signature
-    data['meter'] = songObj.meter
-    data['pickup'] = score.pickup
+    seg.time_signature = songObj.time_signature
+    seg.meter = songObj.meter
+    seg.pickup = score.pickup
 
     # analysis
     contour = Contour(score)
-    data['ambitus'] = score.analyze("ambitus").chromatic.directed
-    data['contour'] = contour
-    data['contour_prime'] = contour.reduction_morris()[0]
-    data['contour_size'] = len(contour)
+    seg.ambitus = score.analyze("ambitus").chromatic.directed
+    seg.contour = contour
+    seg.contour_prime = contour.reduction_morris()[0]
+    seg.contour_size = len(contour)
 
-    data['typeof'] = data_input['typeof']
-    data['number'] = data_input['number']
-    data['initial_event'] = initial
-    data['final_event'] = final
-    data['part_number'] = data_input['part_number']
-    data['period_number'] = data_input['period_number']
+    seg.typeof = segment_form['typeof']
+    seg.number = segment_form['number']
+    seg.initial_event = initial
+    seg.final_event = final
+    seg.part_number = segment_form['part_number']
+    seg.period_number = segment_form['period_number']
 
-    return Segment(data)
+    return seg
 
 
 # FIXME: period enumeration when a subsequent part doesn't contain a
@@ -164,20 +161,20 @@ def formParser(filename):
             typeof, i, f = el.split()
             initial = int(i)
             final = int(f)
-            dic = {}
-            dic['initial'] = initial
-            dic['final'] = final
-            dic['period_number'] = period_number
-            dic['part_number'] = part_number
+            segment_form = {}
+            segment_form['initial'] = initial
+            segment_form['final'] = final
+            segment_form['period_number'] = period_number
+            segment_form['part_number'] = part_number
             if typeof == 'p':
                 phrase_number += 1
-                dic['typeof'] = 'Phrase'
-                dic['number'] = phrase_number
+                segment_form['typeof'] = 'Phrase'
+                segment_form['number'] = phrase_number
             else:
                 link_number += 1
-                dic['typeof'] = 'Link'
-                dic['number'] = link_number
-            form.append(dic)
+                segment_form['typeof'] = 'Link'
+                segment_form['number'] = link_number
+            form.append(segment_form)
 
     return form
 

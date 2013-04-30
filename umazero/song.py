@@ -10,29 +10,25 @@ import _utils
 class Song(object):
     """Class for song objects."""
 
-    def __init__(self, data):
+    def __init__(self):
 
-        self.filename = data['filename']
+        self.filename = None
 
         # metadata
-        self.collection = data['collection']
-        self.title = data['title']
-        self.composer = data['composer']
+        self.collection = None
+        self.title = None
+        self.composer = None
 
         # music
-        self.score = data['score']
-        self.measures = data['measures']
-        self.params = data['params']
-        self.time_signature = data['time_signature']
-        self.meter = data['meter']
-        self.pickup = data['pickup']
-        self.key = data['key']
-        self.mode = data['mode']
-
-        if 'segments' in data:
-            self.segments = data['segments']
-        else:
-            self.segments = []
+        self.score = None
+        self.measures = None
+        self.params = None
+        self.time_signature = None
+        self.meter = None
+        self.pickup = None
+        self.key = None
+        self.mode = None
+        self.segments = []
 
     def __repr__(self):
         return "<Song: {0}. {1}>".format(self.title, self.collection)
@@ -256,6 +252,7 @@ def makeSong(filename, number_show=False, save=False):
         if measures[0].number == 0:
             return True
 
+    print "Processing file {0}...".format(os.path.basename(filename))
     score = music21.converter.parse(filename)
     part = score.getElementsByClass('Part')[0]
     measures = part.getElementsByClass('Measure')
@@ -278,26 +275,27 @@ def makeSong(filename, number_show=False, save=False):
                     measure_events.append(event_n)
             measure.events = measure_events
 
-    data = {}
-    data['filename'] = filename
+    song = Song()
+
+    song.filename = filename
 
     # metadata
-    data['collection'] = os.path.basename(os.path.dirname(filename))
-    data['title'] = score.metadata.title
-    data['composer'] = " ".join(score.metadata.composer.replace('\n', ' ').split())
+    song.collection = os.path.basename(os.path.dirname(filename))
+    song.title = score.metadata.title
+    song.composer = " ".join(score.metadata.composer.replace('\n', ' ').split())
 
     # music
-    data['score'] = score
-    data['measures'] = measures
-    data['params'] = params
+    song.score = score
+    song.measures = measures
+    song.params = params
 
-    data['time_signature'] = str(time_signature_obj)
-    data['meter'] = time_signature_obj.beatCountName
-    data['pickup'] = pickup_test(measures)
-    data['key'] = key
-    data['mode'] = mode
+    song.time_signature = str(time_signature_obj)
+    song.meter = time_signature_obj.beatCountName
+    song.pickup = pickup_test(measures)
+    song.key = key
+    song.mode = mode
 
-    newSong = getSegments(filename, Song(data), save)
+    newSong = getSegments(filename, song, save)
 
     if save:
         newSong.score = None

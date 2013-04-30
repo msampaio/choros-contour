@@ -8,13 +8,13 @@ class CollectionSong(object):
     """Class for song objects. This class is specific for the metadata
     organized in json file."""
 
-    def __init__(self, dic):
+    def __init__(self):
 
-        self.title = dic['Title']
-        self.number = dic['Number']
-        self.collection = dic['Collection']
-        self.composer = dic['Composer']
-        self.lyrics = dic['Lyrics']
+        self.title = None
+        self.number = None
+        self.collection = None
+        self.composer = None
+        self.lyrics = None
 
     def __repr__(self):
         return "<CollectionSong: {0} ({1}). {2}>".format(self.title, self.composer, self.collection)
@@ -25,40 +25,52 @@ class AllCollectionSongs(object):
     attributes and methods to return information about CollectionSong
     objects parameters."""
 
-    def __init__(self, dic):
+    def __init__(self):
 
-        self.collectionSongs = dic['collectionSongs']
-        self.allCollections = dic['allCollections']
-        self.allComposers = dic['allComposers']
-        self.allTitles = dic['allTitles']
-        self.number = dic['number']
+        self.collectionSongs = None
+        self.allCollections = None
+        self.allComposers = None
+        self.allTitles = None
+        self.number = None
 
     def __repr__(self):
         return "<AllCollectionSongs. Collections: {0}, Songs: {1}, Composers: {2}>".format(len(self.allCollections), self.number, len(self.allComposers))
 
+def makeCollectionSong(jsonDic):
+    """Return a CollectionSong object from an element."""
+
+    collsong = CollectionSong()
+    collsong.title = jsonDic['Title']
+    collsong.number = jsonDic['Number']
+    collsong.collection = jsonDic['Collection']
+    collsong.composer = jsonDic['Composer']
+    collsong.lyrics = jsonDic['Lyrics']
+
+    return collsong
 
 def makeAllCollectionSongs(jsonSeq):
     """Return an AllCollectionSongs object from a sequence loaded from
     a json file."""
 
-    dic = {}
+    allcollsongs = AllCollectionSongs()
 
     collections = set()
     composers = set()
     titles = set()
     collectionSongs = []
-    for el in jsonSeq:
-        collectionSongs.append(CollectionSong(el))
-        collections.add(el['Collection'])
-        composers.add(el['Composer'])
-        titles.add(el['Title'])
-    dic['collectionSongs'] = collectionSongs
-    dic['allCollections'] = sorted(collections)
-    dic['allComposers'] = sorted(composers)
-    dic['allTitles'] = sorted(titles)
-    dic['number'] = len(collectionSongs)
+    for jsonDic in jsonSeq:
+        collectionSong = makeCollectionSong(jsonDic)
+        collectionSongs.append(collectionSong)
+        collections.add(collectionSong.collection)
+        composers.add(collectionSong.composer)
+        titles.add(collectionSong.title)
+    allcollsongs.collectionSongs = collectionSongs
+    allcollsongs.allCollections = sorted(collections)
+    allcollsongs.allComposers = sorted(composers)
+    allcollsongs.allTitles = sorted(titles)
+    allcollsongs.number = len(collectionSongs)
 
-    return AllCollectionSongs(dic)
+    return allcollsongs
 
 
 def loadSongCollections(filename='songs_map.json'):
