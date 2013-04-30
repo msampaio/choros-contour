@@ -94,7 +94,7 @@ def period_comparison(periodsList):
         # FIXME: improve acmemb algorithm to compare contours instead of primes
         primes = [phrase.contour.reduction_morris()[0] for phrase in phrases]
         # FIXME: use Schultz instead of reduction_morris to remove this condition
-        if len(primes[0]) < 10 and len(primes[1]) < 10:
+        if len(primes[0]) < 10 and len(primes[1]) < 10 and len(primes) == 2:
             acmemb = comparison.all_contour_mutually_embedded(*primes)
             if acmemb != 1:
                 result.append((phrases, acmemb))
