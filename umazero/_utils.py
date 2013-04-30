@@ -120,3 +120,16 @@ def remove_endline(string):
     """Return a given string without new line or crlf."""
 
     return string.replace('\n', '').replace('\r', '')
+
+
+def get_filename(collection_number, song_number, path='choros-corpus'):
+    """Return absolute filename of a given collection and song numbers."""
+
+    collection = filename_exclusion(path)[collection_number]
+    print collection
+    files = filenames_list(collection, 'xml')
+    for f in files:
+        basename = os.path.basename(f)
+        number = int(basename.split()[0])
+        if number == song_number:
+            return f
