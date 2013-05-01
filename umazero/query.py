@@ -35,6 +35,7 @@ class AllSegments(object):
         self.allTimeSignatures = None
         self.allMeters = None
         self.allIntervals = None
+        self.allSemitoneIntervals = None
         self.allFirstIntervals = None
         self.allLastIntervals = None
         self.allFilenames = None
@@ -92,6 +93,12 @@ class AllSegments(object):
         else:
             return _aux_getBy([seg for seg in self.segments if interval in seg.intervals], self.save)
 
+    def getBySemitoneInterval(self, interval):
+        """Return a new AllSegment object with all Segment objects
+        with a given _interval value as attribute."""
+
+        return _aux_getBy([seg for seg in self.segments if interval in seg.intervals_with_direction_semitones], self.save)
+
     def getByFirstInterval(self, first_interval):
         """Return a new AllSegment object with all Segment objects
         with a given first_interval value as attribute."""
@@ -137,6 +144,7 @@ def getSegmentsData(SegmentsList):
     allseg.allTimeSignatures = getData(SegmentsList, 'time_signature')
     allseg.allMeters = getData(SegmentsList, 'meter')
     allseg.allIntervals = getData(SegmentsList, 'intervals')
+    allseg.allSemitoneIntervals = getData(SegmentsList, 'intervals_with_direction_semitones')
     allseg.allFirstIntervals = getData(SegmentsList, 'first_interval')
     allseg.allLastIntervals = getData(SegmentsList, 'last_interval')
     allseg.allFilenames = getData(SegmentsList, 'filename')
