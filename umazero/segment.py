@@ -4,8 +4,14 @@
 import os
 import music21
 from music21.contour import Contour
+from music21.interval import notesToInterval, notesToChromatic
 import song
 import _utils
+import note
+
+
+class SegmentException(Exception):
+    pass
 
 
 class Segment(song.Song):
@@ -30,6 +36,12 @@ class Segment(song.Song):
         self.contour = None
         self.contour_prime = None
         self.contour_size = None
+
+        self.notes = None
+        self.intervals = None
+        self.intervals_with_direction = None
+        self.first_interval = None
+        self.last_interval = None
 
         self.typeof = None
         self.number = None
@@ -125,6 +137,15 @@ def makeSegment(segment_form):
     seg.contour = contour
     seg.contour_prime = contour.reduction_morris()[0]
     seg.contour_size = len(contour)
+
+    notes = note.song_notes(score)
+    seg.notes = [note.make_note(n) for n in notes]
+    _size = len(notes)
+
+    seg.intervals = note.intervals_without_direction(notes)
+    seg.intervals_with_direction = note.intervals_with_direction(notes)
+    seg.first_interval = notesToChromatic(notes[0], notes[1]).directed
+    seg.last_interval = notesToChromatic(notes[_size - 2], notes[_size - 1]).directed
 
     seg.typeof = segment_form['typeof']
     seg.number = segment_form['number']
