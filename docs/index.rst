@@ -22,6 +22,6 @@ Data and Analysis
    basic_data.rst
    intervals.rst
    contour.rst
-   special_cases.rst
    periods.rst
+   special_cases.rst
    glossary.rst
