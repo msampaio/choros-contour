@@ -6,6 +6,7 @@ import os
 import glob
 import unicodedata
 from PIL import Image, ImageChops
+from collections import Counter
 
 
 def flatten(seq):
@@ -133,3 +134,7 @@ def get_filename(collection_number, song_number, path='choros-corpus'):
         number = int(basename.split()[0])
         if number == song_number:
             return f
+
+
+def count_segments(AllSegmentsObj, attrib):
+    return Counter((getattr(seg, attrib) for seg in AllSegmentsObj.segments))

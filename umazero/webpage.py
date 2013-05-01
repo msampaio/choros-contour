@@ -144,9 +144,6 @@ def print_plot(out, title, composer, data, plot_fn):
 def print_basic_data(out, composer, AllSegmentsObj, allSegments_number):
     """Write data in a codecs.open object for basic_data page."""
 
-    def count_segments(AllSegmentsObj, attrib):
-        return Counter((getattr(seg, attrib) for seg in AllSegmentsObj.segments))
-
     print "Processing segments of composer... {0}".format(composer)
 
     songs_number = len(AllSegmentsObj.allFilenames)
@@ -160,9 +157,9 @@ def print_basic_data(out, composer, AllSegmentsObj, allSegments_number):
     out.write("Number of segments: {0}\n\n".format(AllSegmentsObj.segments_number))
 
 
-    print_plot(out, 'Meter', composer, count_segments(AllSegmentsObj, 'meter'), plot.simple_pie)
-    print_plot(out, 'Ambitus in semitones', composer, count_segments(AllSegmentsObj, 'ambitus'), plot.simple_scatter)
-    print_plot(out, 'Pickup measure', composer, count_segments(AllSegmentsObj, 'pickup'), plot.simple_pie)
+    print_plot(out, 'Meter', composer, _utils.count_segments(AllSegmentsObj, 'meter'), plot.simple_pie)
+    print_plot(out, 'Ambitus in semitones', composer, _utils.count_segments(AllSegmentsObj, 'ambitus'), plot.simple_scatter)
+    print_plot(out, 'Pickup measure', composer, _utils.count_segments(AllSegmentsObj, 'pickup'), plot.simple_pie)
 
 
 def make_basic_data_webpage(AllSegmentsObj):
