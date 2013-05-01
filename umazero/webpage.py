@@ -35,7 +35,7 @@ def rst_header(title, level=1):
 def rst_image(filename, directory, scale_factor=100):
     """Return a string formatted for rst code figure."""
 
-    return u".. image:: {0}/{1}.png\n   :scale: {2}\n".format(directory, filename, scale_factor)
+    return u".. image:: {0}/{1}.png\n   :scale: {2}\n\n".format(directory, filename, scale_factor)
 
 
 def rst_table(dic, size=8):
