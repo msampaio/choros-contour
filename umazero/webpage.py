@@ -38,14 +38,17 @@ def rst_image(filename, directory, scale_factor=100):
     return u".. image:: {0}/{1}.png\n   :scale: {2}\n\n".format(directory, filename, scale_factor)
 
 
-def rst_table(dic, size=8):
+def rst_table(dic):
     """Return a string formatted for rst code table. The input data is
     a dictionary such as {'a': 2, 'b': 4, 'c': 6}."""
 
-    mark = "{0} {0}".format("=" * size)
+    table_data = _utils.sort2(dic)
+    larger_value = max([len(str(el)) for el in _utils.flatten(table_data)])
+
+    mark = "{0}    {0}".format("=" * (larger_value))
     result = [mark]
-    for key, val in _utils.sort2(dic):
-        result.append("{1:{0}} {2:{0}.2f}".format(size, key, val))
+    for key, val in table_data:
+        result.append("{1:{0}} {2:{0}.2f}".format(larger_value, key, val))
     result.append(mark)
     return "\n".join(result)
 
