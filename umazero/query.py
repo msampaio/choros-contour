@@ -44,6 +44,12 @@ class AllSegments(object):
 
         return self.segments[index]
 
+    def getByTypeOf(self, typeof):
+        """Return a new AllSegment object with all Segment objects
+        with a given type as attribute, such as Phrase or Link."""
+
+        return _aux_getBy([seg for seg in self.segments if seg.typeof == typeof], self.save)
+
     def getByComposer(self, composer):
         """Return a new AllSegment object with all Segment objects
         with a given composer as attribute."""
