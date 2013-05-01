@@ -80,6 +80,7 @@ def getSegmentsData(SegmentsList):
 
     def getData(SegmentsList, attrib):
         s = set()
+        r = []
         for SegmentObj in SegmentsList:
             value = getattr(SegmentObj, attrib)
             if type(value) == music21.contour.contour.Contour:
@@ -89,7 +90,6 @@ def getSegmentsData(SegmentsList):
             else:
                 s.add(value)
                 r = sorted(s)
-        # FIXME: local variable 'r' referenced before assignment
         return r
 
     allseg = AllSegments()
