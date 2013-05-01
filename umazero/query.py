@@ -34,6 +34,9 @@ class AllSegments(object):
         self.allAmbitus = None
         self.allTimeSignatures = None
         self.allMeters = None
+        self.allIntervals = None
+        self.allFirstIntervals = None
+        self.allLastIntervals = None
         self.allFilenames = None
 
     def __repr__(self):
@@ -80,6 +83,27 @@ class AllSegments(object):
 
         return _aux_getBy([seg for seg in self.segments if seg.pickup == pickup], self.save)
 
+    def getByInterval(self, interval, without=False):
+        """Return a new AllSegment object with all Segment objects
+        with a given _interval value as attribute."""
+
+        if without:
+            return _aux_getBy([seg for seg in self.segments if interval not in seg.intervals], self.save)
+        else:
+            return _aux_getBy([seg for seg in self.segments if interval in seg.intervals], self.save)
+
+    def getByFirstInterval(self, first_interval):
+        """Return a new AllSegment object with all Segment objects
+        with a given first_interval value as attribute."""
+
+        return _aux_getBy([seg for seg in self.segments if seg.first_interval == first_interval], self.save)
+
+    def getByLastInterval(self, last_interval):
+        """Return a new AllSegment object with all Segment objects
+        with a given last_interval value as attribute."""
+
+        return _aux_getBy([seg for seg in self.segments if seg.last_interval == last_interval], self.save)
+
 
 def getSegmentsData(SegmentsList):
     """Return a dictionary with the data raised in Segment objects."""
@@ -93,6 +117,10 @@ def getSegmentsData(SegmentsList):
                 value = tuple(value)
                 s.add(value)
                 r = [music21.contour.contour.Contour(cseg) for cseg in sorted(s)]
+            elif type(value) == list:
+                for el in value:
+                    s.add(el)
+                    r = sorted(s)
             else:
                 s.add(value)
                 r = sorted(s)
@@ -108,6 +136,9 @@ def getSegmentsData(SegmentsList):
     allseg.allAmbitus = getData(SegmentsList, 'ambitus')
     allseg.allTimeSignatures = getData(SegmentsList, 'time_signature')
     allseg.allMeters = getData(SegmentsList, 'meter')
+    allseg.allIntervals = getData(SegmentsList, 'intervals')
+    allseg.allFirstIntervals = getData(SegmentsList, 'first_interval')
+    allseg.allLastIntervals = getData(SegmentsList, 'last_interval')
     allseg.allFilenames = getData(SegmentsList, 'filename')
 
     return allseg
