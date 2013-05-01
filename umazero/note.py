@@ -49,3 +49,9 @@ def intervals_with_direction(notes):
     size = len(notes)
     pos = zip(range(size-1), range(1, size))
     return [notesToInterval(notes[x], notes[y]).directedName for x, y in pos]
+
+
+def intervals_with_direction_semitones(notes):
+    size = len(notes)
+    pos = zip(range(size-1), range(1, size))
+    return [notesToInterval(notes[x], notes[y]).semitones for x, y in pos]

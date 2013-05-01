@@ -144,6 +144,7 @@ def makeSegment(segment_form):
 
     seg.intervals = note.intervals_without_direction(notes)
     seg.intervals_with_direction = note.intervals_with_direction(notes)
+    seg.intervals_with_direction_semitones = note.intervals_with_direction_semitones(notes)
     seg.first_interval = notesToChromatic(notes[0], notes[1]).directed
     seg.last_interval = notesToChromatic(notes[_size - 2], notes[_size - 1]).directed
 
