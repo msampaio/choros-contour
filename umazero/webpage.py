@@ -13,6 +13,7 @@ import contour
 import song
 import query
 import songcollections
+import intervals
 
 
 class WebpageError(Exception):
@@ -178,6 +179,50 @@ def make_basic_data_webpage(AllSegmentsObj):
         for composer in AllSegmentsObj.allComposers:
             segments = AllSegmentsObj.getByComposer(composer)
             print_basic_data(out, composer, segments, AllSegmentsObj.segments_number)
+
+
+def print_intervals(out, composer, AllSegmentsObj, allSegments_number):
+    """Write data in a codecs.open object for intervals page."""
+
+    print "Processing segments of composer... {0}".format(composer)
+
+    songs_number = len(AllSegmentsObj.allFilenames)
+    percentual_allSegments = AllSegmentsObj.segments_number / float(allSegments_number) * 100
+
+    out.write(rst_header(composer, 2))
+
+    out.write("Number of Songs: {0}\n\n".format(songs_number))
+    if percentual_allSegments != 100:
+        out.write("Percentual of all segments: {0:.2f}%\n\n".format(percentual_allSegments))
+    out.write("Number of segments: {0}\n\n".format(AllSegmentsObj.segments_number))
+
+    segments_intervals = _utils.flatten([getattr(seg, 'intervals') for seg in AllSegmentsObj.segments])
+    consonant_intervals = (intervals.is_consonant(i) for i in segments_intervals)
+    leaps = intervals.leaps(segments_intervals)
+    step_leap_arpeggio = intervals.step_leap_arpeggio(segments_intervals)
+
+    print_plot(out, 'Intervals', composer, _utils.group_minorities(Counter(segments_intervals), 0.02), plot.simple_pie)
+    print_plot(out, 'Consonance', composer, Counter(consonant_intervals), plot.simple_pie)
+    print_plot(out, 'Leaps', composer, _utils.group_minorities(leaps, 0.02), plot.simple_pie)
+    print_plot(out, 'Steps, Leaps, 3rds and repetitions', composer, step_leap_arpeggio, plot.simple_pie)
+
+
+def make_intervals_webpage(AllSegmentsObj):
+    """Create and save data of intervals webpage. The input data is an
+    AllSegments object."""
+
+    print "Creating intervals webpage..."
+
+    with codecs.open("docs/intervals.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Intervals", 1))
+        out.write('This page contains intervals of choros segments such as time signature organized by composer. ')
+        out.write('The numbers in the table\'s second column are in percent.\n\n')
+
+        print_intervals(out, 'All composers', AllSegmentsObj, AllSegmentsObj.segments_number)
+
+        for composer in AllSegmentsObj.allComposers:
+            segments = AllSegmentsObj.getByComposer(composer)
+            print_intervals(out, composer, segments, AllSegmentsObj.segments_number)
 
 
 def print_contour(out, composer, AllSegmentsObj, allSegments_number):
@@ -361,6 +406,7 @@ def run():
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
     make_basic_data_webpage(AllSegmentsObj)
+    make_intervals_webpage(AllSegmentsObj)
     make_contour_webpage(AllSegmentsObj)
     make_special_cases_webpage(AllSegmentsObj, songsObj)
     make_periods_webpage(songsObj)

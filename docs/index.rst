@@ -20,6 +20,7 @@ Data and Analysis
    :maxdepth: 1
 
    basic_data.rst
+   intervals.rst
    contour.rst
    special_cases.rst
    periods.rst
