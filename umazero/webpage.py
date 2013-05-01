@@ -197,11 +197,13 @@ def print_intervals(out, composer, AllSegmentsObj, allSegments_number):
     out.write("Number of segments: {0}\n\n".format(AllSegmentsObj.segments_number))
 
     segments_intervals = _utils.flatten([getattr(seg, 'intervals') for seg in AllSegmentsObj.segments])
+    semitone_intervals = _utils.flatten([getattr(seg, 'intervals_with_direction_semitones') for seg in AllSegmentsObj.segments])
     consonant_intervals = (intervals.is_consonant(i) for i in segments_intervals)
     leaps = intervals.leaps(segments_intervals)
     step_leap_arpeggio = intervals.step_leap_arpeggio(segments_intervals)
 
     print_plot(out, 'Intervals', composer, _utils.group_minorities(Counter(segments_intervals), 0.02), plot.simple_pie)
+    print_plot(out, 'Intervals (in semitones)', composer, Counter(semitone_intervals), plot.simple_scatter)
     print_plot(out, 'Consonance', composer, Counter(consonant_intervals), plot.simple_pie)
     print_plot(out, 'Leaps', composer, _utils.group_minorities(leaps, 0.02), plot.simple_pie)
     print_plot(out, 'Steps, Leaps, 3rds and repetitions', composer, step_leap_arpeggio, plot.simple_pie)
@@ -318,6 +320,20 @@ def make_special_cases_webpage(AllSegmentsObj, songsObj):
         print_lily(out, higher_ambitus_segment, '{0} semitones'.format(higher_ambitus))
         out.write(rst_header('Lower', 3))
         print_lily(out, lower_ambitus_segment, '{0} semitones'.format(lower_ambitus))
+
+        # largest leap
+        allSemitoneIntervals = AllSegmentsObj.allSemitoneIntervals
+        largest_upward_interval = max(allSemitoneIntervals)
+        largest_downward_interval = min(allSemitoneIntervals)
+
+        upward_interval_segment = AllSegmentsObj.getBySemitoneInterval(largest_upward_interval).segments[0]
+        downward_interval_segment = AllSegmentsObj.getBySemitoneInterval(largest_downward_interval).segments[0]
+
+        out.write(rst_header('Largest leaps', 2))
+        out.write(rst_header('Upward', 3))
+        print_lily(out, upward_interval_segment, '{0} semitones'.format(largest_upward_interval))
+        out.write(rst_header('Downward', 3))
+        print_lily(out, downward_interval_segment, '{0} semitones'.format(largest_downward_interval))
 
         # oscillation contour
         oscillation_list = []
