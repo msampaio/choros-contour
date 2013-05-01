@@ -119,7 +119,7 @@ def make_collections_webpage(collectionsObj):
             out.write('{0}. {1} ({2}) - {3}\n\n'.format(n + 1, collObj.title, collObj.composer, collObj.collection))
 
 
-def print_plot(out, title, composer, data, plot_fn):
+def print_plot(out, title, composer, data, plot_fn, table=False):
     """Write header, chart and table in a given codecs.open object
     with a given data of a given composer."""
 
@@ -138,7 +138,8 @@ def print_plot(out, title, composer, data, plot_fn):
     # print in rst
     out.write(rst_header(title, 3))
     out.write(rst_image(pngfile, "contour", 90))
-    out.write(rst_table(_utils.percentage(data)))
+    if table:
+        out.write(rst_table(_utils.percentage(data)))
     out.write("\n\n")
 
 
@@ -202,8 +203,8 @@ def print_intervals(out, composer, AllSegmentsObj, allSegments_number):
     leaps = intervals.leaps(segments_intervals)
     step_leap_arpeggio = intervals.step_leap_arpeggio(segments_intervals)
 
-    print_plot(out, 'Intervals', composer, _utils.group_minorities(Counter(segments_intervals), 0.02), plot.simple_pie)
-    print_plot(out, 'Intervals (in semitones)', composer, Counter(semitone_intervals), plot.simple_scatter)
+    print_plot(out, 'Intervals', composer, _utils.group_minorities(Counter(segments_intervals), 0.02), plot.simple_pie, True)
+    print_plot(out, 'Intervals (in semitones)', composer, Counter(semitone_intervals), plot.simple_scatter, True)
     print_plot(out, 'Consonance', composer, Counter(consonant_intervals), plot.simple_pie)
     print_plot(out, 'Leaps', composer, _utils.group_minorities(leaps, 0.02), plot.simple_pie)
     print_plot(out, 'Steps, Leaps, 3rds and repetitions', composer, step_leap_arpeggio, plot.simple_pie)
@@ -242,7 +243,7 @@ def print_contour(out, composer, AllSegmentsObj, allSegments_number):
         out.write("Percentual of all segments: {0:.2f}%\n\n".format(percentual_allSegments))
     out.write("Number of Segments: {0}\n\n".format(AllSegmentsObj.segments_number))
 
-    print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(AllSegmentsObj.segments), 0.04), plot.simple_pie)
+    print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(AllSegmentsObj.segments), 0.04), plot.simple_pie, True)
     print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(AllSegmentsObj.segments), plot.simple_scatter)
     print_plot(out, 'Passing contour', composer, contour.multicount(AllSegmentsObj.segments, contour.passing_contour), plot.simple_scatter)
     print_plot(out, 'Contour oscillation index', composer, contour.contour_oscillation_count(AllSegmentsObj.segments), plot.simple_scatter)
