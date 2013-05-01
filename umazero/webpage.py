@@ -56,6 +56,68 @@ def rst_link(link):
     return ":download:`MIDI <{0}>`".format(link)
 
 
+def make_corpus_webpage(songsList, collectionsObj):
+    """Create and save data of corpus webpage. The input data is a
+    list of Song objects and a SongCollections object."""
+
+    print "Creating corpus webpage..."
+
+    with codecs.open("docs/corpus.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Corpus information", 1))
+        out.write('This page contains information about analyzed corpus such as composers and song names.\n\n')
+
+        total_songs = collectionsObj.number
+        processed_songs = len(songsList)
+        percentual_songs = processed_songs / float(total_songs) * 100
+        date = datetime.datetime.today().date().isoformat()
+
+        out.write('Processed songs: {0} of {1} ({2:.2f}%) until {3}.\n\n'.format(processed_songs, total_songs, percentual_songs, date))
+
+        out.write(rst_header('Composers', 2))
+        composers_dic = {}
+        for s in songsList:
+            composer = s.composer
+            if composer not in composers_dic:
+                composers_dic[composer] = 0
+            composers_dic[composer] += 1
+        n = 0
+        for composer, songs in sorted(composers_dic.items()):
+            if songs > 1:
+                plural = 's'
+            else:
+                plural = ''
+            out.write('{0}. {1} ({2} song{3})\n\n'.format(n + 1, composer, songs, plural))
+            n += 1
+
+        out.write(rst_header('Songs', 2))
+        for n, s in enumerate(sorted(songsList, key=lambda x: x.title)):
+            out.write('{0}. {1} ({2})\n\n'.format(n + 1, s.title, s.composer))
+
+
+def make_collections_webpage(collectionsObj):
+    """Create and save data of collections webpage. The input data is
+    an AllSegments object."""
+
+    print "Creating collections webpage..."
+
+    with codecs.open("docs/collections.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Collections information", 1))
+        out.write('This page contains information about all collections to be analysed such as composers and song names.\n\n')
+
+        out.write(rst_header('Collections', 2))
+        for n, collection in enumerate(collectionsObj.allCollections):
+            out.write('{0}. {1}\n\n'.format(n + 1, collection))
+
+        out.write(rst_header('Composers', 2))
+        for n, composer in enumerate(collectionsObj.allComposers):
+            out.write('{0}. {1}\n\n'.format(n + 1, composer))
+
+        # FIXME: use table instead of list
+        out.write(rst_header('Songs', 2))
+        for n, collObj in enumerate(sorted(collectionsObj.collectionSongs, key=lambda coll: coll.title)):
+            out.write('{0}. {1} ({2}) - {3}\n\n'.format(n + 1, collObj.title, collObj.composer, collObj.collection))
+
+
 def print_plot(out, title, composer, data, plot_fn):
     """Write header, chart and table in a given codecs.open object
     with a given data of a given composer."""
@@ -160,68 +222,6 @@ def make_contour_webpage(AllSegmentsObj):
         for composer in AllSegmentsObj.allComposers:
             segments = AllSegmentsObj.getByComposer(composer)
             print_contour(out, composer, segments, AllSegmentsObj.segments_number)
-
-
-def make_corpus_webpage(songsList, collectionsObj):
-    """Create and save data of corpus webpage. The input data is a
-    list of Song objects and a SongCollections object."""
-
-    print "Creating corpus webpage..."
-
-    with codecs.open("docs/corpus.rst", 'w', encoding="utf-8") as out:
-        out.write(rst_header(u"Corpus information", 1))
-        out.write('This page contains information about analyzed corpus such as composers and song names.\n\n')
-
-        total_songs = collectionsObj.number
-        processed_songs = len(songsList)
-        percentual_songs = processed_songs / float(total_songs) * 100
-        date = datetime.datetime.today().date().isoformat()
-
-        out.write('Processed songs: {0} of {1} ({2:.2f}%) until {3}.\n\n'.format(processed_songs, total_songs, percentual_songs, date))
-
-        out.write(rst_header('Composers', 2))
-        composers_dic = {}
-        for s in songsList:
-            composer = s.composer
-            if composer not in composers_dic:
-                composers_dic[composer] = 0
-            composers_dic[composer] += 1
-        n = 0
-        for composer, songs in sorted(composers_dic.items()):
-            if songs > 1:
-                plural = 's'
-            else:
-                plural = ''
-            out.write('{0}. {1} ({2} song{3})\n\n'.format(n + 1, composer, songs, plural))
-            n += 1
-
-        out.write(rst_header('Songs', 2))
-        for n, s in enumerate(sorted(songsList, key=lambda x: x.title)):
-            out.write('{0}. {1} ({2})\n\n'.format(n + 1, s.title, s.composer))
-
-
-def make_collections_webpage(collectionsObj):
-    """Create and save data of collections webpage. The input data is
-    an AllSegments object."""
-
-    print "Creating collections webpage..."
-
-    with codecs.open("docs/collections.rst", 'w', encoding="utf-8") as out:
-        out.write(rst_header(u"Collections information", 1))
-        out.write('This page contains information about all collections to be analysed such as composers and song names.\n\n')
-
-        out.write(rst_header('Collections', 2))
-        for n, collection in enumerate(collectionsObj.allCollections):
-            out.write('{0}. {1}\n\n'.format(n + 1, collection))
-
-        out.write(rst_header('Composers', 2))
-        for n, composer in enumerate(collectionsObj.allComposers):
-            out.write('{0}. {1}\n\n'.format(n + 1, composer))
-
-        # FIXME: use table instead of list
-        out.write(rst_header('Songs', 2))
-        for n, collObj in enumerate(sorted(collectionsObj.collectionSongs, key=lambda coll: coll.title)):
-            out.write('{0}. {1} ({2}) - {3}\n\n'.format(n + 1, collObj.title, collObj.composer, collObj.collection))
 
 
 def print_lily(out, SegmentObj, subtitle):
@@ -361,10 +361,10 @@ def run():
     collectionsSeq = json.load(open('songs_map.json'))
     collectionsObj = songcollections.makeAllCollectionSongs(collectionsSeq)
     
-    make_basic_data_webpage(AllSegmentsObj)
-    make_contour_webpage(AllSegmentsObj)
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
+    make_basic_data_webpage(AllSegmentsObj)
+    make_contour_webpage(AllSegmentsObj)
     make_special_cases_webpage(AllSegmentsObj, songsObj)
     make_periods_webpage(songsObj)
 
