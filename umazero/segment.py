@@ -167,7 +167,12 @@ def formParser(filename):
 
     form_name = filename.replace('.xml', '.form')
     with open(form_name, 'r') as f:
-        seq = [_utils.remove_endline(el) for el in f.readlines() if _utils.remove_endline(el)]
+        lines = f.readlines()
+        seq = []
+        for el in lines:
+            seq_el = _utils.remove_endline(el).strip(' ')
+            if seq_el not in [' ', '']:
+                seq.append(seq_el)
     form = []
     part_number = 0
     period_number = 0
