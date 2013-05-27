@@ -24,7 +24,8 @@ class Segment(song.Song):
         # metadata
         self.collection = None
         self.title = None
-        self.composer = None
+        self.composers = None
+        self.composersStr = None
 
         # music
         self.score = None
@@ -53,7 +54,7 @@ class Segment(song.Song):
         self.period_number = None
 
     def __repr__(self):
-        return "<Segment {0}: {1} - {2} ({3})>".format(self.typeof, self.title, self.composer, self.number)
+        return "<Segment {0}: {1} - {2} ({3})>".format(self.typeof, self.title, self.composersStr, self.number)
 
     def show(self, arg=None):
         """Shortcut for music21.stream.show."""
@@ -121,7 +122,8 @@ def makeSegment(segment_form):
     # metadata
     seg.collection = songObj.collection
     seg.title = songObj.title
-    seg.composer = songObj.composer
+    seg.composers = songObj.composers
+    seg.composersStr = songObj.composersStr
 
     # music
     if not segment_form['save']:

@@ -14,10 +14,10 @@ class CollectionSong(object):
         self.number = None
         self.collection = None
         self.composers = None
+        self.composersStr = None
 
     def __repr__(self):
-        composers = ", ".join(self.composers)
-        return "<CollectionSong: {0} ({1}). {2}>".format(self.title, composers, self.collection)
+        return "<CollectionSong: {0} ({1}). {2}>".format(self.title, self.composersStr, self.collection)
 
 
 class AllCollectionSongs(object):
@@ -54,6 +54,7 @@ def makeCollectionSong(jsonDic):
     collsong.collection = jsonDic['Collection']
     composers = [jsonDic['Composer {0}'.format(i)] for i in range(1, 3)]
     collsong.composers = [c for c in composers if c != '']
+    collsong.composersStr = ", ".join(composers)
 
     return collsong
 

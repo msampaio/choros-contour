@@ -80,7 +80,7 @@ def make_corpus_webpage(songsList, collectionsObj):
         out.write(rst_header('Composers', 2))
         composers_dic = {}
         for s in songsList:
-            composers = s.composer
+            composers = s.composers
             for composer in composers:
                 if composer not in composers_dic:
                     composers_dic[composer] = 0
@@ -96,7 +96,7 @@ def make_corpus_webpage(songsList, collectionsObj):
 
         out.write(rst_header('Songs', 2))
         for n, s in enumerate(sorted(songsList, key=lambda x: x.title)):
-            out.write('{0}. {1} ({2})\n\n'.format(n + 1, s.title, ", ".join(s.composer)))
+            out.write('{0}. {1} ({2})\n\n'.format(n + 1, s.title, s.composersStr))
 
 
 def make_collections_webpage(collectionsObj):
@@ -120,7 +120,7 @@ def make_collections_webpage(collectionsObj):
         # FIXME: use table instead of list
         out.write(rst_header('Songs', 2))
         for n, collObj in enumerate(sorted(collectionsObj.collectionSongs, key=lambda coll: coll.title)):
-            out.write('{0}. {1} ({2}) - {3}\n\n'.format(n + 1, collObj.title, ", ".join(collObj.composers), collObj.collection))
+            out.write('{0}. {1} ({2}) - {3}\n\n'.format(n + 1, collObj.title, collObj.composersStr, collObj.collection))
 
 
 def print_plot(out, title, composer, data, plot_fn, table=False):
@@ -308,7 +308,7 @@ def make_periods_webpage(songsObj):
 
         composers_dic = {}
         for songObj in songsObj:
-            composers = songObj.composer
+            composers = songObj.composers
             for composer in composers:
                 if composer not in composers_dic:
                     composers_dic[composer] = []
@@ -324,8 +324,7 @@ def print_lily(out, SegmentObj, subtitle):
 
     # plotting
     directory = "docs/contour"
-    composers = ", ".join(SegmentObj.composer)
-    r_composer = composers.replace(" ", "-")
+    r_composer = SegmentObj.composersStr.replace(" ", "-")
     r_title = SegmentObj.title.replace(" ", "-")
     r_typeof = SegmentObj.typeof
     r_number = str(SegmentObj.number)
@@ -340,7 +339,7 @@ def print_lily(out, SegmentObj, subtitle):
     midifile = _utils.unicode_normalize(os.path.join(os.path.basename(directory), filename + ".mid"))
     SegmentObj.midi_save(midiname)
 
-    title = ", ".join([SegmentObj.title, composers, " ".join([SegmentObj.typeof, str(SegmentObj.number)]), subtitle])
+    title = ", ".join([SegmentObj.title, SegmentObj.composersStr, " ".join([SegmentObj.typeof, str(SegmentObj.number)]), subtitle])
     # print in rst
     out.write(rst_header(title, 4))
     out.write(rst_image(pngfile, "contour", 90))

@@ -17,7 +17,8 @@ class Song(object):
         # metadata
         self.collection = None
         self.title = None
-        self.composer = None
+        self.composers = None
+        self.composersStr = None
 
         # music
         self.score = None
@@ -287,7 +288,8 @@ def makeSong(filename, number_show=False, save=False):
     CollectionSongObj = AllCollectionSongsObj.getCollectionSong(song.collection, songNumber)
 
     song.title = CollectionSongObj.title
-    song.composer = CollectionSongObj.composers
+    song.composers = CollectionSongObj.composers
+    song.composersStr = CollectionSongObj.composersStr
 
     # music
     song.score = score

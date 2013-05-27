@@ -58,7 +58,7 @@ class AllSegments(object):
         """Return a new AllSegment object with all Segment objects
         with a given composer as attribute."""
 
-        return _aux_getBy([seg for seg in self.segments if composer in seg.composer], self.save)
+        return _aux_getBy([seg for seg in self.segments if composer in seg.composers], self.save)
 
     def getByTitle(self, title):
         """Return a new AllSegment object with all Segment objects
@@ -134,7 +134,7 @@ def getSegmentsData(SegmentsList):
         return r
 
     allseg = AllSegments()
-    allseg.allComposers = getData(SegmentsList, 'composer')
+    allseg.allComposers = getData(SegmentsList, 'composers')
     allseg.allTitles = getData(SegmentsList, 'title')
     allseg.allCollections = getData(SegmentsList, 'collection')
     allseg.allContours = getData(SegmentsList, 'contour')
