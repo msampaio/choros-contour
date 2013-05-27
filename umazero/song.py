@@ -312,7 +312,7 @@ def makeSong(filename, number_show=False, save=False):
         newSong.score = None
         newSong.params = None
         newSong.measures = None
-    return  newSong
+    return newSong
 
 
 def makeSongCollection(collection, save=False):
