@@ -13,11 +13,11 @@ class CollectionSong(object):
         self.title = None
         self.number = None
         self.collection = None
-        self.composer = None
-        self.lyrics = None
+        self.composers = None
 
     def __repr__(self):
-        return "<CollectionSong: {0} ({1}). {2}>".format(self.title, self.composer, self.collection)
+        composers = ", ".join(self.composers)
+        return "<CollectionSong: {0} ({1}). {2}>".format(self.title, composers, self.collection)
 
 
 class AllCollectionSongs(object):
@@ -36,6 +36,15 @@ class AllCollectionSongs(object):
     def __repr__(self):
         return "<AllCollectionSongs. Collections: {0}, Songs: {1}, Composers: {2}>".format(len(self.allCollections), self.number, len(self.allComposers))
 
+    def getCollectionSong(self, collection, number):
+        """Return a CollectionSong object from a given collection and
+        file number. """
+
+        for CollectionSongObj in self.collectionSongs:
+            if CollectionSongObj.collection == collection and CollectionSongObj.number == number:
+                return CollectionSongObj
+
+
 def makeCollectionSong(jsonDic):
     """Return a CollectionSong object from an element."""
 
@@ -43,8 +52,8 @@ def makeCollectionSong(jsonDic):
     collsong.title = jsonDic['Title']
     collsong.number = jsonDic['Number']
     collsong.collection = jsonDic['Collection']
-    collsong.composer = jsonDic['Composer']
-    collsong.lyrics = jsonDic['Lyrics']
+    composers = [jsonDic['Composer {0}'.format(i)] for i in range(1, 3)]
+    collsong.composers = [c for c in composers if c != '']
 
     return collsong
 
@@ -62,7 +71,8 @@ def makeAllCollectionSongs(jsonSeq):
         collectionSong = makeCollectionSong(jsonDic)
         collectionSongs.append(collectionSong)
         collections.add(collectionSong.collection)
-        composers.add(collectionSong.composer)
+        for c in collectionSong.composers:
+            composers.add(c)
         titles.add(collectionSong.title)
     allcollsongs.collectionSongs = collectionSongs
     allcollsongs.allCollections = sorted(collections)

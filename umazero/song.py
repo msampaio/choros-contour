@@ -5,7 +5,7 @@ import os
 import music21
 import segment
 import _utils
-
+import songcollections
 
 class Song(object):
     """Class for song objects."""
@@ -281,8 +281,13 @@ def makeSong(filename, number_show=False, save=False):
 
     # metadata
     song.collection = os.path.basename(os.path.dirname(filename))
-    song.title = score.metadata.title
-    song.composer = " ".join(score.metadata.composer.replace('\n', ' ').split())
+
+    songNumber = int(os.path.basename(filename).split()[0])
+    AllCollectionSongsObj = songcollections.loadSongCollections()
+    CollectionSongObj = AllCollectionSongsObj.getCollectionSong(song.collection, songNumber)
+
+    song.title = CollectionSongObj.title
+    song.composer = CollectionSongObj.composers
 
     # music
     song.score = score
