@@ -86,6 +86,8 @@ class Segment(song.Song):
             self.score = newSegment
         else:
             print "There is already a score attribute"
+        self.score.metadata.movementNumber = 'Segment {0}'.format(self.number)
+
 
     def midi_save(self, path=None):
         """Save score as midi file in a given path."""

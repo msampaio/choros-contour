@@ -160,6 +160,10 @@ class Song(object):
         new_score.final = final
         new_score.pickup = False
 
+        new_score.insert(music21.metadata.Metadata())
+        new_score.metadata.title = self.title
+        new_score.metadata.composer = self.composersStr
+
         measure_number = 1
         first_measure = 0
 
