@@ -358,6 +358,7 @@ def make_special_cases_webpage(AllSegmentsObj, songsObj):
         out.write('This page contains segments with data such as higher and lower ambitus.\n\n')
 
         # ambitus
+        print 'Creating ambitus special cases'
         allAmbitus = AllSegmentsObj.allAmbitus
         higher_ambitus = max(allAmbitus)
         lower_ambitus = min(allAmbitus)
@@ -372,6 +373,7 @@ def make_special_cases_webpage(AllSegmentsObj, songsObj):
         print_lily(out, lower_ambitus_segment, '{0} semitones'.format(lower_ambitus))
 
         # largest leap
+        print 'Creating largest leaps special cases'
         allSemitoneIntervals = AllSegmentsObj.allSemitoneIntervals
         largest_upward_interval = max(allSemitoneIntervals)
         largest_downward_interval = min(allSemitoneIntervals)
@@ -386,6 +388,7 @@ def make_special_cases_webpage(AllSegmentsObj, songsObj):
         print_lily(out, downward_interval_segment, '{0} semitones'.format(largest_downward_interval))
 
         # oscillation contour
+        print 'Creating oscillation contour special cases'
         oscillation_list = []
         for SegmentObj in AllSegmentsObj.segments:
             oscillation_value = SegmentObj.contour.oscillation_index()
@@ -400,6 +403,7 @@ def make_special_cases_webpage(AllSegmentsObj, songsObj):
         print_lily(out, lower_oscillation[1], '{0} (from 0 to 1)'.format(round(lower_oscillation[0], 2)))
 
         # period similarity
+        print 'Creating period similarity special cases'
         periods = song.makeStructuresList(songsObj)
         comparison_list = contour.period_comparison(periods)
         acmemb_values = [x[1] for x in comparison_list]
@@ -407,7 +411,6 @@ def make_special_cases_webpage(AllSegmentsObj, songsObj):
         higher_similarity = sorted(comparison_list, key = lambda el: el[1], reverse=True)[0]
         lower_similarity = sorted(comparison_list, key = lambda el: el[1])[0]
 
-        print higher_similarity[0][0]
         out.write(rst_header('Prime contour similarity index', 2))
         out.write(rst_header('Most similar', 3))
         print_lily(out, higher_similarity[0][0], '{0} (from 0 to 1)'.format(round(higher_similarity[1], 2)))
