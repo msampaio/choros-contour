@@ -187,3 +187,13 @@ def makeAllSegments(path='choros-corpus', save=False):
         songs = song.makeSongAllCollections(True)
 
     return makeAllSegmentsBySongSequence(songs, True)
+
+
+def composersFilter(AllSegmentsObj, percentual=0.03):
+    def segmentsPercentual(composer, segments_total):
+        return AllSegmentsObj.getByComposer(composer).segments_number / float(segments_total)
+
+    composers = AllSegmentsObj.allComposers
+    segments_total = AllSegmentsObj.segments_number
+
+    return [composer for composer in composers if segmentsPercentual(composer, segments_total) >= percentual]

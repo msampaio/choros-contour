@@ -167,7 +167,7 @@ def print_basic_data(out, composer, AllSegmentsObj, allSegments_number):
     print_plot(out, 'Pickup measure', composer, _utils.count_segments(AllSegmentsObj, 'pickup'), plot.simple_pie)
 
 
-def make_basic_data_webpage(AllSegmentsObj):
+def make_basic_data_webpage(AllSegmentsObj, topComposers):
     """Create and save data of basic_data webpage. The input data is
     an AllSegments object."""
 
@@ -180,7 +180,7 @@ def make_basic_data_webpage(AllSegmentsObj):
 
         print_basic_data(out, 'All composers', AllSegmentsObj, AllSegmentsObj.segments_number)
 
-        for composer in AllSegmentsObj.allComposers:
+        for composer in topComposers:
             segments = AllSegmentsObj.getByComposer(composer)
             print_basic_data(out, composer, segments, AllSegmentsObj.segments_number)
 
@@ -213,7 +213,7 @@ def print_intervals(out, composer, AllSegmentsObj, allSegments_number):
     print_plot(out, 'Steps, Leaps, 3rds and repetitions', composer, step_leap_arpeggio, plot.simple_pie)
 
 
-def make_intervals_webpage(AllSegmentsObj):
+def make_intervals_webpage(AllSegmentsObj, topComposers):
     """Create and save data of intervals webpage. The input data is an
     AllSegments object."""
 
@@ -226,7 +226,7 @@ def make_intervals_webpage(AllSegmentsObj):
 
         print_intervals(out, 'All composers', AllSegmentsObj, AllSegmentsObj.segments_number)
 
-        for composer in AllSegmentsObj.allComposers:
+        for composer in topComposers:
             segments = AllSegmentsObj.getByComposer(composer)
             print_intervals(out, composer, segments, AllSegmentsObj.segments_number)
 
@@ -254,7 +254,7 @@ def print_contour(out, composer, AllSegmentsObj, allSegments_number):
     print_plot(out, 'Contour last movement', composer, contour.last_movement(AllSegmentsObj.segments), plot.simple_pie)
 
 
-def make_contour_webpage(AllSegmentsObj):
+def make_contour_webpage(AllSegmentsObj, topComposers):
     """Create and save data of contour webpage. The input data is an
     AllSegments object."""
 
@@ -267,7 +267,7 @@ def make_contour_webpage(AllSegmentsObj):
 
         print_contour(out, 'All composers', AllSegmentsObj, AllSegmentsObj.segments_number)
 
-        for composer in AllSegmentsObj.allComposers:
+        for composer in topComposers:
             segments = AllSegmentsObj.getByComposer(composer)
             print_contour(out, composer, segments, AllSegmentsObj.segments_number)
 
@@ -426,12 +426,13 @@ def run():
     AllSegmentsObj = retrieval.loadSegments()
     collectionsSeq = json.load(open('songs_map.json'))
     collectionsObj = songcollections.makeAllCollectionSongs(collectionsSeq)
+    topComposers = query.composersFilter(AllSegmentsObj, 0.03)
     
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
-    make_basic_data_webpage(AllSegmentsObj)
-    make_intervals_webpage(AllSegmentsObj)
-    make_contour_webpage(AllSegmentsObj)
+    make_basic_data_webpage(AllSegmentsObj, topComposers)
+    make_intervals_webpage(AllSegmentsObj, topComposers)
+    make_contour_webpage(AllSegmentsObj, topComposers)
     make_periods_webpage(songsObj)
     make_special_cases_webpage(AllSegmentsObj, songsObj)
 
