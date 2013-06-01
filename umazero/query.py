@@ -151,16 +151,13 @@ def getSegmentsData(SegmentsList):
 
     return allseg
 
-def makeAllSegments(save=False):
-    """Return an AllSegment object with all Segment objects saved in a
-    pickle or in available collections."""
+
+def makeAllSegmentsBySongSequence(songs, save=False):
+    """Return an AllSegment object with all Segment objects from a
+    given sequence of songs."""
 
     SegmentsList = []
-    songs = retrieval.load_pickle('songs')
-    if save:
-        songs = retrieval.load_pickle('songs')
-    else:
-        songs = song.makeSongAllCollections(save)
+
     for s in songs:
         SegmentsList.extend(s.segments)
 
@@ -169,3 +166,24 @@ def makeAllSegments(save=False):
     allseg.segments_number = len(allseg.segments)
     allseg.save = save
     return allseg
+
+
+def makeAllSegmentsByCollection(collection, save=False):
+    """Return an AllSegment object with all Segment objects from a
+    given collection name."""
+
+    songs = retrieval.load_pickle('songs', collection)
+
+    return makeAllSegmentsBySongSequence(songs, save)
+
+
+def makeAllSegments(path='choros-corpus', save=False):
+    """Return an AllSegment object with all Segment objects saved in a
+    pickle or in available collections."""
+
+    if save:
+        songs = retrieval.load_pickle()
+    else:
+        songs = song.makeSongAllCollections(True)
+
+    return makeAllSegmentsBySongSequence(songs, True)

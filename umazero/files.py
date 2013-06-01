@@ -79,14 +79,21 @@ def get_songs(path, pattern='^((?!numbered).)*\.xml$'):
     return songs
 
 
+def get_collections_names(collections_dir='choros-corpus'):
+    """Return a sequence with collections names from a given
+    collections directory."""
+
+    exclusions = ['.DS_Store', '.git', 'README.md', '.gitignore']
+    return _utils.filename_exclusion(collections_dir, exclusions)
+
+
 def get_songs_filenames(collections_dir):
     """Return a sequence of song filenames from a given
     collections_dir path, which song filenames match with a regular
     expression pattern, and are not in exclusions sequence."""
 
-    exclusions = ['.DS_Store', '.git', 'README.md']
+    collections = get_collections_names(collections_dir)
     pattern = '^((?!numbered).)*\.xml$'
-    collections = _utils.filename_exclusion(collections_dir, exclusions)
 
     result = []
     for collection in collections:
