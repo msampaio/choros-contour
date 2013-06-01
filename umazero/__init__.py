@@ -19,6 +19,7 @@ from songcollections import loadSongCollections
 from files import enumerator
 from files import colorize
 from files import copyfiles
+from files import get_collections_names as allCollections
 
 # external
 from music21.contour import Contour

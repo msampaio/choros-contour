@@ -220,7 +220,7 @@ class Song(object):
         mf.write()
         mf.close()
 
-def makeSong(filename, number_show=False, save=False):
+def makeSong(filename, number_show=False, save=False, AllCollectionSongsObj=None):
     """Return a Song object from a xml file. The argument number_show
     means the enumbered numbers will be included in score object, and
     the save argument means the object can be saved in a pickle file,
@@ -293,7 +293,8 @@ def makeSong(filename, number_show=False, save=False):
     song.collection = os.path.basename(os.path.dirname(filename))
 
     songNumber = int(os.path.basename(filename).split()[0])
-    AllCollectionSongsObj = songcollections.loadSongCollections()
+    if not AllCollectionSongsObj:
+        AllCollectionSongsObj = songcollections.loadSongCollections()
     CollectionSongObj = AllCollectionSongsObj.getCollectionSong(song.collection, songNumber)
 
     song.title = CollectionSongObj.title
@@ -324,7 +325,8 @@ def makeSongCollection(collection, save=False):
     """Returns a list of Song objects from a given collection."""
 
     files = _utils.filenames_list(collection)
-    return [makeSong(f, False, save) for f in files]
+    AllCollectionSongsObj = songcollections.loadSongCollections()
+    return [makeSong(f, False, save, AllCollectionSongsObj) for f in files]
 
 
 def makeSongAllCollections(save=True, path='choros-corpus'):
