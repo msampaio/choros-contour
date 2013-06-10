@@ -104,3 +104,9 @@ It's also possible to enumerate all collections of songs:
 A .form file of the song must be in the same directory of the song.
 
     >>> umazero.colorize('song.xml')
+
+## Check .form files
+
+Check if all .form files are in correct syntax
+
+    >>> umazero.formChecker('choros-corpus')
