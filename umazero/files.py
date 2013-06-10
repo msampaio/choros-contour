@@ -87,13 +87,13 @@ def get_collections_names(collections_dir='choros-corpus'):
     return _utils.filename_exclusion(collections_dir, exclusions)
 
 
-def get_songs_filenames(collections_dir):
+def get_songs_filenames(collections_dir, suffix='xml'):
     """Return a sequence of song filenames from a given
     collections_dir path, which song filenames match with a regular
     expression pattern, and are not in exclusions sequence."""
 
     collections = get_collections_names(collections_dir)
-    pattern = '^((?!numbered).)*\.xml$'
+    pattern = '^((?!numbered).)*\.{0}$'.format(suffix)
 
     result = []
     for collection in collections:
@@ -122,3 +122,40 @@ def copyfiles(path='~/Dropbox/genos-choros/choros-corpus/expandidos'):
 
     pattern = '^((?!numbered).)*\.(form|xml)$'
     copy_files(pattern, dirs, dest_dir)
+
+
+# FIXME: Check periods with less than 2 phrases
+def formCheckerFile(formFile):
+    def checkNumbers(n, string, sequence, errorSeq):
+        eventNumbers = string.replace('p ', '').replace('l ', '').split(' ')[:2]
+        for eventNumber in eventNumbers:
+            intEventNumber = int(eventNumber)
+            if len(sequence) > 0:
+                last = sequence[-1]
+                if intEventNumber < last:
+                    errorSeq.append([n, string])
+            sequence.append(intEventNumber)
+
+    with open(formFile, 'r') as f:
+        lines = f.readlines()
+        error = []
+        events = []
+        for n, line in enumerate(lines):
+            newLine = _utils.remove_endline(line).rstrip(' ').replace('  ', ' ')
+            regexObj = re.search('^[lp] [0-9]', newLine)
+            if regexObj:
+                checkNumbers(n, regexObj.string, events, error)
+            elif newLine in ['', '# part', '# period']:
+                pass
+            else:
+                error.append([n, line])
+
+        if len(error) > 0:
+            print 'Error in file {0}'.format(formFile)
+            for l in error:
+                print '{0}: {1}'.format(*l)
+
+def formChecker(directory='choros-corpus'):
+    allFiles = get_songs_filenames(directory, 'form')
+    for f in allFiles:
+        formCheckerFile(f)
