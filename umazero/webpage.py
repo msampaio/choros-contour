@@ -427,7 +427,7 @@ def run():
     AllSegmentsObj = retrieval.loadSegments()
     collectionsSeq = json.load(open('songs_map.json'))
     collectionsObj = songcollections.makeAllCollectionSongs(collectionsSeq)
-    topComposers = query.composersFilter(AllSegmentsObj, 0.03)
+    topComposers = query.composersFilter(AllSegmentsObj, 0.05)
     
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
