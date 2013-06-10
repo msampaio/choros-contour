@@ -13,9 +13,9 @@ html:
 	$(MAKE) -C docs html
 
 webpage:
-	python -c "import umazero.webpage; umazero.webpage.run()"
+	python -c "import umazero; umazero.makeWebpage()"
 
-save:
+saveAll:
 	python -c "import umazero; umazero.saveAll()"
 
 copy:
