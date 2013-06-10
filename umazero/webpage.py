@@ -292,7 +292,7 @@ def print_period(out, composer, ComposerSongObjList, number_of_periods):
     print_plot(out, 'All Mutually Embedded Contour', composer, Counter(acmemb_values), plot.simple_scatter)
 
 
-def make_periods_webpage(songsObj):
+def make_periods_webpage(songsObj, topComposers):
     """Create and save data of periods webpage. The input data is a
     list of Song objects."""
 
@@ -307,12 +307,13 @@ def make_periods_webpage(songsObj):
         print_period(out, 'All composers', songsObj, number_of_periods)
 
         composers_dic = {}
+        for composer in topComposers:
+            composers_dic[composer] = []
+
         for songObj in songsObj:
-            composers = songObj.composers
-            for composer in composers:
-                if composer not in composers_dic:
-                    composers_dic[composer] = []
-                composers_dic[composer].append(songObj)
+            for songComposer in songObj.composers:
+                if songComposer in topComposers:
+                    composers_dic[songComposer].append(songObj)
 
         for composer in sorted(composers_dic.keys()):
             print_period(out, composer, composers_dic[composer], number_of_periods)
@@ -433,7 +434,7 @@ def run():
     make_basic_data_webpage(AllSegmentsObj, topComposers)
     make_intervals_webpage(AllSegmentsObj, topComposers)
     make_contour_webpage(AllSegmentsObj, topComposers)
-    make_periods_webpage(songsObj)
+    make_periods_webpage(songsObj, topComposers)
     make_special_cases_webpage(AllSegmentsObj, songsObj)
 
 
