@@ -43,7 +43,7 @@ package.
 
 In prompt:
 
-    $ make save
+    $ make saveAll
 
 ## Run ipython interpreter and import `umazero` package:
 
