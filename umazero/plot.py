@@ -88,84 +88,110 @@ def simple_scatter(y, x, labels, title=None, filename=None):
     plt.savefig(filename, dpi=72)
 
 
-def stacked_bars(stacked_bar_data):
-    """Plot a chart with stacked bars. The input data is a dictionary
-    with values, legend_labels, bas_legend, title and ylabel data."""
+def stacked_bars(stackedDic=stackedDic):
 
-    values = stacked_bar_data['values']
-    legend_labels = stacked_bar_data['legend_labels']
-    bars_legend = stacked_bar_data['bars_legend']
-    size = len(values[0])
+    values = stackedDic['values']
+    labels = stackedDic['labels']
+    title = stackedDic['title']
+    ylabel = stackedDic['ylabel']
+    xticks = stackedDic['xticks']
 
-    higher_bar = max([sum([line[i] for line in values]) for i in range(size)])
+    def multiple_bottom(values):
+        """Return a sequence with bottoms to stacked bars."""
 
-    for bl in bars_legend:
-        if len(bl) > 40:
-            splitted = bl.split()
-            words = len(splitted)
-            half = words / 2
-            word_ind = bars_legend.index(bl)
-            bars_legend[word_ind] = "\n".join([" ".join(splitted[:half]), " ".join(splitted[half:])])
+        bottomSeq = []
+        for n in range(len(values)):
+            if n == 0:
+                bottomSeq.append(0)
+            else:
+                seq = values[:n]
+                if len(seq) == 1:
+                    val = seq[0]
+                else:
+                    val = tuple([sum(zipped) for zipped in zip(*seq)])
+                bottomSeq.append(val)
 
-    title = stacked_bar_data['title']
-    ylabel = stacked_bar_data['ylabel']
+        return bottomSeq
 
-    ind = numpy.arange(size)    # the x locations for the groups
+    ind = numpy.arange(len(values[0]))
     width = 0.35       # the width of the bars: can also be len(x) sequence
 
-    c = 0
-    legend = []
-    plt.figure(1, figsize=(10,8))
-    for val in values:
-        p = plt.bar(ind, val, width, color=cm.jet(c))
-        # FIXME: improve increment
+    # bottom values
+    bottomSeq = multiple_bottom(values)
+
+    maxValue = max([sum(vals) for vals in zip(bottomSeq[-1], values[-1])])
+
+    # plot
+    plots = []
+    c = 0 # color
+    for n, seq in enumerate(values):
+        plots.append(plt.bar(ind, seq, width, color=cm.jet(c), bottom=bottomSeq[n]))
         c += 20
-        legend.append(p[0])
 
     plt.ylabel(ylabel)
     plt.title(title)
+    plt.xticks(ind+width/2., xticks, rotation=90)
+    plt.yticks(numpy.arange(0, maxValue, maxValue / 10))
+    plt.legend([x[0] for x in plots], labels)
 
-    plt.xticks(ind+width/2., bars_legend, rotation=90, fontsize=10)
-    plt.yticks(numpy.arange(0,81,10))
-    plt.legend(legend, legend_labels)
-    plt.subplots_adjust(left=None, right=None, bottom=0.4, top=0.9, wspace=None, hspace=None)
-    plt.ylim(0, higher_bar * 1.2)
     plt.show()
 
+def generateStackedDic(allSegmentObj, attrib='pickup', topComposers=['Pixinguinha', 'Waldyr Azevedo'], commonNumber=4):
+    """Return a dictionary with data for stacked_bars function."""
 
-def generate_stacked_bar_data(AllSegmentsObj, attrib):
-    """Return a dictionary with data for stacked_bars function. The
-    input data is an AllSegments object and the attribute from this
-    object to be plotted in stacked bars."""
+    def generateCounted(allSegmentObj, composer):
+        if composer == 'All Composers':
+            return allSegmentObj
+        else:
+            return allSegmentObj.getByComposer(composer)
 
-    AllSegmentsObj = copy.deepcopy(AllSegmentsObj)
-    attrib_values = []
-    composers = AllSegmentsObj.allComposers
-    composers_values = {}
-    for SegmentObj in AllSegmentsObj.segments:
-        value = getattr(SegmentObj, attrib)
-        composer = SegmentObj.composer
-        if not value in composers_values:
-            composers_values[value] = [0 for c in composers]
-        ind = composers.index(composer)
-        composers_values[value][ind] += 1
-        attrib_values.append(value)
-    ordered_attrib_values = [val[0] for val in Counter(attrib_values).most_common()]
-    stacked_bar_data = {}
-    stacked_bar_data['title'] = attrib[0].upper() + attrib[1:]
-    stacked_bar_data['ylabel'] = 'Segments'
-    stacked_bar_data['bars_legend'] = composers
-    stacked_bar_data['legend_labels'] = ordered_attrib_values
-    stacked_bar_data['values'] = []
-    for val in ordered_attrib_values:
-        stacked_bar_data['values'].append(composers_values[val])
-    # FIXME: create all and other categories
+    # FIXME: create 'other' for less present values
 
-    return stacked_bar_data
+    composers = copy.deepcopy(topComposers)
+    # composers.insert(0, 'All Composers')
 
-def stacked_bar_chart(AllSegmentsObj, attrib):
-    """Return a stacked bar chart from a given AllSegments object and
-    a given attribute name from this object to be plotted in stacked
-    bars."""
+    valuesData = {}
+    commonElements = set()
 
-    stacked_bars(generate_stacked_bar_data(AllSegmentsObj, attrib))
+    for composer in composers:
+        composerSegmentsSeq = generateCounted(allSegmentObj, composer).segments
+        if attrib in ('contour', 'contour_prime'):
+            val = [tuple(getattr(seg, attrib)) for seg in composerSegmentsSeq]
+        else:
+            val = [getattr(seg, attrib) for seg in composerSegmentsSeq]
+
+        counted = Counter(val)
+        most_common = counted.most_common()[:commonNumber]
+        newCounted = _utils.group_minorities(counted, 0.05)
+        valuesData[composer] = newCounted
+        for k, v in most_common:
+            commonElements.add(k)
+
+    commonElements = sorted(commonElements)
+    valuesSeq = []
+
+    for commonEl in commonElements:
+        commonElSeq = []
+        for vComposer, vCounter in sorted(valuesData.items()):
+            commonElSeq.append(vCounter[commonEl])
+        valuesSeq.append(commonElSeq)
+
+    if attrib in ('contour', 'contour_prime'):
+        commonElements = [Contour(cseg) for cseg in commonElements]
+    else:
+        commonElements = list(commonElements)
+
+    stackedDic = {}
+    stackedDic['xticks'] = composers
+    stackedDic['labels'] = commonElements
+    stackedDic['ylabel'] = 'Segments number'
+    stackedDic['title'] = 'Segments by {0}'.format(attrib)
+    stackedDic['values'] = valuesSeq
+
+    return stackedDic
+
+def simple_stacked_bar(allSegmentObj, attrib, topComposers, commonNumber=4):
+    """Return a stacked bar chard from given data."""
+
+    stackedDic = generateStackedDic(allSegmentObj, attrib, topComposers, commonNumber)
+    stacked_bars(stackedDic)
