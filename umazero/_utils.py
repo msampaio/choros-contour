@@ -7,6 +7,7 @@ import glob
 import unicodedata
 from PIL import Image, ImageChops
 from collections import Counter
+import query
 
 
 def flatten(seq):
@@ -138,3 +139,58 @@ def get_filename(collection_number, song_number, path='choros-corpus'):
 
 def count_segments(AllSegmentsObj, attrib):
     return Counter((getattr(seg, attrib) for seg in AllSegmentsObj.segments))
+
+
+def attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber=5):
+    """Return a Sequence with a Matrix of attribute values, all
+    attribute values and top composers."""
+
+    def minoritiesRemotion(matrix, attribValues, valuesNumber):
+        valuesAndMatrix = zip(attribValues, [sum(els) for els in matrix], matrix)
+        sortedValuesAndMatrix = sorted(valuesAndMatrix, reverse=True, key=lambda x:x[1])
+        mostCommon = sortedValuesAndMatrix[:valuesNumber]
+        other = tuple([sum(els) for els in zip(*[x[2] for x in sortedValuesAndMatrix[valuesNumber:]])])
+        mostCommon.insert(0, ('Other', sum(other), other))
+
+        newAttribValues = []
+        newMatrix = []
+
+        for avalue, amount, amatrix in mostCommon:
+            newAttribValues.append(avalue)
+            newMatrix.append(amatrix)
+
+        return newMatrix, newAttribValues
+
+    attribValues = query.getData(allSegmentObj.segments, attrib)
+
+    if attrib in ('contour', 'contour_prime'):
+        attribValues = [tuple(cseg) for cseg in attribValues]
+
+    matrix = []
+
+    for composer in topComposers:
+        composerSegmentsSeq = allSegmentObj.getByComposer(composer).segments
+
+        if attrib in ('contour', 'contour_prime'):
+            values = [tuple(getattr(seg, attrib)) for seg in composerSegmentsSeq]
+        else:
+            values = [getattr(seg, attrib) for seg in composerSegmentsSeq]
+
+        counted = Counter(values)
+        composerAttribValues = counted.keys()
+
+        for attribValue in attribValues:
+            if attribValue not in composerAttribValues:
+                counted[attribValue] = 0
+
+        values_pairs = sorted(counted.items())
+        matrix.append([els[1] for els in values_pairs])
+
+    size = len(matrix)
+    newMatrix = zip(*matrix)
+
+    nm, av = minoritiesRemotion(newMatrix, attribValues, valuesNumber)
+    if attrib in ('contour', 'contour_prime'):
+        from music21.contour.contour import Contour
+        av = flatten([[av[0]], [Contour(cseg) for cseg in av[1:]]])
+    return nm, av, topComposers
