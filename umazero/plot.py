@@ -119,8 +119,8 @@ def stacked_bars(stackedDic):
     # bottom values
     bottomSeq = multiple_bottom(values)
 
-    # FIXME: must be useful for attrib values True/False
-    maxValue = max([sum(vals) for vals in zip(bottomSeq[-1], values[-1])])
+    cleaned_values = [val for val in values if val]
+    maxValue = max([sum(vals) for vals in zip(*cleaned_values) if vals])
 
     # plot
     plots = []

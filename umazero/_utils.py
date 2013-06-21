@@ -146,20 +146,24 @@ def attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber=5):
     attribute values and top composers."""
 
     def minoritiesRemotion(matrix, attribValues, valuesNumber):
-        valuesAndMatrix = zip(attribValues, [sum(els) for els in matrix], matrix)
-        sortedValuesAndMatrix = sorted(valuesAndMatrix, reverse=True, key=lambda x:x[1])
-        mostCommon = sortedValuesAndMatrix[:valuesNumber]
-        other = tuple([sum(els) for els in zip(*[x[2] for x in sortedValuesAndMatrix[valuesNumber:]])])
-        mostCommon.insert(0, ('Other', sum(other), other))
+        size = len(matrix)
+        if size ==  valuesNumber:
+            return matrix, attribValues
+        else:
+            valuesAndMatrix = zip(attribValues, [sum(els) for els in matrix], matrix)
+            sortedValuesAndMatrix = sorted(valuesAndMatrix, reverse=True, key=lambda x:x[1])
+            mostCommon = sortedValuesAndMatrix[:valuesNumber]
+            other = tuple([sum(els) for els in zip(*[x[2] for x in sortedValuesAndMatrix[valuesNumber:]])])
+            mostCommon.insert(0, ('Other', sum(other), other))
 
-        newAttribValues = []
-        newMatrix = []
+            newAttribValues = []
+            newMatrix = []
 
-        for avalue, amount, amatrix in mostCommon:
-            newAttribValues.append(avalue)
-            newMatrix.append(amatrix)
+            for avalue, amount, amatrix in mostCommon:
+                newAttribValues.append(avalue)
+                newMatrix.append(amatrix)
 
-        return newMatrix, newAttribValues
+            return newMatrix, newAttribValues
 
     attribValues = query.getData(allSegmentObj.segments, attrib)
 
