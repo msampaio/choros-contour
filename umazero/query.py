@@ -112,26 +112,31 @@ class AllSegments(object):
         return _aux_getBy([seg for seg in self.segments if seg.last_interval == last_interval], self.save)
 
 
+def getData(SegmentsList, attrib):
+    """Return all attribute values from a given Segments objects list
+    and attribute."""
+
+    s = set()
+    r = []
+    for SegmentObj in SegmentsList:
+        value = getattr(SegmentObj, attrib)
+        if type(value) == music21.contour.contour.Contour:
+            value = tuple(value)
+            s.add(value)
+            r = [music21.contour.contour.Contour(cseg) for cseg in sorted(s)]
+        elif type(value) == list:
+            for el in value:
+                s.add(el)
+                r = sorted(s)
+        else:
+            s.add(value)
+            r = sorted(s)
+    return r
+
+
 def getSegmentsData(SegmentsList):
     """Return a dictionary with the data raised in Segment objects."""
 
-    def getData(SegmentsList, attrib):
-        s = set()
-        r = []
-        for SegmentObj in SegmentsList:
-            value = getattr(SegmentObj, attrib)
-            if type(value) == music21.contour.contour.Contour:
-                value = tuple(value)
-                s.add(value)
-                r = [music21.contour.contour.Contour(cseg) for cseg in sorted(s)]
-            elif type(value) == list:
-                for el in value:
-                    s.add(el)
-                    r = sorted(s)
-            else:
-                s.add(value)
-                r = sorted(s)
-        return r
 
     allseg = AllSegments()
     allseg.allComposers = getData(SegmentsList, 'composers')
