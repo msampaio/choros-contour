@@ -128,15 +128,24 @@ def stacked_bars(stackedDic):
     color_increment = int(250 / float(len(labels)))
     c = 0 # color
 
+    fig = plt.figure()
+    ax = plt.subplot(111)
+
     for n, seq in enumerate(values):
-        plots.append(plt.bar(ind, seq, width, color=cm.jet(c), bottom=bottomSeq[n]))
+        plots.append(ax.bar(ind, seq, width, color=cm.jet(c), bottom=bottomSeq[n]))
         c += color_increment
 
     plt.ylabel(ylabel)
     plt.title(title)
     plt.xticks(ind+width/2., xticks, rotation=90)
     plt.yticks(numpy.arange(0, maxValue, maxValue / 10))
-    plt.legend([x[0] for x in plots], labels)
+
+    # Shink current axis by 20%
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0 * 3, box.width * 0.8, box.height * 0.75])
+
+    # Put a legend to the right of the current axis
+    ax.legend([x[0] for x in plots], labels, loc='center left', bbox_to_anchor=(1, 0.5))
 
     plt.show()
 
