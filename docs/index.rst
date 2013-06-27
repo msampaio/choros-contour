@@ -19,6 +19,7 @@ Data and Analysis
 .. toctree::
    :maxdepth: 1
 
+   parameters.rst
    basic_data.rst
    intervals.rst
    contour.rst

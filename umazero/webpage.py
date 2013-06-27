@@ -123,6 +123,51 @@ def make_collections_webpage(collectionsObj):
             out.write('{0}. {1} ({2}) - {3}\n\n'.format(n + 1, collObj.title, collObj.composersStr, collObj.collection))
 
 
+def parameters_plot(out, attrib, title, AllSegmentsObj, topComposers, valuesNumber):
+    """Write header, chart and table in a given codecs.open object
+    with a given data of a given composer."""
+
+    # plotting
+    directory = "docs/contour"
+    r_title = title.replace(" ", "-")
+    dest = _utils.unicode_normalize(os.path.join(directory, r_title + ".png"))
+    pngfile = os.path.splitext(os.path.basename(dest))[0]
+    plot.clear()
+    plot.simple_stacked_bar(AllSegmentsObj, attrib, topComposers, valuesNumber, title, 'Segments', dest)
+
+    # print in rst
+    out.write(rst_header(title, 3))
+    out.write(rst_image(pngfile, "contour", 100))
+    out.write("\n\n")
+
+
+def make_parameters_webpage(AllSegmentsObj, topComposers):
+    """Create and save data of parameters webpage. The input data is
+    an AllSegments object and topComposers sequence."""
+
+    print "Creating parameters webpage..."
+
+    with codecs.open("docs/parameters.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Parameters", 1))
+        out.write('This page contains basic data of choros segments such as meter organized by parameter.\n\n')
+
+        # meter (bar)
+        print '. Creating meter chart...'
+        parameters_plot(out, 'meter', 'Meter', AllSegmentsObj, topComposers, 3)
+
+        # ambitus (scatter)
+        print '. Creating ambitus chart...'
+        parameters_plot(out, 'ambitus', 'Ambitus', AllSegmentsObj, topComposers, 8)
+
+        # pickup (bar)
+        print '. Creating pickup chart...'
+        parameters_plot(out, 'pickup', 'Pickup measure', AllSegmentsObj, topComposers, 2)
+
+        # contour prime (bar)
+        print '. Creating prime contour chart...'
+        parameters_plot(out, 'contour_prime', 'Prime contour', AllSegmentsObj, topComposers, 5)
+
+
 def print_plot(out, title, composer, data, plot_fn, table=False):
     """Write header, chart and table in a given codecs.open object
     with a given data of a given composer."""
@@ -437,6 +482,7 @@ def singleRun(dataSeq):
 
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
+    make_parameters_webpage(AllSegmentsObj, topComposers)
     make_basic_data_webpage(AllSegmentsObj, topComposers)
     make_intervals_webpage(AllSegmentsObj, topComposers)
     make_contour_webpage(AllSegmentsObj, topComposers)

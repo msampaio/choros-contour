@@ -95,6 +95,8 @@ def stacked_bars(stackedDic):
     title = stackedDic['title']
     ylabel = stackedDic['ylabel']
     xticks = stackedDic['xticks']
+    if 'filename' in stackedDic:
+        filename = stackedDic['filename']
 
     def multiple_bottom(values):
         """Return a sequence with bottoms to stacked bars."""
@@ -147,10 +149,12 @@ def stacked_bars(stackedDic):
     # Put a legend to the right of the current axis
     ax.legend([x[0] for x in plots], labels, loc='center left', bbox_to_anchor=(1, 0.5))
 
-    plt.show()
+    if not filename:
+        filename = '/tmp/foo.png'
+    plt.savefig(filename, dpi=72)
 
 
-def generateStackedDic(allSegmentObj, topComposers, attrib, valuesNumber=5, title='', ylabel='Segments'):
+def generateStackedDic(allSegmentObj, topComposers, attrib, valuesNumber=5, title='', ylabel='Segments', filename=None):
 
     values, labels, xticks = _utils.attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber)
     stackedDic = {}
@@ -159,12 +163,13 @@ def generateStackedDic(allSegmentObj, topComposers, attrib, valuesNumber=5, titl
     stackedDic['title'] = title
     stackedDic['ylabel'] = ylabel
     stackedDic['xticks'] = xticks
+    stackedDic['filename'] = filename
+
     return stackedDic
 
 
-def simple_stacked_bar(allSegmentObj, attrib, topComposers, valuesNumber=4, title='', ylabel='Segments'):
+def simple_stacked_bar(allSegmentObj, attrib, topComposers, valuesNumber=4, title='', ylabel='Segments', filename=None):
     """Return a stacked bar chard from given data."""
 
-    stackedDic = generateStackedDic(allSegmentObj, attrib, topComposers, valuesNumber, title, ylabel)
+    stackedDic = generateStackedDic(allSegmentObj, topComposers, attrib, valuesNumber, title, ylabel, filename)
     stacked_bars(stackedDic)
-
