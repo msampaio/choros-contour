@@ -466,9 +466,11 @@ def make_special_cases_webpage(AllSegmentsObj, songsObj):
         print_lily(out, lower_similarity[0][1], '{0} (from 0 to 1)'.format(round(lower_similarity[1], 2)))
 
 
-def loadData():
+def loadData(onlyPhrase=True):
     songsObj = retrieval.loadSongs()
     AllSegmentsObj = retrieval.loadSegments()
+    if onlyPhrase:
+        AllSegmentsObj = AllSegmentsObj.getByTypeOf('Phrase')
     collectionsSeq = json.load(open('songs_map.json'))
     collectionsObj = songcollections.makeAllCollectionSongs(collectionsSeq)
     topComposers = query.composersFilter(AllSegmentsObj, 0.05)
