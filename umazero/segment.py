@@ -8,6 +8,7 @@ from music21.interval import notesToInterval, notesToChromatic
 import song
 import _utils
 import note
+import contour
 
 
 class SegmentException(Exception):
@@ -136,11 +137,12 @@ def makeSegment(segment_form):
     seg.pickup = score.pickup
 
     # analysis
-    contour = Contour(score)
+    contourObj = Contour(score)
     seg.ambitus = score.analyze("ambitus").chromatic.directed
-    seg.contour = contour
-    seg.contour_prime = contour.reduction_morris()[0]
-    seg.contour_size = len(contour)
+    seg.contour = contourObj
+    # FIXME: the reduction_morris method in wrong in Music21. Using local Sampaio prime form
+    seg.contour_prime = contour.sampaio(contourObj.reduction_morris()[0])
+    seg.contour_size = len(contourObj)
 
     notes = note.song_notes(score)
     seg.notes = [note.make_note(n) for n in notes]
