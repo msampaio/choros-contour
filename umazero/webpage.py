@@ -421,14 +421,20 @@ def make_special_cases_webpage(AllSegmentsObj, songsObj):
         print_lily(out, lower_similarity[0][1], '{0} (from 0 to 1)'.format(round(lower_similarity[1], 2)))
 
 
-def run():
-    _utils.mkdir('docs/contour')
+def loadData():
     songsObj = retrieval.loadSongs()
     AllSegmentsObj = retrieval.loadSegments()
     collectionsSeq = json.load(open('songs_map.json'))
     collectionsObj = songcollections.makeAllCollectionSongs(collectionsSeq)
     topComposers = query.composersFilter(AllSegmentsObj, 0.05)
-    
+
+    return songsObj, AllSegmentsObj, collectionsSeq, collectionsObj, topComposers
+
+
+def singleRun(dataSeq):
+    _utils.mkdir('docs/contour')
+    songsObj, AllSegmentsObj, collectionsSeq, collectionsObj, topComposers = dataSeq
+
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
     make_basic_data_webpage(AllSegmentsObj, topComposers)
@@ -436,6 +442,10 @@ def run():
     make_contour_webpage(AllSegmentsObj, topComposers)
     make_periods_webpage(songsObj, topComposers)
     make_special_cases_webpage(AllSegmentsObj, songsObj)
+
+
+def run():
+    singleRun(loadData)
 
 
 if __name__ == '__main__':
