@@ -75,9 +75,12 @@ def pieSave(values, labels=None, title=None, filename=None):
     plt.savefig(filename, dpi=72)
 
 
-def scatter(y, x, labels, title=None, filename=None):
+def scatter(y, x, labels=None, title=None):
     """Return a plt object with a scatter chart. The input data is two
-    sequences of values, and a sequence of labels for y and x axis."""
+    sequences of values, and a sequence of labels for y and x axis.
+
+    >>> scatter([1, 2, 3], [4, 5, 6], ['Y axis', 'X axis'])
+    """
 
     range_numbers = range(len(x))
     # make a square figure and axes
