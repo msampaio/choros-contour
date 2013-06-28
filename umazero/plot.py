@@ -9,6 +9,7 @@ from music21.contour import Contour
 from collections import Counter
 import copy
 import _utils
+import matrix
 
 
 def __explode_max(seq):
@@ -233,7 +234,7 @@ def stackedBarSave(stackedDic):
 
 def generateAttribStackedDic(allSegmentObj, topComposers, attrib, valuesNumber=5, title='', ylabel='Segments', filename=None):
 
-    values, labels, xticks = _utils.attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber)
+    values, labels, xticks = matrix.attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber)
     stackedDic = {}
     stackedDic['values'] = values
     stackedDic['labels'] = labels
