@@ -25,7 +25,10 @@ def clear():
     pylab.clf()
 
 
-def simple_pie(values, labels=None, title=None, filename=None):
+def pie(values, labels=None, title=None):
+    """Return plt object with a pie chart. The input data is a
+    sequence of values."""
+
     """Plot a pie chart. The input data is a sequence of values."""
     
     range_numbers = range(len(values))
@@ -59,14 +62,22 @@ def simple_pie(values, labels=None, title=None, filename=None):
     if title:
         plt.title(title, bbox={'facecolor':'0.8', 'pad':5})
 
+    return plt
+
+
+def pieSave(values, labels=None, title=None, filename=None):
+    """Plot a pie chart. The input data is a sequence of values."""
+
+    plt = pie(values, labels=None, title=None)
+
     if not filename:
         filename = '/tmp/foo.png'
     plt.savefig(filename, dpi=72)
 
 
-def simple_scatter(y, x, labels, title=None, filename=None):
-    """Plot a scatter chart. The input data is two sequences of
-    values, and a sequence of labels for y and x axis."""
+def scatter(y, x, labels, title=None, filename=None):
+    """Return a plt object with a scatter chart. The input data is two
+    sequences of values, and a sequence of labels for y and x axis."""
 
     range_numbers = range(len(x))
     # make a square figure and axes
@@ -83,6 +94,15 @@ def simple_scatter(y, x, labels, title=None, filename=None):
         plt.xlabel(labels[1])
         plt.ylabel(labels[0])
 
+    return plt
+
+
+def scatterSave(y, x, labels, title=None, filename=None):
+    """Plot a scatter chart. The input data is two sequences of
+    values, and a sequence of labels for y and x axis."""
+
+    plt = scatter(y, x, labels, title=None)
+
     if not filename:
         filename = '/tmp/foo.png'
     plt.savefig(filename, dpi=72)
@@ -95,8 +115,6 @@ def stacked_bars(stackedDic):
     title = stackedDic['title']
     ylabel = stackedDic['ylabel']
     xticks = stackedDic['xticks']
-    if 'filename' in stackedDic:
-        filename = stackedDic['filename']
 
     def multiple_bottom(values):
         """Return a sequence with bottoms to stacked bars."""
@@ -149,8 +167,18 @@ def stacked_bars(stackedDic):
     # Put a legend to the right of the current axis
     ax.legend([x[0] for x in plots], labels, loc='center left', bbox_to_anchor=(1, 0.5))
 
-    if not filename:
+    return plt
+
+
+def stackedBarSave(stackedDic):
+
+    plt = stacked_bars(stackedDic)
+
+    if 'filename' in stackedDic:
+        filename = stackedDic['filename']
+    else:
         filename = '/tmp/foo.png'
+
     plt.savefig(filename, dpi=72)
 
 
@@ -172,4 +200,4 @@ def simple_stacked_bar(allSegmentObj, attrib, topComposers, valuesNumber=4, titl
     """Return a stacked bar chard from given data."""
 
     stackedDic = generateStackedDic(allSegmentObj, topComposers, attrib, valuesNumber, title, ylabel, filename)
-    stacked_bars(stackedDic)
+    stackedBarSave(stackedDic)
