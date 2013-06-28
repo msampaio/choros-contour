@@ -141,6 +141,16 @@ def count_segments(AllSegmentsObj, attrib):
     return Counter((getattr(seg, attrib) for seg in AllSegmentsObj.segments))
 
 
+def dicValueInsertion(dic, key, value):
+    """Return a given value only if it's not the key value of a given
+    dictionary."""
+
+    if key in dic:
+        return dic[key]
+    else:
+        return value
+
+
 def attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber=5):
     """Return a Sequence with a Matrix of attribute values, all
     attribute values and top composers."""

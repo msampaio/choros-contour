@@ -134,20 +134,43 @@ def make_collections_webpage(collectionsObj):
             out.write('{0}. {1} ({2}) - {3}\n\n'.format(n + 1, collObj.title, collObj.composersStr, collObj.collection))
 
 
-def parameters_plot(out, attrib, title, AllSegmentsObj, topComposers, valuesNumber):
+def makePlot(plotDic):
     """Write header, chart and table in a given codecs.open object
     with a given data of a given composer."""
 
-    # plotting
+    title = plotDic['title']
+    attrib = plotDic['attrib']
+    topComposers = plotDic['topComposers']
+    AllSegmentsObj = plotDic['AllSegmentsObj']
+    plotFn = plotDic['plotFn']
+    dest = plotDic['dest']
+
+    # plot
+    plot.clear()
+    if plotFn == plot.simple_stacked_bar:
+        valuesNumber = plotDic['valuesNumber']
+        plot.simple_stacked_bar(AllSegmentsObj, attrib, topComposers, valuesNumber, title, 'Segments (%)', dest)
+
+
+def plot_print_rst(plotDic):
+    # files data
+    out = plotDic['out']
+    title = plotDic['title']
+
+    hierarchy = _utils.dicValueInsertion(plotDic, 'hierarchy', 3)
+    size = _utils.dicValueInsertion(plotDic, 'size', 90)
+
     directory = "docs/contour"
     r_title = title.replace(" ", "-")
     dest = _utils.unicode_normalize(os.path.join(directory, r_title + ".png"))
     pngfile = os.path.splitext(os.path.basename(dest))[0]
-    plot.clear()
-    plot.simple_stacked_bar(AllSegmentsObj, attrib, topComposers, valuesNumber, title, 'Segments (%)', dest)
+
+    # plot
+    plotDic['dest'] = dest
+    makePlot(plotDic)
 
     # print in rst
-    rst_plot(out, title, pngfile, 3, 100)
+    rst_plot(out, title, pngfile, hierarchy, size)
 
 
 def make_parameters_webpage(AllSegmentsObj, topComposers):
@@ -162,19 +185,59 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
 
         # meter (bar)
         print '. Creating meter chart...'
-        parameters_plot(out, 'meter', 'Meter', AllSegmentsObj, topComposers, 3)
+
+        meterDic = {}
+        meterDic['plotFn'] = plot.simple_stacked_bar
+        meterDic['out'] = out
+        meterDic['attrib'] = 'meter'
+        meterDic['title'] = 'Meter'
+        meterDic['AllSegmentsObj'] = AllSegmentsObj
+        meterDic['topComposers'] = topComposers
+        meterDic['valuesNumber'] = 3
+        meterDic['size'] = 100
+        plot_print_rst(meterDic)
 
         # ambitus (scatter)
         print '. Creating ambitus chart...'
-        parameters_plot(out, 'ambitus', 'Ambitus', AllSegmentsObj, topComposers, 8)
+
+        ambitusDic = {}
+        ambitusDic['plotFn'] = plot.simple_stacked_bar
+        ambitusDic['out'] = out
+        ambitusDic['attrib'] = 'ambitus'
+        ambitusDic['title'] = 'Ambitus'
+        ambitusDic['AllSegmentsObj'] = AllSegmentsObj
+        ambitusDic['topComposers'] = topComposers
+        ambitusDic['valuesNumber'] = 8
+        ambitusDic['size'] = 100
+        plot_print_rst(ambitusDic)
 
         # pickup (bar)
         print '. Creating pickup chart...'
-        parameters_plot(out, 'pickup', 'Pickup measure', AllSegmentsObj, topComposers, 2)
+
+        pickupDic = {}
+        pickupDic['plotFn'] = plot.simple_stacked_bar
+        pickupDic['out'] = out
+        pickupDic['attrib'] = 'pickup'
+        pickupDic['title'] = 'Pickup'
+        pickupDic['AllSegmentsObj'] = AllSegmentsObj
+        pickupDic['topComposers'] = topComposers
+        pickupDic['valuesNumber'] = 2
+        pickupDic['size'] = 100
+        plot_print_rst(pickupDic)
 
         # contour prime (bar)
         print '. Creating prime contour chart...'
-        parameters_plot(out, 'contour_prime', 'Prime contour', AllSegmentsObj, topComposers, 5)
+
+        primeContourDic = {}
+        primeContourDic['plotFn'] = plot.simple_stacked_bar
+        primeContourDic['out'] = out
+        primeContourDic['attrib'] = 'contour_prime'
+        primeContourDic['title'] = 'Prime Contour'
+        primeContourDic['AllSegmentsObj'] = AllSegmentsObj
+        primeContourDic['topComposers'] = topComposers
+        primeContourDic['valuesNumber'] = 5
+        primeContourDic['size'] = 100
+        plot_print_rst(primeContourDic)
 
 
 def print_plot(out, title, composer, data, plot_fn, table=False):
