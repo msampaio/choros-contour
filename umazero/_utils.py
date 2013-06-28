@@ -150,6 +150,7 @@ def dicValueInsertion(dic, key, value):
     else:
         return value
 
+
 def makeCoordSequence(AllSegmentsObj, attrib, topComposers):
     def aux(AllSegmentsObj, attrib, composer):
         if composer == 'All composers':
@@ -163,66 +164,84 @@ def makeCoordSequence(AllSegmentsObj, attrib, topComposers):
     return [aux(AllSegmentsObj, attrib, composer) for composer in AllAndTopComposers]
 
 
-def attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber=5):
-    """Return a Sequence with a Matrix of attribute values, all
-    attribute values and top composers."""
+def minoritiesRemotion(matrix, attribValues, valuesNumber):
+    size = len(matrix)
+    if size ==  valuesNumber:
+        return matrix, attribValues
+    else:
+        valuesAndMatrix = zip(attribValues, [sum(els) for els in matrix], matrix)
+        sortedValuesAndMatrix = sorted(valuesAndMatrix, reverse=True, key=lambda x:x[1])
+        mostCommon = sortedValuesAndMatrix[:valuesNumber]
+        other = tuple([sum(els) for els in zip(*[x[2] for x in sortedValuesAndMatrix[valuesNumber:]])])
+        mostCommon.insert(0, ('Other', sum(other), other))
 
-    def minoritiesRemotion(matrix, attribValues, valuesNumber):
-        size = len(matrix)
-        if size ==  valuesNumber:
-            return matrix, attribValues
-        else:
-            valuesAndMatrix = zip(attribValues, [sum(els) for els in matrix], matrix)
-            sortedValuesAndMatrix = sorted(valuesAndMatrix, reverse=True, key=lambda x:x[1])
-            mostCommon = sortedValuesAndMatrix[:valuesNumber]
-            other = tuple([sum(els) for els in zip(*[x[2] for x in sortedValuesAndMatrix[valuesNumber:]])])
-            mostCommon.insert(0, ('Other', sum(other), other))
+        newAttribValues = []
+        newMatrix = []
 
-            newAttribValues = []
-            newMatrix = []
+        for avalue, amount, amatrix in mostCommon:
+            newAttribValues.append(avalue)
+            newMatrix.append(amatrix)
 
-            for avalue, amount, amatrix in mostCommon:
-                newAttribValues.append(avalue)
-                newMatrix.append(amatrix)
+        return newMatrix, newAttribValues
 
-            return newMatrix, newAttribValues
 
+def appendAttribMatrix(matrix, allSegmentObj, composer, attrib, attribValues):
+    if composer == 'All composers':
+        composerSegmentsSeq = allSegmentObj.segments
+    else:
+        composerSegmentsSeq = allSegmentObj.getByComposer(composer).segments
+
+    if attrib in ('contour', 'contour_prime'):
+        values = [tuple(getattr(seg, attrib)) for seg in composerSegmentsSeq]
+    else:
+        values = [getattr(seg, attrib) for seg in composerSegmentsSeq]
+
+    # values in percentage
+    counted = percentage(Counter(values))
+    composerAttribValues = counted.keys()
+
+    for attribValue in attribValues:
+        if attribValue not in composerAttribValues:
+            counted[attribValue] = 0
+
+    values_pairs = sorted(counted.items())
+    matrix.append([els[1] for els in values_pairs])
+
+    return matrix
+
+
+def makeAttribValuesMatrix(allSegmentObj, attrib, AllAndTopComposers):
+    matrix = []
     attribValues = query.getData(allSegmentObj.segments, attrib)
 
     if attrib in ('contour', 'contour_prime'):
         attribValues = [tuple(cseg) for cseg in attribValues]
 
-    matrix = []
-
-    AllAndTopComposers = flatten([['All composers'], topComposers])
-
     for composer in AllAndTopComposers:
-        if composer == 'All composers':
-            composerSegmentsSeq = allSegmentObj.segments
-        else:
-            composerSegmentsSeq = allSegmentObj.getByComposer(composer).segments
+        matrix = appendAttribMatrix(matrix, allSegmentObj, composer, attrib, attribValues)
 
-        if attrib in ('contour', 'contour_prime'):
-            values = [tuple(getattr(seg, attrib)) for seg in composerSegmentsSeq]
-        else:
-            values = [getattr(seg, attrib) for seg in composerSegmentsSeq]
+    return matrix, attribValues
 
-        # values in percentage
-        counted = percentage(Counter(values))
-        composerAttribValues = counted.keys()
 
-        for attribValue in attribValues:
-            if attribValue not in composerAttribValues:
-                counted[attribValue] = 0
-
-        values_pairs = sorted(counted.items())
-        matrix.append([els[1] for els in values_pairs])
-
+def makeMatrix(matrix, AllAndTopComposers, values, valuesNumber, attrib=None):
+    # insert matrix after attrib or fn calculation
     size = len(matrix)
-    newMatrix = zip(*matrix)
+    transposedMatrix = zip(*matrix)
 
-    nm, av = minoritiesRemotion(newMatrix, attribValues, valuesNumber)
+    newMatrix, val = minoritiesRemotion(transposedMatrix, values, valuesNumber)
+
     if attrib in ('contour', 'contour_prime'):
         from music21.contour.contour import Contour
-        av = flatten([[av[0]], [Contour(cseg) for cseg in av[1:]]])
-    return nm, av, AllAndTopComposers
+        val = flatten([[val[0]], [Contour(cseg) for cseg in val[1:]]])
+
+    return newMatrix, val, AllAndTopComposers
+
+
+def attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber=5):
+    """Return a Sequence with a Matrix of attribute values, all
+    attribute values and top composers."""
+
+    AllAndTopComposers = flatten([['All composers'], topComposers])
+    attribMatrix, attribValues = makeAttribValuesMatrix(allSegmentObj, attrib, AllAndTopComposers)
+
+    return makeMatrix(attribMatrix, AllAndTopComposers, attribValues, valuesNumber)
