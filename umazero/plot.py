@@ -120,12 +120,11 @@ def multipleScatter(coordSequence, labels, legend, title=None):
        ['Y axis', 'X axis'], ['Group A', 'Group B'], 'Title')
     """
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(10,5))
     ax = plt.subplot(111)
-    # plt.figure(1, figsize=(4,4))
 
     plots = []
-    color_increment = int(250 / float(len(labels)))
+    color_increment = int(250 / float(len(legend)))
     c = 0 # color
 
     for y, x in coordSequence:
@@ -137,9 +136,9 @@ def multipleScatter(coordSequence, labels, legend, title=None):
     plt.xlabel(labels[1])
     plt.ylabel(labels[0])
 
-    # Shink current axis by 20%
+    # Shink current axis by 25%
     box = ax.get_position()
-    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    ax.set_position([box.x0, box.y0, box.width * 0.75, box.height])
 
     # Put a legend to the right of the current axis
     ax.legend(legend, loc='center left', bbox_to_anchor=(1, 0.5))
@@ -147,11 +146,11 @@ def multipleScatter(coordSequence, labels, legend, title=None):
     return plt
 
 
-def multipleScatterSave(coordSequence, legend, labels, title=None, filename=None):
+def multipleScatterSave(coordSequence, labels, legend, title=None, filename=None):
     """Plot a scatter chart. The input data is two sequences of
     values, and a sequence of labels for y and x axis."""
 
-    plt = multipleScatter(coordSequence, legend, labels, title=None)
+    plt = multipleScatter(coordSequence, labels, legend, title)
 
     if not filename:
         filename = '/tmp/foo.png'
