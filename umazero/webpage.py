@@ -60,6 +60,17 @@ def rst_link(link):
     return ":download:`MIDI <{0}>`".format(link)
 
 
+def rst_plot(out, title, pngfile, hierarchy=3, size=90, midifile=None):
+    """Return a string formatted for rst code plot. With optional
+    given data, the function writes a also a table in rst."""
+
+    out.write(rst_header(title, hierarchy))
+    out.write(rst_image(pngfile, "contour", size))
+    if midifile:
+        out.write(rst_link(midifile))
+    out.write("\n\n")
+
+
 def make_corpus_webpage(songsList, collectionsObj):
     """Create and save data of corpus webpage. The input data is a
     list of Song objects and a SongCollections object."""
@@ -136,9 +147,7 @@ def parameters_plot(out, attrib, title, AllSegmentsObj, topComposers, valuesNumb
     plot.simple_stacked_bar(AllSegmentsObj, attrib, topComposers, valuesNumber, title, '%', dest)
 
     # print in rst
-    out.write(rst_header(title, 3))
-    out.write(rst_image(pngfile, "contour", 100))
-    out.write("\n\n")
+    rst_plot(out, title, pngfile, 3, 100)
 
 
 def make_parameters_webpage(AllSegmentsObj, topComposers):
@@ -185,11 +194,7 @@ def print_plot(out, title, composer, data, plot_fn, table=False):
         plot_fn(data.values(), data.keys(), None, dest)
 
     # print in rst
-    out.write(rst_header(title, 3))
-    out.write(rst_image(pngfile, "contour", 90))
-    if table:
-        out.write(rst_table(_utils.percentage(data)))
-    out.write("\n\n")
+    rst_plot(out, title, pngfile)
 
 
 def print_basic_data(out, composer, AllSegmentsObj, allSegments_number):
@@ -386,11 +391,9 @@ def print_lily(out, SegmentObj, subtitle):
     SegmentObj.midi_save(midiname)
 
     title = ", ".join([SegmentObj.title, SegmentObj.composersStr, " ".join([SegmentObj.typeof, str(SegmentObj.number)]), subtitle])
+
     # print in rst
-    out.write(rst_header(title, 4))
-    out.write(rst_image(pngfile, "contour", 90))
-    out.write(rst_link(midifile))
-    out.write("\n\n")
+    rst_plot(out, title, pngfile, 4, 90, midifile)
 
 
 def make_special_cases_webpage(AllSegmentsObj, songsObj):
