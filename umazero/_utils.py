@@ -172,15 +172,21 @@ def attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber=5):
 
     matrix = []
 
-    for composer in topComposers:
-        composerSegmentsSeq = allSegmentObj.getByComposer(composer).segments
+    AllAndTopComposers = flatten([['All composers'], topComposers])
+
+    for composer in AllAndTopComposers:
+        if composer == 'All composers':
+            composerSegmentsSeq = allSegmentObj.segments
+        else:
+            composerSegmentsSeq = allSegmentObj.getByComposer(composer).segments
 
         if attrib in ('contour', 'contour_prime'):
             values = [tuple(getattr(seg, attrib)) for seg in composerSegmentsSeq]
         else:
             values = [getattr(seg, attrib) for seg in composerSegmentsSeq]
 
-        counted = Counter(values)
+        # values in percentage
+        counted = percentage(Counter(values))
         composerAttribValues = counted.keys()
 
         for attribValue in attribValues:
@@ -197,4 +203,4 @@ def attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber=5):
     if attrib in ('contour', 'contour_prime'):
         from music21.contour.contour import Contour
         av = flatten([[av[0]], [Contour(cseg) for cseg in av[1:]]])
-    return nm, av, topComposers
+    return nm, av, AllAndTopComposers

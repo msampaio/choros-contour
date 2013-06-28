@@ -134,7 +134,7 @@ def stacked_bars(stackedDic):
         return bottomSeq
 
     ind = numpy.arange(len(values[0]))
-    width = 0.35       # the width of the bars: can also be len(x) sequence
+    width = 0.45       # the width of the bars: can also be len(x) sequence
 
     # bottom values
     bottomSeq = multiple_bottom(values)
@@ -158,7 +158,7 @@ def stacked_bars(stackedDic):
     plt.ylabel(ylabel)
     plt.title(title)
     plt.xticks(ind+width/2., xticks, rotation=90)
-    plt.yticks(numpy.arange(0, maxValue, maxValue / 10))
+    plt.yticks(numpy.arange(0, maxValue * 1.1, maxValue / 10))
 
     # Shink current axis by 20%
     box = ax.get_position()
