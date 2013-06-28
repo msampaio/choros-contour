@@ -159,9 +159,9 @@ def makeAttribCoordSequence(AllSegmentsObj, attrib, topComposers):
             counted = count_segments(AllSegmentsObj.getByComposer(composer), attrib)
         return [counted.values(), counted.keys()]
 
-    AllAndTopComposers = flatten([['All composers'], topComposers])
+    allAndTopComposers = flatten([['All composers'], topComposers])
 
-    return [aux(AllSegmentsObj, attrib, composer) for composer in AllAndTopComposers]
+    return [aux(AllSegmentsObj, attrib, composer) for composer in allAndTopComposers]
 
 
 def minoritiesRemotion(matrix, attribValues, valuesNumber):
@@ -208,22 +208,22 @@ def appendAttribMatrix(matrix, allSegmentObj, composer, attrib, attribValues):
     matrix.append([els[1] for els in values_pairs])
 
     return matrix
+def makeAttribValuesMatrix(allSegmentObj, attrib, allAndTopComposers):
 
 
-def makeAttribValuesMatrix(allSegmentObj, attrib, AllAndTopComposers):
     matrix = []
     attribValues = query.getData(allSegmentObj.segments, attrib)
 
     if attrib in ('contour', 'contour_prime'):
         attribValues = [tuple(cseg) for cseg in attribValues]
 
-    for composer in AllAndTopComposers:
         matrix = appendAttribMatrix(matrix, allSegmentObj, composer, attrib, attribValues)
+    for composer in allAndTopComposers:
 
     return matrix, attribValues
 
 
-def makeMatrix(matrix, AllAndTopComposers, values, valuesNumber, attrib=None):
+def makeMatrix(matrix, allAndTopComposers, values, valuesNumber, attrib=None):
     # insert matrix after attrib or fn calculation
     size = len(matrix)
     transposedMatrix = zip(*matrix)
@@ -234,14 +234,14 @@ def makeMatrix(matrix, AllAndTopComposers, values, valuesNumber, attrib=None):
         from music21.contour.contour import Contour
         val = flatten([[val[0]], [Contour(cseg) for cseg in val[1:]]])
 
-    return newMatrix, val, AllAndTopComposers
+    return newMatrix, val, allAndTopComposers
 
 
 def attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber=5):
     """Return a Sequence with a Matrix of attribute values, all
     attribute values and top composers."""
 
-    AllAndTopComposers = flatten([['All composers'], topComposers])
-    attribMatrix, attribValues = makeAttribValuesMatrix(allSegmentObj, attrib, AllAndTopComposers)
+    allAndTopComposers = flatten([['All composers'], topComposers])
+    attribMatrix, attribValues = makeAttribValuesMatrix(allSegmentObj, attrib, allAndTopComposers)
 
-    return makeMatrix(attribMatrix, AllAndTopComposers, attribValues, valuesNumber)
+    return makeMatrix(attribMatrix, allAndTopComposers, attribValues, valuesNumber)
