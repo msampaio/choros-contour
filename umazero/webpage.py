@@ -139,7 +139,6 @@ def makePlot(plotDic):
     with a given data of a given composer."""
 
     title = plotDic['title']
-    attrib = plotDic['attrib']
     topComposers = plotDic['topComposers']
     AllSegmentsObj = plotDic['AllSegmentsObj']
     plotFn = plotDic['plotFn']
@@ -147,10 +146,12 @@ def makePlot(plotDic):
 
     # plot
     plot.clear()
-    if plotFn == plot.simple_stacked_bar:
+    if plotFn == plot.attribStackedBarSave:
+        attrib = plotDic['attrib']
         valuesNumber = plotDic['valuesNumber']
-        plot.simple_stacked_bar(AllSegmentsObj, attrib, topComposers, valuesNumber, title, 'Segments (%)', dest)
+        plot.attribStackedBarSave(AllSegmentsObj, attrib, topComposers, valuesNumber, title, 'Segments (%)', dest)
     elif plotFn == plot.multipleScatterSave:
+        attrib = plotDic['attrib']
         coordSequence = plotDic['coordSequence']
         legend = plotDic['legend']
         labels = plotDic['labels']
@@ -194,7 +195,7 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         print '. Creating meter chart...'
 
         meterDic = {}
-        meterDic['plotFn'] = plot.simple_stacked_bar
+        meterDic['plotFn'] = plot.attribStackedBarSave
         meterDic['out'] = out
         meterDic['attrib'] = 'meter'
         meterDic['title'] = 'Meter'
@@ -217,7 +218,7 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         ambitusDic['valuesNumber'] = 8
         ambitusDic['size'] = 100
 
-        ambitusDic['coordSequence'] = _utils.makeCoordSequence(AllSegmentsObj, 'ambitus', topComposers)
+        ambitusDic['coordSequence'] = _utils.makeAttribCoordSequence(AllSegmentsObj, 'ambitus', topComposers)
         ambitusDic['legend'] = ['Segments (%)', 'Semitones']
         ambitusDic['labels'] = AllAndTopComposers
 
@@ -227,7 +228,7 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         print '. Creating pickup chart...'
 
         pickupDic = {}
-        pickupDic['plotFn'] = plot.simple_stacked_bar
+        pickupDic['plotFn'] = plot.attribStackedBarSave
         pickupDic['out'] = out
         pickupDic['attrib'] = 'pickup'
         pickupDic['title'] = 'Pickup'
@@ -241,7 +242,7 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         print '. Creating prime contour chart...'
 
         primeContourDic = {}
-        primeContourDic['plotFn'] = plot.simple_stacked_bar
+        primeContourDic['plotFn'] = plot.attribStackedBarSave
         primeContourDic['out'] = out
         primeContourDic['attrib'] = 'contour_prime'
         primeContourDic['title'] = 'Prime Contour'

@@ -231,7 +231,7 @@ def stackedBarSave(stackedDic):
     plt.savefig(filename, dpi=72)
 
 
-def generateStackedDic(allSegmentObj, topComposers, attrib, valuesNumber=5, title='', ylabel='Segments', filename=None):
+def generateAttribStackedDic(allSegmentObj, topComposers, attrib, valuesNumber=5, title='', ylabel='Segments', filename=None):
 
     values, labels, xticks = _utils.attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber)
     stackedDic = {}
@@ -245,8 +245,8 @@ def generateStackedDic(allSegmentObj, topComposers, attrib, valuesNumber=5, titl
     return stackedDic
 
 
-def simple_stacked_bar(allSegmentObj, attrib, topComposers, valuesNumber=4, title='', ylabel='Segments', filename=None):
+def attribStackedBarSave(allSegmentObj, attrib, topComposers, valuesNumber=4, title='', ylabel='Segments', filename=None):
     """Return a stacked bar chard from given data."""
 
-    stackedDic = generateStackedDic(allSegmentObj, topComposers, attrib, valuesNumber, title, ylabel, filename)
+    stackedDic = generateAttribStackedDic(allSegmentObj, topComposers, attrib, valuesNumber, title, ylabel, filename)
     stackedBarSave(stackedDic)

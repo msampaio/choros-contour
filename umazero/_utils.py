@@ -151,7 +151,7 @@ def dicValueInsertion(dic, key, value):
         return value
 
 
-def makeCoordSequence(AllSegmentsObj, attrib, topComposers):
+def makeAttribCoordSequence(AllSegmentsObj, attrib, topComposers):
     def aux(AllSegmentsObj, attrib, composer):
         if composer == 'All composers':
             counted = count_segments(AllSegmentsObj, attrib)
