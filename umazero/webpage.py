@@ -144,7 +144,7 @@ def parameters_plot(out, attrib, title, AllSegmentsObj, topComposers, valuesNumb
     dest = _utils.unicode_normalize(os.path.join(directory, r_title + ".png"))
     pngfile = os.path.splitext(os.path.basename(dest))[0]
     plot.clear()
-    plot.simple_stacked_bar(AllSegmentsObj, attrib, topComposers, valuesNumber, title, '%', dest)
+    plot.simple_stacked_bar(AllSegmentsObj, attrib, topComposers, valuesNumber, title, 'Segments (%)', dest)
 
     # print in rst
     rst_plot(out, title, pngfile, 3, 100)
