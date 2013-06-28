@@ -150,6 +150,11 @@ def makePlot(plotDic):
     if plotFn == plot.simple_stacked_bar:
         valuesNumber = plotDic['valuesNumber']
         plot.simple_stacked_bar(AllSegmentsObj, attrib, topComposers, valuesNumber, title, 'Segments (%)', dest)
+    elif plotFn == plot.multipleScatterSave:
+        coordSequence = plotDic['coordSequence']
+        legend = plotDic['legend']
+        labels = plotDic['labels']
+        plot.multipleScatterSave(coordSequence, legend, labels, title, dest)
 
 
 def plot_print_rst(plotDic):
@@ -183,6 +188,8 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         out.write(rst_header(u"Parameters", 1))
         out.write('This page contains basic data of choros segments such as meter organized by parameter.\n\n')
 
+        AllAndTopComposers = _utils.flatten([['All composers'], topComposers])
+
         # meter (bar)
         print '. Creating meter chart...'
 
@@ -201,7 +208,7 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         print '. Creating ambitus chart...'
 
         ambitusDic = {}
-        ambitusDic['plotFn'] = plot.simple_stacked_bar
+        ambitusDic['plotFn'] = plot.multipleScatterSave
         ambitusDic['out'] = out
         ambitusDic['attrib'] = 'ambitus'
         ambitusDic['title'] = 'Ambitus'
@@ -209,6 +216,11 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         ambitusDic['topComposers'] = topComposers
         ambitusDic['valuesNumber'] = 8
         ambitusDic['size'] = 100
+
+        ambitusDic['coordSequence'] = _utils.makeCoordSequence(AllSegmentsObj, 'ambitus', topComposers)
+        ambitusDic['legend'] = ['Segments (%)', 'Semitones']
+        ambitusDic['labels'] = AllAndTopComposers
+
         plot_print_rst(ambitusDic)
 
         # pickup (bar)

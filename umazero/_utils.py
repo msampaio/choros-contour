@@ -150,6 +150,18 @@ def dicValueInsertion(dic, key, value):
     else:
         return value
 
+def makeCoordSequence(AllSegmentsObj, attrib, topComposers):
+    def aux(AllSegmentsObj, attrib, composer):
+        if composer == 'All composers':
+            counted = count_segments(AllSegmentsObj, attrib)
+        else:
+            counted = count_segments(AllSegmentsObj.getByComposer(composer), attrib)
+        return [counted.values(), counted.keys()]
+
+    AllAndTopComposers = flatten([['All composers'], topComposers])
+
+    return [aux(AllSegmentsObj, attrib, composer) for composer in AllAndTopComposers]
+
 
 def attribValuesMatrix(allSegmentObj, topComposers, attrib, valuesNumber=5):
     """Return a Sequence with a Matrix of attribute values, all
