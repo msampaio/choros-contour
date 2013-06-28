@@ -107,7 +107,7 @@ def save(filename):
     """Save a given xml file with numbered events in a new filename
     with 'numbered' suffix."""
 
-    print "Processing {0}...".format(filename)
+    print ". Processing {0}...".format(filename)
     s = song.makeSong(filename, True)
     s.xml_write('numbered')
 

@@ -195,7 +195,7 @@ def print_plot(out, title, composer, data, plot_fn, table=False):
 def print_basic_data(out, composer, AllSegmentsObj, allSegments_number):
     """Write data in a codecs.open object for basic_data page."""
 
-    print "Processing segments of composer... {0}".format(composer)
+    print ". Processing segments of composer... {0}".format(composer)
 
     songs_number = len(AllSegmentsObj.allFilenames)
     percentual_allSegments = AllSegmentsObj.segments_number / float(allSegments_number) * 100
@@ -233,7 +233,7 @@ def make_basic_data_webpage(AllSegmentsObj, topComposers):
 def print_intervals(out, composer, AllSegmentsObj, allSegments_number):
     """Write data in a codecs.open object for intervals page."""
 
-    print "Processing segments of composer... {0}".format(composer)
+    print ". Processing segments of composer... {0}".format(composer)
 
     songs_number = len(AllSegmentsObj.allFilenames)
     percentual_allSegments = AllSegmentsObj.segments_number / float(allSegments_number) * 100
@@ -279,7 +279,7 @@ def make_intervals_webpage(AllSegmentsObj, topComposers):
 def print_contour(out, composer, AllSegmentsObj, allSegments_number):
     """Write data in a codecs.open object for contour page."""
 
-    print "Processing segments of composer... {0}".format(composer)
+    print ". Processing segments of composer... {0}".format(composer)
 
     songs_number = len(AllSegmentsObj.allFilenames)
     percentual_allSegments = AllSegmentsObj.segments_number / float(allSegments_number) * 100
@@ -320,7 +320,7 @@ def make_contour_webpage(AllSegmentsObj, topComposers):
 def print_period(out, composer, ComposerSongObjList, number_of_periods):
     """Write data in a codecs.open object for contour page."""
 
-    print "Processing segments of composer... {0}".format(composer)
+    print ". Processing segments of composer... {0}".format(composer)
 
     periods = song.makeStructuresList(ComposerSongObjList)
     comparison_list = contour.period_comparison(periods)

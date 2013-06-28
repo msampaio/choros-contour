@@ -262,7 +262,7 @@ def makeSong(filename, number_show=False, save=False, AllCollectionSongsObj=None
         if measures[0].number == 0:
             return True
 
-    print "Processing file {0}...".format(os.path.basename(filename))
+    print ". Processing file {0}...".format(os.path.basename(filename))
     score = music21.converter.parse(filename)
     part = score.getElementsByClass('Part')[0]
     measures = part.getElementsByClass('Measure')
