@@ -111,6 +111,53 @@ def scatterSave(y, x, labels, title=None, filename=None):
     plt.savefig(filename, dpi=72)
 
 
+def multipleScatter(coordSequence, labels, legend, title=None):
+    """Return a plt object with multiple superposed scatter charts.
+    The input data is a sequence of (y, x) coordinates, labels for y
+    and x axis, and a legend with plotted data.
+
+    multipleScatter([[[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]],
+       ['Y axis', 'X axis'], ['Group A', 'Group B'], 'Title')
+    """
+
+    fig = plt.figure()
+    ax = plt.subplot(111)
+    # plt.figure(1, figsize=(4,4))
+
+    plots = []
+    color_increment = int(250 / float(len(labels)))
+    c = 0 # color
+
+    for y, x in coordSequence:
+        area = [i * 5 for i in y]
+        plots.append(plt.scatter(x, _utils.percentual(y), s=area, color=cm.jet(c)))
+        c += color_increment
+
+    plt.title(title)
+    plt.xlabel(labels[1])
+    plt.ylabel(labels[0])
+
+    # Shink current axis by 20%
+    box = ax.get_position()
+    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+
+    # Put a legend to the right of the current axis
+    ax.legend(legend, loc='center left', bbox_to_anchor=(1, 0.5))
+
+    return plt
+
+
+def multipleScatterSave(coordSequence, legend, labels, title=None, filename=None):
+    """Plot a scatter chart. The input data is two sequences of
+    values, and a sequence of labels for y and x axis."""
+
+    plt = multipleScatter(coordSequence, legend, labels, title=None)
+
+    if not filename:
+        filename = '/tmp/foo.png'
+    plt.savefig(filename, dpi=72)
+
+
 def stacked_bars(stackedDic):
 
     values = stackedDic['values']
