@@ -4,6 +4,7 @@
 from collections import Counter
 import _utils
 import query
+from music21.contour import Contour
 
 
 def minoritiesRemotion(matrix, valuesCategories, valuesNumber):
@@ -104,6 +105,36 @@ def makeAttribValuesMatrix(allSegmentsObj, attrib, allAndTopComposers, contourTy
     return matrix, valuesCategories
 
 
+def makeDataValuesMatrix(allSegmentObj, allAndTopComposers, fn):
+    """Return a matrix with data to plot in stackedBar chart, and a
+    sequence with the values categories.
+
+    >>> makeDataValuesMatrix(allseg, ['All composers', u'Benedito Lacerda', u'Ernesto Nazareth'], intervals.allIntervals)
+
+    ([0.02737401111384851, 0.13550135501355012, 0.20667378390955626,...,0, 0, 0, 0, 0, 0]],
+    ['d8', 'm10', 'M7', ... , 'M13', 'AA1', 'M14'])
+    """
+
+    def makeRowFromDic(dic, keys):
+        row = []
+        for key in keys:
+            if key in dic:
+                row.append(dic[key])
+            else:
+                row.append(0)
+        return row
+
+    dicSeq = [fn(allSegmentObj, composer) for composer in allAndTopComposers]
+
+    valuesSet = dicSeq[0].keys()
+    myMatrix = []
+
+    for d in dicSeq:
+        myMatrix.append(makeRowFromDic(d, valuesSet))
+
+    return myMatrix, valuesSet
+
+
 def makeMatrix(matrix, allAndTopComposers, valuesCategories, valuesNumber, contourType=False):
     """Transpose a given matrix and return also a sequence of values
     categories and all and top composers.
@@ -143,3 +174,12 @@ def attribValuesMatrix(allSegmentsObj, topComposers, attrib, valuesNumber=5):
     attribMatrix, valuesCategories = makeAttribValuesMatrix(allSegmentsObj, attrib, allAndTopComposers, contourType)
 
     return makeMatrix(attribMatrix, allAndTopComposers, valuesCategories, valuesNumber, contourType)
+
+
+def dataValuesMatrix(allSegmentObj, allAndTopComposers, fn, valuesNumber=5, contourType=False):
+    """Return a Sequence with a Matrix of attribute values, all
+    attribute values and top composers."""
+
+    fnMatrix, valuesCategories = makeDataValuesMatrix(allSegmentObj, allAndTopComposers, fn)
+
+    return makeMatrix(fnMatrix, allAndTopComposers, valuesCategories, valuesNumber, contourType)
