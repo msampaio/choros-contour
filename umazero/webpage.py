@@ -334,6 +334,35 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         primeContourDic['size'] = 100
         plot_print_rst(primeContourDic)
 
+        # first movement (bar)
+        print '. Creating first movement chart...'
+
+        firstMovementDic = {}
+        firstMovementDic['plotFn'] = plot.dataStackedBarSave
+        firstMovementDic['out'] = out
+        firstMovementDic['valuesNumber'] = 2
+        firstMovementDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.firstMovement, firstMovementDic['valuesNumber'])
+        firstMovementDic['title'] = 'First movement'
+        firstMovementDic['AllSegmentsObj'] = AllSegmentsObj
+        firstMovementDic['topComposers'] = topComposers
+        firstMovementDic['size'] = 100
+
+        plot_print_rst(firstMovementDic)
+
+        # last movement (bar)
+        print '. Creating last movement chart...'
+
+        lastMovementDic = {}
+        lastMovementDic['plotFn'] = plot.dataStackedBarSave
+        lastMovementDic['out'] = out
+        lastMovementDic['valuesNumber'] = 2
+        lastMovementDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.lastMovement, lastMovementDic['valuesNumber'])
+        lastMovementDic['title'] = 'Last movement'
+        lastMovementDic['AllSegmentsObj'] = AllSegmentsObj
+        lastMovementDic['topComposers'] = topComposers
+        lastMovementDic['size'] = 100
+
+        plot_print_rst(lastMovementDic)
 
 
 def print_plot(out, title, composer, data, plot_fn, table=False):

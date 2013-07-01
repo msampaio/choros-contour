@@ -90,3 +90,35 @@ def allIntervalsST(allSegmentObj, composer):
 
     intervalsSeq = _utils.flatten([seg.intervals_with_direction_semitones for seg in composerSegments])
     return intervalsSeq
+
+
+def firstMovement(allSegmentObj, composer):
+    """Return a Counter dictionary with percentage values of first
+    movement classification of a given composer.
+
+    >>> firstMovement(allseg, 'Waldyr Azevedo')
+    {1: 65.74074074074075, -1: 34.25925925925926}
+    """
+
+    composerSegments = allSegmentObj.getByComposer(composer).segments
+    counterObj = Counter()
+
+    myData = contour.first_movement(composerSegments)
+
+    return _utils.percentage(myData)
+
+
+def lastMovement(allSegmentObj, composer):
+    """Return a Counter dictionary with percentage values of last
+    movement classification of a given composer.
+
+    >>> lastMovement(allseg, 'Waldyr Azevedo')
+    {1: 32.407407407407405, -1: 67.5925925925926}
+    """
+
+    composerSegments = allSegmentObj.getByComposer(composer).segments
+    counterObj = Counter()
+
+    myData = contour.last_movement(composerSegments)
+
+    return _utils.percentage(myData)
