@@ -720,7 +720,7 @@ def singleRun(dataSeq):
 
 
 def run():
-    singleRun(loadData)
+    singleRun(loadData())
 
 
 if __name__ == '__main__':
