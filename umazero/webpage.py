@@ -184,15 +184,15 @@ def plot_print_rst(plotDic):
     rst_plot(out, title, pngfile, hierarchy, size)
 
 
-def make_parameters_webpage(AllSegmentsObj, topComposers):
-    """Create and save data of parameters webpage. The input data is
+def make_duration_webpage(AllSegmentsObj, topComposers):
+    """Create and save data of Duration webpage. The input data is
     an AllSegments object and topComposers sequence."""
 
-    print "Creating parameters webpage..."
+    print "Creating duration webpage..."
 
-    with codecs.open("docs/parameters.rst", 'w', encoding="utf-8") as out:
-        out.write(rst_header(u"Parameters", 1))
-        out.write('This page contains basic data of choros segments such as meter organized by parameter.\n\n')
+    with codecs.open("docs/duration.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Duration", 1))
+        out.write('This page contains basic data of Duration domain of choros segments such as meter.\n\n')
 
         AllAndTopComposers = _utils.flatten([['All composers'], topComposers])
 
@@ -223,6 +223,19 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         pickupDic['valuesNumber'] = 2
         pickupDic['size'] = 100
         plot_print_rst(pickupDic)
+
+
+def make_pitch_webpage(AllSegmentsObj, topComposers):
+    """Create and save data of pitch webpage. The input data is
+    an AllSegments object and topComposers sequence."""
+
+    print "Creating pitch webpage..."
+
+    with codecs.open("docs/pitch.rst", 'w', encoding="utf-8") as out:
+        out.write(rst_header(u"Pitch", 1))
+        out.write('This page contains basic data of Pitch domain of choros segments such as meter.\n\n')
+
+        AllAndTopComposers = _utils.flatten([['All composers'], topComposers])
 
         # ambitus (scatter)
         print '. Creating ambitus chart...'
@@ -503,7 +516,8 @@ def singleRun(dataSeq):
 
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
-    make_parameters_webpage(AllSegmentsObj, topComposers)
+    make_duration_webpage(AllSegmentsObj, topComposers)
+    make_pitch_webpage(AllSegmentsObj, topComposers)
     make_special_cases_webpage(AllSegmentsObj, songsObj)
 
 

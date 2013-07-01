@@ -31,5 +31,6 @@ pip-log.txt
 /docs/contour/
 /docs/collections.rst
 /docs/corpus.rst
-/docs/parameters.rst
+/docs/duration.rst
+/docs/pitch.rst
 /docs/special_cases.rst

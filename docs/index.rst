@@ -19,6 +19,7 @@ Data and Analysis
 .. toctree::
    :maxdepth: 1
 
-   parameters.rst
+   duration.rst
+   pitch.rst
    special_cases.rst
    glossary.rst
