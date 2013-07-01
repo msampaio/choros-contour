@@ -14,6 +14,8 @@ import song
 import query
 import songcollections
 import intervals
+import matrix
+import questions
 
 
 class WebpageError(Exception):
@@ -156,6 +158,9 @@ def makePlot(plotDic):
         legend = plotDic['legend']
         labels = plotDic['labels']
         plot.multipleScatterSave(coordSequence, legend, labels, title, dest)
+    elif plotFn == plot.dataStackedBarSave:
+        dataMatrix = plotDic['matrix']
+        plot.dataStackedBarSave(dataMatrix, title, 'Segments (%)', dest)
 
 
 def plot_print_rst(plotDic):
@@ -238,6 +243,36 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         pickupDic['size'] = 100
         plot_print_rst(pickupDic)
 
+        # intervals (bar)
+        print '. Creating intervals chart...'
+
+        intervalDic = {}
+        intervalDic['plotFn'] = plot.dataStackedBarSave
+        intervalDic['out'] = out
+        intervalDic['valuesNumber'] = 8
+        intervalDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.allIntervals, intervalDic['valuesNumber'])
+        intervalDic['title'] = 'Intervals'
+        intervalDic['AllSegmentsObj'] = AllSegmentsObj
+        intervalDic['topComposers'] = topComposers
+        intervalDic['size'] = 100
+
+        plot_print_rst(intervalDic)
+
+        # steps, leaps, 3rds, repetition (bar)
+        print '. Creating steps, leaps and arpeggios chart...'
+
+        stepsLeapsDic = {}
+        stepsLeapsDic['plotFn'] = plot.dataStackedBarSave
+        stepsLeapsDic['out'] = out
+        stepsLeapsDic['valuesNumber'] = 4
+        stepsLeapsDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.stepLeapArpeggio, stepsLeapsDic['valuesNumber'])
+        stepsLeapsDic['title'] = 'Steps, Leaps and Arpeggios'
+        stepsLeapsDic['AllSegmentsObj'] = AllSegmentsObj
+        stepsLeapsDic['topComposers'] = topComposers
+        stepsLeapsDic['size'] = 100
+
+        plot_print_rst(stepsLeapsDic)
+
         # contour prime (bar)
         print '. Creating prime contour chart...'
 
@@ -251,6 +286,7 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         primeContourDic['valuesNumber'] = 5
         primeContourDic['size'] = 100
         plot_print_rst(primeContourDic)
+
 
 
 def print_plot(out, title, composer, data, plot_fn, table=False):
