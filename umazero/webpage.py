@@ -296,7 +296,7 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         leapsDic = {}
         leapsDic['plotFn'] = plot.dataStackedBarSave
         leapsDic['out'] = out
-        leapsDic['valuesNumber'] = 5
+        leapsDic['valuesNumber'] = 8
         leapsDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.allLeaps, leapsDic['valuesNumber'])
         leapsDic['title'] = 'Leaps'
         leapsDic['AllSegmentsObj'] = AllSegmentsObj
