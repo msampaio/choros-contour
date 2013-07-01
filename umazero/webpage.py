@@ -334,6 +334,24 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         primeContourDic['size'] = 100
         plot_print_rst(primeContourDic)
 
+        # Oscillation index (scatter)
+        print '. Creating oscillation index chart...'
+
+        oscillationDic = {}
+        oscillationDic['plotFn'] = plot.multipleScatterSave
+        oscillationDic['out'] = out
+        oscillationDic['attrib'] = 'oscillation'
+        oscillationDic['title'] = 'Oscillation index'
+        oscillationDic['AllSegmentsObj'] = AllSegmentsObj
+        oscillationDic['topComposers'] = topComposers
+        oscillationDic['size'] = 100
+
+        oscillationDic['coordSequence'] = [_utils.makeDataCoordSequence(questions.oscillation(AllSegmentsObj, composer)) for composer in AllAndTopComposers]
+        oscillationDic['legend'] = ['Segments (%)', 'Oscillation index']
+        oscillationDic['labels'] = AllAndTopComposers
+
+        plot_print_rst(oscillationDic)
+
         # first movement (bar)
         print '. Creating first movement chart...'
 
