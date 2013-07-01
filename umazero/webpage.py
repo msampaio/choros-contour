@@ -320,6 +320,36 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
 
         plot_print_rst(stepsLeapsDic)
 
+        # first movement (bar)
+        print '. Creating first movement chart...'
+
+        firstMovementDic = {}
+        firstMovementDic['plotFn'] = plot.dataStackedBarSave
+        firstMovementDic['out'] = out
+        firstMovementDic['valuesNumber'] = 2
+        firstMovementDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.firstMovement, firstMovementDic['valuesNumber'])
+        firstMovementDic['title'] = 'First movement'
+        firstMovementDic['AllSegmentsObj'] = AllSegmentsObj
+        firstMovementDic['topComposers'] = topComposers
+        firstMovementDic['size'] = 100
+
+        plot_print_rst(firstMovementDic)
+
+        # last movement (bar)
+        print '. Creating last movement chart...'
+
+        lastMovementDic = {}
+        lastMovementDic['plotFn'] = plot.dataStackedBarSave
+        lastMovementDic['out'] = out
+        lastMovementDic['valuesNumber'] = 2
+        lastMovementDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.lastMovement, lastMovementDic['valuesNumber'])
+        lastMovementDic['title'] = 'Last movement'
+        lastMovementDic['AllSegmentsObj'] = AllSegmentsObj
+        lastMovementDic['topComposers'] = topComposers
+        lastMovementDic['size'] = 100
+
+        plot_print_rst(lastMovementDic)
+
         # contour prime (bar)
         print '. Creating prime contour chart...'
 
@@ -332,6 +362,7 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         primeContourDic['topComposers'] = topComposers
         primeContourDic['valuesNumber'] = 5
         primeContourDic['size'] = 100
+
         plot_print_rst(primeContourDic)
 
         # DifferentPoints index (scatter)
@@ -369,228 +400,6 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         oscillationDic['labels'] = AllAndTopComposers
 
         plot_print_rst(oscillationDic)
-
-        # first movement (bar)
-        print '. Creating first movement chart...'
-
-        firstMovementDic = {}
-        firstMovementDic['plotFn'] = plot.dataStackedBarSave
-        firstMovementDic['out'] = out
-        firstMovementDic['valuesNumber'] = 2
-        firstMovementDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.firstMovement, firstMovementDic['valuesNumber'])
-        firstMovementDic['title'] = 'First movement'
-        firstMovementDic['AllSegmentsObj'] = AllSegmentsObj
-        firstMovementDic['topComposers'] = topComposers
-        firstMovementDic['size'] = 100
-
-        plot_print_rst(firstMovementDic)
-
-        # last movement (bar)
-        print '. Creating last movement chart...'
-
-        lastMovementDic = {}
-        lastMovementDic['plotFn'] = plot.dataStackedBarSave
-        lastMovementDic['out'] = out
-        lastMovementDic['valuesNumber'] = 2
-        lastMovementDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.lastMovement, lastMovementDic['valuesNumber'])
-        lastMovementDic['title'] = 'Last movement'
-        lastMovementDic['AllSegmentsObj'] = AllSegmentsObj
-        lastMovementDic['topComposers'] = topComposers
-        lastMovementDic['size'] = 100
-
-        plot_print_rst(lastMovementDic)
-
-
-def print_plot(out, title, composer, data, plot_fn, table=False):
-    """Write header, chart and table in a given codecs.open object
-    with a given data of a given composer."""
-
-    # plotting
-    directory = "docs/contour"
-    r_composer = composer.replace(" ", "-")
-    r_title = title.replace(" ", "-")
-    dest = _utils.unicode_normalize(os.path.join(directory, r_composer + "-" + r_title + ".png"))
-    pngfile = os.path.splitext(os.path.basename(dest))[0]
-    plot.clear()
-    if plot_fn == plot.scatterSave:
-        plot_fn(data.values(), data.keys(), ['Percentual of segments (%)', title], None, dest)
-    else:
-        plot_fn(data.values(), data.keys(), None, dest)
-
-    # print in rst
-    rst_plot(out, title, pngfile)
-
-
-def print_basic_data(out, composer, AllSegmentsObj, allSegments_number):
-    """Write data in a codecs.open object for basic_data page."""
-
-    print ". Processing segments of composer... {0}".format(composer)
-
-    songs_number = len(AllSegmentsObj.allFilenames)
-    percentual_allSegments = AllSegmentsObj.segments_number / float(allSegments_number) * 100
-
-    out.write(rst_header(composer, 2))
-
-    out.write("Number of Songs: {0}\n\n".format(songs_number))
-    if percentual_allSegments != 100:
-        out.write("Percentual of all segments: {0:.2f}%\n\n".format(percentual_allSegments))
-    out.write("Number of segments: {0}\n\n".format(AllSegmentsObj.segments_number))
-
-    print_plot(out, 'Meter', composer, _utils.count_segments(AllSegmentsObj, 'meter'), plot.pieSave)
-    print_plot(out, 'Ambitus in semitones', composer, _utils.count_segments(AllSegmentsObj, 'ambitus'), plot.scatterSave)
-    print_plot(out, 'Pickup measure', composer, _utils.count_segments(AllSegmentsObj, 'pickup'), plot.pieSave)
-
-
-def make_basic_data_webpage(AllSegmentsObj, topComposers):
-    """Create and save data of basic_data webpage. The input data is
-    an AllSegments object."""
-
-    print "Creating basic data webpage..."
-
-    with codecs.open("docs/basic_data.rst", 'w', encoding="utf-8") as out:
-        out.write(rst_header(u"Basic Data", 1))
-        out.write('This page contains basic data of choros segments such as time signature organized by composer. ')
-        out.write('The numbers in the table\'s second column are in percent.\n\n')
-
-        print_basic_data(out, 'All composers', AllSegmentsObj, AllSegmentsObj.segments_number)
-
-        for composer in topComposers:
-            segments = AllSegmentsObj.getByComposer(composer)
-            print_basic_data(out, composer, segments, AllSegmentsObj.segments_number)
-
-
-def print_intervals(out, composer, AllSegmentsObj, allSegments_number):
-    """Write data in a codecs.open object for intervals page."""
-
-    print ". Processing segments of composer... {0}".format(composer)
-
-    songs_number = len(AllSegmentsObj.allFilenames)
-    percentual_allSegments = AllSegmentsObj.segments_number / float(allSegments_number) * 100
-
-    out.write(rst_header(composer, 2))
-
-    out.write("Number of Songs: {0}\n\n".format(songs_number))
-    if percentual_allSegments != 100:
-        out.write("Percentual of all segments: {0:.2f}%\n\n".format(percentual_allSegments))
-    out.write("Number of segments: {0}\n\n".format(AllSegmentsObj.segments_number))
-
-    segments_intervals = _utils.flatten([getattr(seg, 'intervals') for seg in AllSegmentsObj.segments])
-    semitone_intervals = _utils.flatten([getattr(seg, 'intervals_with_direction_semitones') for seg in AllSegmentsObj.segments])
-    consonant_intervals = (intervals.is_consonant(i) for i in segments_intervals)
-    leaps = intervals.leaps(segments_intervals)
-    step_leap_arpeggio = intervals.step_leap_arpeggio(segments_intervals)
-
-    print_plot(out, 'Intervals', composer, _utils.group_minorities(Counter(segments_intervals), 0.02), plot.pieSave, True)
-    print_plot(out, 'Intervals (in semitones)', composer, Counter(semitone_intervals), plot.scatterSave, True)
-    print_plot(out, 'Consonance', composer, Counter(consonant_intervals), plot.pieSave)
-    print_plot(out, 'Leaps', composer, _utils.group_minorities(leaps, 0.02), plot.pieSave)
-    print_plot(out, 'Steps, Leaps, 3rds and repetitions', composer, step_leap_arpeggio, plot.pieSave)
-
-
-def make_intervals_webpage(AllSegmentsObj, topComposers):
-    """Create and save data of intervals webpage. The input data is an
-    AllSegments object."""
-
-    print "Creating intervals webpage..."
-
-    with codecs.open("docs/intervals.rst", 'w', encoding="utf-8") as out:
-        out.write(rst_header(u"Intervals", 1))
-        out.write('This page contains intervals of choros segments such as time signature organized by composer. ')
-        out.write('The numbers in the table\'s second column are in percent.\n\n')
-
-        print_intervals(out, 'All composers', AllSegmentsObj, AllSegmentsObj.segments_number)
-
-        for composer in topComposers:
-            segments = AllSegmentsObj.getByComposer(composer)
-            print_intervals(out, composer, segments, AllSegmentsObj.segments_number)
-
-
-def print_contour(out, composer, AllSegmentsObj, allSegments_number):
-    """Write data in a codecs.open object for contour page."""
-
-    print ". Processing segments of composer... {0}".format(composer)
-
-    songs_number = len(AllSegmentsObj.allFilenames)
-    percentual_allSegments = AllSegmentsObj.segments_number / float(allSegments_number) * 100
-
-    out.write(rst_header(composer, 2))
-
-    out.write("Number of Songs: {0}\n\n".format(songs_number))
-    if percentual_allSegments != 100:
-        out.write("Percentual of all segments: {0:.2f}%\n\n".format(percentual_allSegments))
-    out.write("Number of Segments: {0}\n\n".format(AllSegmentsObj.segments_number))
-
-    print_plot(out, 'Contour Prime', composer, _utils.group_minorities(contour.contour_prime_count(AllSegmentsObj.segments), 0.04), plot.pieSave, True)
-    print_plot(out, 'Highest Contour Point', composer, contour.contour_highest_cp_count(AllSegmentsObj.segments), plot.scatterSave)
-    print_plot(out, 'Passing contour', composer, contour.multicount(AllSegmentsObj.segments, contour.passing_contour), plot.scatterSave)
-    print_plot(out, 'Contour oscillation index', composer, contour.contour_oscillation_count(AllSegmentsObj.segments), plot.scatterSave)
-    print_plot(out, 'Contour first movement', composer, contour.first_movement(AllSegmentsObj.segments), plot.pieSave)
-    print_plot(out, 'Contour last movement', composer, contour.last_movement(AllSegmentsObj.segments), plot.pieSave)
-
-
-def make_contour_webpage(AllSegmentsObj, topComposers):
-    """Create and save data of contour webpage. The input data is an
-    AllSegments object."""
-
-    print "Creating contour webpage..."
-
-    with codecs.open("docs/contour.rst", 'w', encoding="utf-8") as out:
-        out.write(rst_header(u"Contour", 1))
-        out.write('This page contains contour data of choros segments such as Contour Primes organized by composer.\n\n')
-        out.write('The explanation about the charts below are in `glossary <glossary.html>`_.\n\n')
-
-        print_contour(out, 'All composers', AllSegmentsObj, AllSegmentsObj.segments_number)
-
-        for composer in topComposers:
-            segments = AllSegmentsObj.getByComposer(composer)
-            print_contour(out, composer, segments, AllSegmentsObj.segments_number)
-
-
-def print_period(out, composer, ComposerSongObjList, number_of_periods):
-    """Write data in a codecs.open object for contour page."""
-
-    print ". Processing segments of composer... {0}".format(composer)
-
-    periods = song.makeStructuresList(ComposerSongObjList)
-    comparison_list = contour.period_comparison(periods)
-    acmemb_values = [x[1] for x in comparison_list]
-
-    n = len(periods)
-    percentual_allPeriods = n * 100 / float(number_of_periods)
-
-    out.write(rst_header(composer, 2))
-    if percentual_allPeriods != 100:
-        out.write("Percentual of all periods: {0:.2f}%\n\n".format(percentual_allPeriods))
-    out.write("Number of periods: {0}\n\n".format(n))
-
-    print_plot(out, 'All Mutually Embedded Contour', composer, Counter(acmemb_values), plot.scatterSave)
-
-
-def make_periods_webpage(songsObj, topComposers):
-    """Create and save data of periods webpage. The input data is a
-    list of Song objects."""
-
-    print "Creating periods webpage..."
-
-    with codecs.open("docs/periods.rst", 'w', encoding="utf-8") as out:
-        out.write(rst_header(u"Periods", 1))
-        out.write('This page contains data of choros periods such as contour similarity organized by composer.\n\n')
-
-        number_of_periods = len(song.makeStructuresList(songsObj))
-
-        print_period(out, 'All composers', songsObj, number_of_periods)
-
-        composers_dic = {}
-        for composer in topComposers:
-            composers_dic[composer] = []
-
-        for songObj in songsObj:
-            for songComposer in songObj.composers:
-                if songComposer in topComposers:
-                    composers_dic[songComposer].append(songObj)
-
-        for composer in sorted(composers_dic.keys()):
-            print_period(out, composer, composers_dic[composer], number_of_periods)
 
 
 def print_lily(out, SegmentObj, subtitle):
@@ -675,23 +484,6 @@ def make_special_cases_webpage(AllSegmentsObj, songsObj):
         out.write(rst_header('Least oscillated', 3))
         print_lily(out, lower_oscillation[1], '{0} (from 0 to 1)'.format(round(lower_oscillation[0], 2)))
 
-        # period similarity
-        print 'Creating period similarity special cases'
-        periods = song.makeStructuresList(songsObj)
-        comparison_list = contour.period_comparison(periods)
-        acmemb_values = [x[1] for x in comparison_list]
-
-        higher_similarity = sorted(comparison_list, key = lambda el: el[1], reverse=True)[0]
-        lower_similarity = sorted(comparison_list, key = lambda el: el[1])[0]
-
-        out.write(rst_header('Prime contour similarity index', 2))
-        out.write(rst_header('Most similar', 3))
-        print_lily(out, higher_similarity[0][0], '{0} (from 0 to 1)'.format(round(higher_similarity[1], 2)))
-        print_lily(out, higher_similarity[0][1], '{0} (from 0 to 1)'.format(round(higher_similarity[1], 2)))
-        out.write(rst_header('Least similar', 3))
-        print_lily(out, lower_similarity[0][0], '{0} (from 0 to 1)'.format(round(lower_similarity[1], 2)))
-        print_lily(out, lower_similarity[0][1], '{0} (from 0 to 1)'.format(round(lower_similarity[1], 2)))
-
 
 def loadData(onlyPhrase=True):
     songsObj = retrieval.loadSongs()
@@ -712,10 +504,6 @@ def singleRun(dataSeq):
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
     make_parameters_webpage(AllSegmentsObj, topComposers)
-    make_basic_data_webpage(AllSegmentsObj, topComposers)
-    make_intervals_webpage(AllSegmentsObj, topComposers)
-    make_contour_webpage(AllSegmentsObj, topComposers)
-    make_periods_webpage(songsObj, topComposers)
     make_special_cases_webpage(AllSegmentsObj, songsObj)
 
 

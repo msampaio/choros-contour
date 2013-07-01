@@ -20,9 +20,5 @@ Data and Analysis
    :maxdepth: 1
 
    parameters.rst
-   basic_data.rst
-   intervals.rst
-   contour.rst
-   periods.rst
    special_cases.rst
    glossary.rst
