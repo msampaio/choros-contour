@@ -258,6 +258,24 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
 
         plot_print_rst(intervalDic)
 
+        # intervals in semitones (scatter)
+        print '. Creating intervals in semitones chart...'
+
+        intervalSTDic = {}
+        intervalSTDic['plotFn'] = plot.multipleScatterSave
+        intervalSTDic['out'] = out
+        intervalSTDic['attrib'] = 'intervals_with_direction_semitones'
+        intervalSTDic['title'] = 'Intervals in semitones'
+        intervalSTDic['AllSegmentsObj'] = AllSegmentsObj
+        intervalSTDic['topComposers'] = topComposers
+        intervalSTDic['valuesNumber'] = 8
+        intervalSTDic['size'] = 100
+
+        intervalSTDic['coordSequence'] = [_utils.makeDataCoordSequence(questions.allIntervalsST(AllSegmentsObj, composer)) for composer in AllAndTopComposers]
+        intervalSTDic['legend'] = ['Segments (%)', 'Semitones']
+        intervalSTDic['labels'] = AllAndTopComposers
+
+        plot_print_rst(intervalSTDic)
 
         # consonance (bar)
         print '. Creating consonance chart...'

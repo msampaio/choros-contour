@@ -75,3 +75,18 @@ def allLeaps(allSegmentObj, composer):
         counterObj = counterObj + Counter(myData)
 
     return _utils.percentage(counterObj)
+
+
+def allIntervalsST(allSegmentObj, composer):
+    """Return a sequence with percentage values of all intervals in
+    semitones classification of a given composer.
+
+    >>> allIntervalsST(allseg, 'Waldyr Azevedo')
+    [8, -1, -3, 1, 3, ... , 1, 1, 4, -1, 1, 4]
+    """
+
+    composerSegments = allSegmentObj.getByComposer(composer).segments
+    counterObj = Counter()
+
+    intervalsSeq = _utils.flatten([seg.intervals_with_direction_semitones for seg in composerSegments])
+    return intervalsSeq

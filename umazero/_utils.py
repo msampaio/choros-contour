@@ -150,6 +150,11 @@ def dicValueInsertion(dic, key, value):
         return value
 
 
+def makeDataCoordSequence(seq):
+    newSeq = sorted(percentage(Counter(seq)).items())
+    return [[x[1] for x in newSeq], [y[0] for y in newSeq]]
+
+
 def makeAttribCoordSequence(AllSegmentsObj, attrib, topComposers):
     def aux(AllSegmentsObj, attrib, composer):
         if composer == 'All composers':
