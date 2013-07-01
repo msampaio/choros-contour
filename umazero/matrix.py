@@ -125,7 +125,7 @@ def makeMatrix(matrix, allAndTopComposers, valuesCategories, valuesNumber, conto
 
     if contourType:
         from music21.contour.contour import Contour
-        newValuesCategories = _utils.flatten([[val[0]], [Contour(cseg) for cseg in val[1:]]])
+        newValuesCategories = _utils.flatten([[newValuesCategories[0]], [Contour(cseg) for cseg in newValuesCategories[1:]]])
 
     return newMatrix, newValuesCategories, allAndTopComposers
 
@@ -142,4 +142,4 @@ def attribValuesMatrix(allSegmentsObj, topComposers, attrib, valuesNumber=5):
     allAndTopComposers = _utils.flatten([['All composers'], topComposers])
     attribMatrix, valuesCategories = makeAttribValuesMatrix(allSegmentsObj, attrib, allAndTopComposers, contourType)
 
-    return makeMatrix(attribMatrix, allAndTopComposers, valuesCategories, valuesNumber)
+    return makeMatrix(attribMatrix, allAndTopComposers, valuesCategories, valuesNumber, contourType)
