@@ -246,8 +246,29 @@ def generateAttribStackedDic(allSegmentObj, topComposers, attrib, valuesNumber=5
     return stackedDic
 
 
+def generateDataStackedDic(dataMatrix, title='', ylabel='Segments', filename=None):
+
+    values, labels, xticks = dataMatrix
+    stackedDic = {}
+    stackedDic['values'] = values
+    stackedDic['labels'] = labels
+    stackedDic['title'] = title
+    stackedDic['ylabel'] = ylabel
+    stackedDic['xticks'] = xticks
+    stackedDic['filename'] = filename
+
+    return stackedDic
+
+
 def attribStackedBarSave(allSegmentObj, attrib, topComposers, valuesNumber=4, title='', ylabel='Segments', filename=None):
     """Return a stacked bar chard from given data."""
 
     stackedDic = generateAttribStackedDic(allSegmentObj, topComposers, attrib, valuesNumber, title, ylabel, filename)
+    stackedBarSave(stackedDic)
+
+
+def dataStackedBarSave(dataMatrix, title='', ylabel='Segments', filename=None):
+    """Return a stacked bar chard from given data."""
+
+    stackedDic = generateDataStackedDic(dataMatrix, title, ylabel, filename)
     stackedBarSave(stackedDic)
