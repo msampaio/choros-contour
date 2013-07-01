@@ -86,10 +86,8 @@ def allIntervalsST(allSegmentObj, composer):
     """
 
     composerSegments = allSegmentObj.getByComposer(composer).segments
-    counterObj = Counter()
 
-    intervalsSeq = _utils.flatten([seg.intervals_with_direction_semitones for seg in composerSegments])
-    return intervalsSeq
+    return _utils.flatten([seg.intervals_with_direction_semitones for seg in composerSegments])
 
 
 def firstMovement(allSegmentObj, composer):
