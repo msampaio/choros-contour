@@ -210,6 +210,20 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         meterDic['size'] = 100
         plot_print_rst(meterDic)
 
+        # pickup (bar)
+        print '. Creating pickup chart...'
+
+        pickupDic = {}
+        pickupDic['plotFn'] = plot.attribStackedBarSave
+        pickupDic['out'] = out
+        pickupDic['attrib'] = 'pickup'
+        pickupDic['title'] = 'Pickup'
+        pickupDic['AllSegmentsObj'] = AllSegmentsObj
+        pickupDic['topComposers'] = topComposers
+        pickupDic['valuesNumber'] = 2
+        pickupDic['size'] = 100
+        plot_print_rst(pickupDic)
+
         # ambitus (scatter)
         print '. Creating ambitus chart...'
 
@@ -228,19 +242,20 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
 
         plot_print_rst(ambitusDic)
 
-        # pickup (bar)
-        print '. Creating pickup chart...'
+        # consonance (bar)
+        print '. Creating consonance chart...'
 
-        pickupDic = {}
-        pickupDic['plotFn'] = plot.attribStackedBarSave
-        pickupDic['out'] = out
-        pickupDic['attrib'] = 'pickup'
-        pickupDic['title'] = 'Pickup'
-        pickupDic['AllSegmentsObj'] = AllSegmentsObj
-        pickupDic['topComposers'] = topComposers
-        pickupDic['valuesNumber'] = 2
-        pickupDic['size'] = 100
-        plot_print_rst(pickupDic)
+        consonanceDic = {}
+        consonanceDic['plotFn'] = plot.dataStackedBarSave
+        consonanceDic['out'] = out
+        consonanceDic['valuesNumber'] = 2
+        consonanceDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.consonance, consonanceDic['valuesNumber'])
+        consonanceDic['title'] = 'Consonance'
+        consonanceDic['AllSegmentsObj'] = AllSegmentsObj
+        consonanceDic['topComposers'] = topComposers
+        consonanceDic['size'] = 100
+
+        plot_print_rst(consonanceDic)
 
         # intervals (bar)
         print '. Creating intervals chart...'
@@ -274,21 +289,6 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         intervalSTDic['labels'] = AllAndTopComposers
 
         plot_print_rst(intervalSTDic)
-
-        # consonance (bar)
-        print '. Creating consonance chart...'
-
-        consonanceDic = {}
-        consonanceDic['plotFn'] = plot.dataStackedBarSave
-        consonanceDic['out'] = out
-        consonanceDic['valuesNumber'] = 2
-        consonanceDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.consonance, consonanceDic['valuesNumber'])
-        consonanceDic['title'] = 'Consonance'
-        consonanceDic['AllSegmentsObj'] = AllSegmentsObj
-        consonanceDic['topComposers'] = topComposers
-        consonanceDic['size'] = 100
-
-        plot_print_rst(consonanceDic)
 
         # leaps (bar)
         print '. Creating leaps chart...'
