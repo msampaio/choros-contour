@@ -40,3 +40,38 @@ def stepLeapArpeggio(allSegmentObj, composer):
         counterObj = counterObj + Counter(myData)
 
     return _utils.percentage(counterObj)
+
+
+def consonance(allSegmentObj, composer):
+    """Return a Counter dictionary with percentage values consonance
+    intervals classification of a given composer.
+
+    >>> consonance(allseg, 'Waldyr Azevedo')
+    {False: 9.01639344262295, True: 90.98360655737704}
+    """
+
+    composerSegments = allSegmentObj.getByComposer(composer).segments
+    counterObj = Counter()
+
+    for seg in composerSegments:
+        myData = (intervals.is_consonant(i) for i in seg.intervals)
+        counterObj = counterObj + Counter(myData)
+
+    return _utils.percentage(counterObj)
+
+
+def allLeaps(allSegmentObj, composer):
+    """Return a Counter dictionary with percentage values of all leaps
+    classification of a given composer.
+
+    >>> allLeaps(allseg, 'Waldyr Azevedo')
+    """
+
+    composerSegments = allSegmentObj.getByComposer(composer).segments
+    counterObj = Counter()
+
+    for seg in composerSegments:
+        myData = intervals.leaps(seg.intervals)
+        counterObj = counterObj + Counter(myData)
+
+    return _utils.percentage(counterObj)

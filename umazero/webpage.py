@@ -258,6 +258,37 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
 
         plot_print_rst(intervalDic)
 
+
+        # consonance (bar)
+        print '. Creating consonance chart...'
+
+        consonanceDic = {}
+        consonanceDic['plotFn'] = plot.dataStackedBarSave
+        consonanceDic['out'] = out
+        consonanceDic['valuesNumber'] = 2
+        consonanceDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.consonance, consonanceDic['valuesNumber'])
+        consonanceDic['title'] = 'Consonance'
+        consonanceDic['AllSegmentsObj'] = AllSegmentsObj
+        consonanceDic['topComposers'] = topComposers
+        consonanceDic['size'] = 100
+
+        plot_print_rst(consonanceDic)
+
+        # leaps (bar)
+        print '. Creating leaps chart...'
+
+        leapsDic = {}
+        leapsDic['plotFn'] = plot.dataStackedBarSave
+        leapsDic['out'] = out
+        leapsDic['valuesNumber'] = 5
+        leapsDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.allLeaps, leapsDic['valuesNumber'])
+        leapsDic['title'] = 'Leaps'
+        leapsDic['AllSegmentsObj'] = AllSegmentsObj
+        leapsDic['topComposers'] = topComposers
+        leapsDic['size'] = 100
+
+        plot_print_rst(leapsDic)
+
         # steps, leaps, 3rds, repetition (bar)
         print '. Creating steps, leaps and arpeggios chart...'
 
