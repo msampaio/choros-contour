@@ -34,12 +34,12 @@ def contour_prime_count(SegmentsList):
     return counting([sampaio(seg.contour.reduction_morris()[0]) for seg in SegmentsList])
 
 
-def contour_highest_cp_count(SegmentsList):
+def contour_different_cp(SegmentsList):
     """Return a collections.Counter object with the values of highest
     contour point of each contour segment from a list of Segment
     objects."""
 
-    return counting([max(seg.contour.translation()) for seg in SegmentsList])
+    return [max(seg.contour.translation()) for seg in SegmentsList]
 
 
 def contour_oscillation_count(SegmentsList):

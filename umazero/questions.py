@@ -103,6 +103,19 @@ def oscillation(allSegmentObj, composer):
     return [seg.contour.oscillation_index() for seg in composerSegments]
 
 
+def differentPoints(allSegmentObj, composer):
+    """Return a sequence with percentage values of oscillation index
+    classification of a given composer.
+
+    >>> oscillation(allseg, 'Waldyr Azevedo')
+    [8, -1, -3, 1, 3, ... , 1, 1, 4, -1, 1, 4]
+    """
+
+    composerSegments = allSegmentObj.getByComposer(composer).segments
+
+    return contour.contour_different_cp(composerSegments)
+
+
 def firstMovement(allSegmentObj, composer):
     """Return a Counter dictionary with percentage values of first
     movement classification of a given composer.

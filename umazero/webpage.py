@@ -334,6 +334,24 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         primeContourDic['size'] = 100
         plot_print_rst(primeContourDic)
 
+        # DifferentPoints index (scatter)
+        print '. Creating different Contour points chart...'
+
+        differentPointsDic = {}
+        differentPointsDic['plotFn'] = plot.multipleScatterSave
+        differentPointsDic['out'] = out
+        differentPointsDic['attrib'] = 'differentPoints'
+        differentPointsDic['title'] = 'Different Contour Points'
+        differentPointsDic['AllSegmentsObj'] = AllSegmentsObj
+        differentPointsDic['topComposers'] = topComposers
+        differentPointsDic['size'] = 100
+
+        differentPointsDic['coordSequence'] = [_utils.makeDataCoordSequence(questions.differentPoints(AllSegmentsObj, composer)) for composer in AllAndTopComposers]
+        differentPointsDic['legend'] = ['Segments (%)', 'Number of Contour Points']
+        differentPointsDic['labels'] = AllAndTopComposers
+
+        plot_print_rst(differentPointsDic)
+
         # Oscillation index (scatter)
         print '. Creating oscillation index chart...'
 
