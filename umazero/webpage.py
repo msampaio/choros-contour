@@ -220,7 +220,6 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         ambitusDic['title'] = 'Ambitus'
         ambitusDic['AllSegmentsObj'] = AllSegmentsObj
         ambitusDic['topComposers'] = topComposers
-        ambitusDic['valuesNumber'] = 8
         ambitusDic['size'] = 100
 
         ambitusDic['coordSequence'] = _utils.makeAttribCoordSequence(AllSegmentsObj, 'ambitus', topComposers)
@@ -268,7 +267,6 @@ def make_parameters_webpage(AllSegmentsObj, topComposers):
         intervalSTDic['title'] = 'Intervals in semitones'
         intervalSTDic['AllSegmentsObj'] = AllSegmentsObj
         intervalSTDic['topComposers'] = topComposers
-        intervalSTDic['valuesNumber'] = 8
         intervalSTDic['size'] = 100
 
         intervalSTDic['coordSequence'] = [_utils.makeDataCoordSequence(questions.allIntervalsST(AllSegmentsObj, composer)) for composer in AllAndTopComposers]
