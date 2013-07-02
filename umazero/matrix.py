@@ -7,28 +7,28 @@ import query
 from music21.contour import Contour
 
 
-def minoritiesRemotion(matrix, valuesCategories, valuesNumber):
+def minoritiesRemotion(matrix, valuesSet, valuesNumber):
     size = len(matrix)
     if size ==  valuesNumber:
-        return matrix, valuesCategories
+        return matrix, valuesSet
     else:
-        valuesAndMatrix = zip(valuesCategories, [sum(els) for els in matrix], matrix)
+        valuesAndMatrix = zip(valuesSet, [sum(els) for els in matrix], matrix)
         sortedValuesAndMatrix = sorted(valuesAndMatrix, reverse=True, key=lambda x:x[1])
         mostCommon = sortedValuesAndMatrix[:valuesNumber]
         other = tuple([sum(els) for els in zip(*[x[2] for x in sortedValuesAndMatrix[valuesNumber:]])])
         mostCommon.insert(0, ('Other', sum(other), other))
 
-        newValuesCategories = []
+        newValuesSet = []
         newMatrix = []
 
         for avalue, amount, amatrix in mostCommon:
-            newValuesCategories.append(avalue)
+            newValuesSet.append(avalue)
             newMatrix.append(amatrix)
 
-        return newMatrix, newValuesCategories
+        return newMatrix, newValuesSet
 
 
-def appendMatrix(matrix, values, valuesCategories):
+def appendMatrix(matrix, valuesSeq, valuesSet):
     """Insert a row of values in a given matrix
 
     >>> appendMatrix([], [True, True, False], ['True', 'False'])
@@ -36,15 +36,15 @@ def appendMatrix(matrix, values, valuesCategories):
     """
 
     # values in _utils.percentage
-    counted = _utils.percentage(Counter(values))
-    composerValuesCategories = counted.keys()
+    counted = _utils.percentage(Counter(valuesSeq))
+    composerValuesSet = counted.keys()
 
-    for valueCategory in valuesCategories:
-        if valueCategory not in composerValuesCategories:
-            counted[valueCategory] = 0
+    for value in valuesSet:
+        if value not in composerValuesSet:
+            counted[value] = 0
 
-    categoryAndValueSeq = sorted(counted.items())
-    matrix.append([value for category, value in categoryAndValueSeq])
+    setElementAndValueSeq = sorted(counted.items())
+    matrix.append([value for element, value in setElementAndValueSeq])
 
     return matrix
 
@@ -62,14 +62,14 @@ def makeAttribValuesSequence(allSegmentObj, composer, attrib):
     composerSegmentsSeq = allSegmentObj.getByComposer(composer).segments
 
     if attrib in ('contour', 'contour_prime'):
-        values = [tuple(getattr(seg, attrib)) for seg in composerSegmentsSeq]
+        valuesSeq = [tuple(getattr(seg, attrib)) for seg in composerSegmentsSeq]
     else:
-        values = [getattr(seg, attrib) for seg in composerSegmentsSeq]
+        valuesSeq = [getattr(seg, attrib) for seg in composerSegmentsSeq]
 
-    return values
+    return valuesSeq
 
 
-def appendAttribMatrix(matrix, allSegmentObj, composer, attrib, valuesCategories):
+def appendAttribMatrix(matrix, allSegmentObj, composer, attrib, valuesSet):
     """Make a sequence of attribute values and append it to a given matrix
 
     # allseg is a query.AllSegments object
@@ -78,14 +78,14 @@ def appendAttribMatrix(matrix, allSegmentObj, composer, attrib, valuesCategories
     [[25.617977528089888, 74.38202247191012, 0, 0]]
     """
 
-    values = makeAttribValuesSequence(allSegmentObj, composer, attrib)
+    valuesSeq = makeAttribValuesSequence(allSegmentObj, composer, attrib)
 
-    return appendMatrix(matrix, values, valuesCategories)
+    return appendMatrix(matrix, valuesSeq, valuesSet)
 
 
 def makeAttribValuesMatrix(allSegmentsObj, attrib, allAndTopComposers, contourType=False):
     """Return a matrix with data to plot in stackedBar chart, and a
-    sequence with the values categories.
+    sequence with the values set.
 
     >>> makeAttribValuesMatrix(allseg, 'meter', ['All composers', u'Benedito Lacerda', u'Ernesto Nazareth'])
 
@@ -94,20 +94,20 @@ def makeAttribValuesMatrix(allSegmentsObj, attrib, allAndTopComposers, contourTy
     """
 
     matrix = []
-    valuesCategories = query.getData(allSegmentsObj.segments, attrib)
+    valuesSet = query.getData(allSegmentsObj.segments, attrib)
 
     if contourType:
-        valuesCategories = [tuple(cseg) for cseg in valuesCategories]
+        valuesSet = [tuple(cseg) for cseg in valuesSet]
 
     for composer in allAndTopComposers:
-        matrix = appendAttribMatrix(matrix, allSegmentsObj, composer, attrib, valuesCategories)
+        matrix = appendAttribMatrix(matrix, allSegmentsObj, composer, attrib, valuesSet)
 
-    return matrix, valuesCategories
+    return matrix, valuesSet
 
 
 def makeDataValuesMatrix(allSegmentObj, allAndTopComposers, fn):
     """Return a matrix with data to plot in stackedBar chart, and a
-    sequence with the values categories.
+    sequence with the values set.
 
     >>> makeDataValuesMatrix(allseg, ['All composers', u'Benedito Lacerda', u'Ernesto Nazareth'], intervals.allIntervals)
 
@@ -135,9 +135,9 @@ def makeDataValuesMatrix(allSegmentObj, allAndTopComposers, fn):
     return myMatrix, valuesSet
 
 
-def makeMatrix(matrix, allAndTopComposers, valuesCategories, valuesNumber, contourType=False):
+def makeMatrix(matrix, allAndTopComposers, valuesSet, valuesNumber, contourType=False):
     """Transpose a given matrix and return also a sequence of values
-    categories and all and top composers.
+    set and all and top composers.
 
     >>> matrix = [[97.2508591065292, 0.9163802978235968, 1.8327605956471935],
                   [100.0, 0, 0],
@@ -152,13 +152,13 @@ def makeMatrix(matrix, allAndTopComposers, valuesCategories, valuesNumber, conto
     size = len(matrix)
     transposedMatrix = zip(*matrix)
 
-    newMatrix, newValuesCategories = minoritiesRemotion(transposedMatrix, valuesCategories, valuesNumber)
+    newMatrix, newValuesSet = minoritiesRemotion(transposedMatrix, valuesSet, valuesNumber)
 
     if contourType:
         from music21.contour.contour import Contour
-        newValuesCategories = _utils.flatten([[newValuesCategories[0]], [Contour(cseg) for cseg in newValuesCategories[1:]]])
+        newValuesSet = _utils.flatten([[newValuesSet[0]], [Contour(cseg) for cseg in newValuesSet[1:]]])
 
-    return newMatrix, newValuesCategories, allAndTopComposers
+    return newMatrix, newValuesSet, allAndTopComposers
 
 
 def attribValuesMatrix(allSegmentsObj, topComposers, attrib, valuesNumber=5):
@@ -171,15 +171,15 @@ def attribValuesMatrix(allSegmentsObj, topComposers, attrib, valuesNumber=5):
         contourType = False
 
     allAndTopComposers = _utils.flatten([['All composers'], topComposers])
-    attribMatrix, valuesCategories = makeAttribValuesMatrix(allSegmentsObj, attrib, allAndTopComposers, contourType)
+    attribMatrix, valuesSet = makeAttribValuesMatrix(allSegmentsObj, attrib, allAndTopComposers, contourType)
 
-    return makeMatrix(attribMatrix, allAndTopComposers, valuesCategories, valuesNumber, contourType)
+    return makeMatrix(attribMatrix, allAndTopComposers, valuesSet, valuesNumber, contourType)
 
 
 def dataValuesMatrix(allSegmentObj, allAndTopComposers, fn, valuesNumber=5, contourType=False):
     """Return a Sequence with a Matrix of attribute values, all
     attribute values and top composers."""
 
-    fnMatrix, valuesCategories = makeDataValuesMatrix(allSegmentObj, allAndTopComposers, fn)
+    fnMatrix, valuesSet = makeDataValuesMatrix(allSegmentObj, allAndTopComposers, fn)
 
-    return makeMatrix(fnMatrix, allAndTopComposers, valuesCategories, valuesNumber, contourType)
+    return makeMatrix(fnMatrix, allAndTopComposers, valuesSet, valuesNumber, contourType)
