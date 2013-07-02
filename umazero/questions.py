@@ -152,7 +152,6 @@ def lastMovement(allSegmentObj, composer):
 def reductionBor355(allSegmentObj, composer):
 
     composerSegments = allSegmentObj.getByComposer(composer).segments
-    counterObj = Counter()
 
     coll = []
     for seg in composerSegments:
