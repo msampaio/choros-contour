@@ -465,7 +465,7 @@ def make_pitch_webpage(AllSegmentsObj, topComposers):
         makeContourPrimeChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
         makeDifferentPointsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
         makeOscillationChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
-        makeReductionBor355Chart(out, AllSegmentsObj, topComposers, AllAndTopComposers, 12)
+        makeReductionBor355Chart(out, AllSegmentsObj, topComposers, AllAndTopComposers, 8)
 
 
 def print_lily(out, SegmentObj, subtitle):
