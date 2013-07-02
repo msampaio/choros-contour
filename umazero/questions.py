@@ -4,6 +4,7 @@
 from collections import Counter
 import _utils
 import intervals
+import contour
 
 
 def allIntervals(allSegmentObj, composer):
