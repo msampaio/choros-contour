@@ -215,6 +215,25 @@ def makePickupChart(out, AllSegmentsObj, topComposers, valuesNumber=2):
     plot_print_rst(pickupDic)
 
 
+def makeDurationsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=5):
+    # durations (bar)
+    print '. Creating durations chart...'
+
+
+    durationsDic = {}
+    durationsDic['plotFn'] = plot.dataStackedBarSave
+    durationsDic['out'] = out
+    durationsDic['attrib'] = 'durations'
+    durationsDic['title'] = 'Durations'
+    durationsDic['valuesNumber'] = valuesNumber
+    durationsDic['AllSegmentsObj'] = AllSegmentsObj
+    durationsDic['topComposers'] = topComposers
+    durationsDic['size'] = 100
+    durationsDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.allDurations, durationsDic['valuesNumber'])
+
+    plot_print_rst(durationsDic)
+
+
 def make_duration_webpage(AllSegmentsObj, topComposers):
     """Create and save data of Duration webpage. The input data is
     an AllSegments object and topComposers sequence."""
@@ -229,6 +248,7 @@ def make_duration_webpage(AllSegmentsObj, topComposers):
 
         makeMeterChart(out, AllSegmentsObj, topComposers)
         makePickupChart(out, AllSegmentsObj, topComposers)
+        makeDurationsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
 
 
 def makeAmbitusChart(out, AllSegmentsObj, topComposers, AllAndTopComposers):

@@ -5,6 +5,7 @@ from collections import Counter
 import _utils
 import intervals
 import contour
+import duration
 
 
 def allIntervals(allSegmentObj, composer):
@@ -157,6 +158,19 @@ def reductionBor355(allSegmentObj, composer):
     for seg in composerSegments:
         myData = tuple(seg.contour.reduction_bor(355)[0])
         coll.append(myData)
+    counterObj = Counter(coll)
+
+    return _utils.percentage(counterObj)
+
+
+def allDurations(allSegmentObj, composer):
+    composerSegments = allSegmentObj.getByComposer(composer).segments
+    counterObj = Counter()
+
+    coll = []
+    for seg in composerSegments:
+        myData = duration.segmentDurations(seg)
+        coll.extend(myData)
     counterObj = Counter(coll)
 
     return _utils.percentage(counterObj)
