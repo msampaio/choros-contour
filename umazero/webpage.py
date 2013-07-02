@@ -425,6 +425,23 @@ def makeOscillationChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, 
 
     plot_print_rst(oscillationDic)
 
+def makeReductionBor355Chart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=8):
+    # first movement (bar)
+    print '. Creating Reduction Bor 355 chart...'
+
+    reductionBor355Dic = {}
+    reductionBor355Dic['plotFn'] = plot.dataStackedBarSave
+    reductionBor355Dic['out'] = out
+    reductionBor355Dic['valuesNumber'] = valuesNumber
+    reductionBor355Dic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.reductionBor355, reductionBor355Dic['valuesNumber'], True)
+    reductionBor355Dic['title'] = 'Contour Reduction (Bor 355)'
+    reductionBor355Dic['AllSegmentsObj'] = AllSegmentsObj
+    reductionBor355Dic['topComposers'] = topComposers
+    reductionBor355Dic['size'] = 100
+
+    plot_print_rst(reductionBor355Dic)
+
+
 def make_pitch_webpage(AllSegmentsObj, topComposers):
     """Create and save data of pitch webpage. The input data is
     an AllSegments object and topComposers sequence."""
@@ -448,6 +465,7 @@ def make_pitch_webpage(AllSegmentsObj, topComposers):
         makeContourPrimeChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
         makeDifferentPointsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
         makeOscillationChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
+        makeReductionBor355Chart(out, AllSegmentsObj, topComposers, AllAndTopComposers, 12)
 
 
 def print_lily(out, SegmentObj, subtitle):

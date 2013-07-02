@@ -147,3 +147,17 @@ def lastMovement(allSegmentObj, composer):
     myData = contour.last_movement(composerSegments)
 
     return _utils.percentage(myData)
+
+
+def reductionBor355(allSegmentObj, composer):
+
+    composerSegments = allSegmentObj.getByComposer(composer).segments
+    counterObj = Counter()
+
+    coll = []
+    for seg in composerSegments:
+        myData = tuple(seg.contour.reduction_bor(355)[0])
+        coll.append(myData)
+    counterObj = Counter(coll)
+
+    return _utils.percentage(counterObj)
