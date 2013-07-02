@@ -183,6 +183,37 @@ def plot_print_rst(plotDic):
     # print in rst
     rst_plot(out, title, pngfile, hierarchy, size)
 
+def makeMeterChart(out, AllSegmentsObj, topComposers, valuesNumber=3):
+    # meter (bar)
+    print '. Creating meter chart...'
+
+    meterDic = {}
+    meterDic['plotFn'] = plot.attribStackedBarSave
+    meterDic['out'] = out
+    meterDic['attrib'] = 'meter'
+    meterDic['title'] = 'Meter'
+    meterDic['AllSegmentsObj'] = AllSegmentsObj
+    meterDic['topComposers'] = topComposers
+    meterDic['valuesNumber'] = valuesNumber
+    meterDic['size'] = 100
+    plot_print_rst(meterDic)
+
+
+def makePickupChart(out, AllSegmentsObj, topComposers, valuesNumber=2):
+    # pickup (bar)
+    print '. Creating pickup chart...'
+
+    pickupDic = {}
+    pickupDic['plotFn'] = plot.attribStackedBarSave
+    pickupDic['out'] = out
+    pickupDic['attrib'] = 'pickup'
+    pickupDic['title'] = 'Pickup'
+    pickupDic['AllSegmentsObj'] = AllSegmentsObj
+    pickupDic['topComposers'] = topComposers
+    pickupDic['valuesNumber'] = valuesNumber
+    pickupDic['size'] = 100
+    plot_print_rst(pickupDic)
+
 
 def make_duration_webpage(AllSegmentsObj, topComposers):
     """Create and save data of Duration webpage. The input data is
@@ -196,34 +227,203 @@ def make_duration_webpage(AllSegmentsObj, topComposers):
 
         AllAndTopComposers = _utils.flatten([['All composers'], topComposers])
 
-        # meter (bar)
-        print '. Creating meter chart...'
+        makeMeterChart(out, AllSegmentsObj, topComposers)
+        makePickupChart(out, AllSegmentsObj, topComposers)
 
-        meterDic = {}
-        meterDic['plotFn'] = plot.attribStackedBarSave
-        meterDic['out'] = out
-        meterDic['attrib'] = 'meter'
-        meterDic['title'] = 'Meter'
-        meterDic['AllSegmentsObj'] = AllSegmentsObj
-        meterDic['topComposers'] = topComposers
-        meterDic['valuesNumber'] = 3
-        meterDic['size'] = 100
-        plot_print_rst(meterDic)
 
-        # pickup (bar)
-        print '. Creating pickup chart...'
+def makeAmbitusChart(out, AllSegmentsObj, topComposers, AllAndTopComposers):
+    # ambitus (scatter)
+    print '. Creating ambitus chart...'
 
-        pickupDic = {}
-        pickupDic['plotFn'] = plot.attribStackedBarSave
-        pickupDic['out'] = out
-        pickupDic['attrib'] = 'pickup'
-        pickupDic['title'] = 'Pickup'
-        pickupDic['AllSegmentsObj'] = AllSegmentsObj
-        pickupDic['topComposers'] = topComposers
-        pickupDic['valuesNumber'] = 2
-        pickupDic['size'] = 100
-        plot_print_rst(pickupDic)
+    ambitusDic = {}
+    ambitusDic['plotFn'] = plot.multipleScatterSave
+    ambitusDic['out'] = out
+    ambitusDic['attrib'] = 'ambitus'
+    ambitusDic['title'] = 'Ambitus'
+    ambitusDic['AllSegmentsObj'] = AllSegmentsObj
+    ambitusDic['topComposers'] = topComposers
+    ambitusDic['size'] = 100
 
+    ambitusDic['coordSequence'] = _utils.makeAttribCoordSequence(AllSegmentsObj, 'ambitus', topComposers)
+    ambitusDic['legend'] = ['Segments (%)', 'Semitones']
+    ambitusDic['labels'] = AllAndTopComposers
+
+    plot_print_rst(ambitusDic)
+
+
+def makeConsonanceChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=2):
+    # consonance (bar)
+    print '. Creating consonance chart...'
+
+    consonanceDic = {}
+    consonanceDic['plotFn'] = plot.dataStackedBarSave
+    consonanceDic['out'] = out
+    consonanceDic['valuesNumber'] = valuesNumber
+    consonanceDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.consonance, consonanceDic['valuesNumber'])
+    consonanceDic['title'] = 'Consonance'
+    consonanceDic['AllSegmentsObj'] = AllSegmentsObj
+    consonanceDic['topComposers'] = topComposers
+    consonanceDic['size'] = 100
+
+    plot_print_rst(consonanceDic)
+
+
+def makeIntervalChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=8):
+    # intervals (bar)
+    print '. Creating intervals chart...'
+
+    intervalDic = {}
+    intervalDic['plotFn'] = plot.dataStackedBarSave
+    intervalDic['out'] = out
+    intervalDic['valuesNumber'] = valuesNumber
+    intervalDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.allIntervals, intervalDic['valuesNumber'])
+    intervalDic['title'] = 'Intervals'
+    intervalDic['AllSegmentsObj'] = AllSegmentsObj
+    intervalDic['topComposers'] = topComposers
+    intervalDic['size'] = 100
+
+    plot_print_rst(intervalDic)
+
+
+def makeIntervalSTChart(out, AllSegmentsObj, topComposers, AllAndTopComposers):
+    # intervals in semitones (scatter)
+    print '. Creating intervals in semitones chart...'
+
+    intervalSTDic = {}
+    intervalSTDic['plotFn'] = plot.multipleScatterSave
+    intervalSTDic['out'] = out
+    intervalSTDic['attrib'] = 'intervals_with_direction_semitones'
+    intervalSTDic['title'] = 'Intervals in semitones'
+    intervalSTDic['AllSegmentsObj'] = AllSegmentsObj
+    intervalSTDic['topComposers'] = topComposers
+    intervalSTDic['size'] = 100
+
+    intervalSTDic['coordSequence'] = [_utils.makeDataCoordSequence(questions.allIntervalsST(AllSegmentsObj, composer)) for composer in AllAndTopComposers]
+    intervalSTDic['legend'] = ['Segments (%)', 'Semitones']
+    intervalSTDic['labels'] = AllAndTopComposers
+
+    plot_print_rst(intervalSTDic)
+
+
+def makeLeapsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=8):
+    # leaps (bar)
+    print '. Creating leaps chart...'
+
+    leapsDic = {}
+    leapsDic['plotFn'] = plot.dataStackedBarSave
+    leapsDic['out'] = out
+    leapsDic['valuesNumber'] = valuesNumber
+    leapsDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.allLeaps, leapsDic['valuesNumber'])
+    leapsDic['title'] = 'Leaps'
+    leapsDic['AllSegmentsObj'] = AllSegmentsObj
+    leapsDic['topComposers'] = topComposers
+    leapsDic['size'] = 100
+
+    plot_print_rst(leapsDic)
+
+
+def makeStepsLeapsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=4):
+    # steps, leaps, 3rds, repetition (bar)
+    print '. Creating steps, leaps and arpeggios chart...'
+
+    stepsLeapsDic = {}
+    stepsLeapsDic['plotFn'] = plot.dataStackedBarSave
+    stepsLeapsDic['out'] = out
+    stepsLeapsDic['valuesNumber'] = valuesNumber
+    stepsLeapsDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.stepLeapArpeggio, stepsLeapsDic['valuesNumber'])
+    stepsLeapsDic['title'] = 'Steps, Leaps and Arpeggios'
+    stepsLeapsDic['AllSegmentsObj'] = AllSegmentsObj
+    stepsLeapsDic['topComposers'] = topComposers
+    stepsLeapsDic['size'] = 100
+
+    plot_print_rst(stepsLeapsDic)
+
+
+def makeFirstMovementChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=2):
+    # first movement (bar)
+    print '. Creating first movement chart...'
+
+    firstMovementDic = {}
+    firstMovementDic['plotFn'] = plot.dataStackedBarSave
+    firstMovementDic['out'] = out
+    firstMovementDic['valuesNumber'] = valuesNumber
+    firstMovementDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.firstMovement, firstMovementDic['valuesNumber'])
+    firstMovementDic['title'] = 'First movement'
+    firstMovementDic['AllSegmentsObj'] = AllSegmentsObj
+    firstMovementDic['topComposers'] = topComposers
+    firstMovementDic['size'] = 100
+
+    plot_print_rst(firstMovementDic)
+
+def makeLastMovementChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=2):
+    # last movement (bar)
+    print '. Creating last movement chart...'
+
+    lastMovementDic = {}
+    lastMovementDic['plotFn'] = plot.dataStackedBarSave
+    lastMovementDic['out'] = out
+    lastMovementDic['valuesNumber'] = valuesNumber
+    lastMovementDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.lastMovement, lastMovementDic['valuesNumber'])
+    lastMovementDic['title'] = 'Last movement'
+    lastMovementDic['AllSegmentsObj'] = AllSegmentsObj
+    lastMovementDic['topComposers'] = topComposers
+    lastMovementDic['size'] = 100
+
+    plot_print_rst(lastMovementDic)
+
+def makeContourPrimeChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=5):
+    # contour prime (bar)
+    print '. Creating prime contour chart...'
+
+    primeContourDic = {}
+    primeContourDic['plotFn'] = plot.attribStackedBarSave
+    primeContourDic['out'] = out
+    primeContourDic['attrib'] = 'contour_prime'
+    primeContourDic['title'] = 'Prime Contour'
+    primeContourDic['AllSegmentsObj'] = AllSegmentsObj
+    primeContourDic['topComposers'] = topComposers
+    primeContourDic['valuesNumber'] = valuesNumber
+    primeContourDic['size'] = 100
+
+    plot_print_rst(primeContourDic)
+
+def makeDifferentPointsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=2):
+    # DifferentPoints index (scatter)
+    print '. Creating different Contour points chart...'
+
+    differentPointsDic = {}
+    differentPointsDic['plotFn'] = plot.multipleScatterSave
+    differentPointsDic['out'] = out
+    differentPointsDic['attrib'] = 'differentPoints'
+    differentPointsDic['title'] = 'Different Contour Points'
+    differentPointsDic['AllSegmentsObj'] = AllSegmentsObj
+    differentPointsDic['topComposers'] = topComposers
+    differentPointsDic['size'] = 100
+
+    differentPointsDic['coordSequence'] = [_utils.makeDataCoordSequence(questions.differentPoints(AllSegmentsObj, composer)) for composer in AllAndTopComposers]
+    differentPointsDic['legend'] = ['Segments (%)', 'Number of Contour Points']
+    differentPointsDic['labels'] = AllAndTopComposers
+
+    plot_print_rst(differentPointsDic)
+
+def makeOscillationChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=2):
+    # Oscillation index (scatter)
+    print '. Creating oscillation index chart...'
+
+    oscillationDic = {}
+    oscillationDic['plotFn'] = plot.multipleScatterSave
+    oscillationDic['out'] = out
+    oscillationDic['attrib'] = 'oscillation'
+    oscillationDic['title'] = 'Oscillation index'
+    oscillationDic['AllSegmentsObj'] = AllSegmentsObj
+    oscillationDic['topComposers'] = topComposers
+    oscillationDic['size'] = 100
+
+    oscillationDic['coordSequence'] = [_utils.makeDataCoordSequence(questions.oscillation(AllSegmentsObj, composer)) for composer in AllAndTopComposers]
+    oscillationDic['legend'] = ['Segments (%)', 'Oscillation index']
+    oscillationDic['labels'] = AllAndTopComposers
+
+    plot_print_rst(oscillationDic)
 
 def make_pitch_webpage(AllSegmentsObj, topComposers):
     """Create and save data of pitch webpage. The input data is
@@ -237,182 +437,17 @@ def make_pitch_webpage(AllSegmentsObj, topComposers):
 
         AllAndTopComposers = _utils.flatten([['All composers'], topComposers])
 
-        # ambitus (scatter)
-        print '. Creating ambitus chart...'
-
-        ambitusDic = {}
-        ambitusDic['plotFn'] = plot.multipleScatterSave
-        ambitusDic['out'] = out
-        ambitusDic['attrib'] = 'ambitus'
-        ambitusDic['title'] = 'Ambitus'
-        ambitusDic['AllSegmentsObj'] = AllSegmentsObj
-        ambitusDic['topComposers'] = topComposers
-        ambitusDic['size'] = 100
-
-        ambitusDic['coordSequence'] = _utils.makeAttribCoordSequence(AllSegmentsObj, 'ambitus', topComposers)
-        ambitusDic['legend'] = ['Segments (%)', 'Semitones']
-        ambitusDic['labels'] = AllAndTopComposers
-
-        plot_print_rst(ambitusDic)
-
-        # consonance (bar)
-        print '. Creating consonance chart...'
-
-        consonanceDic = {}
-        consonanceDic['plotFn'] = plot.dataStackedBarSave
-        consonanceDic['out'] = out
-        consonanceDic['valuesNumber'] = 2
-        consonanceDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.consonance, consonanceDic['valuesNumber'])
-        consonanceDic['title'] = 'Consonance'
-        consonanceDic['AllSegmentsObj'] = AllSegmentsObj
-        consonanceDic['topComposers'] = topComposers
-        consonanceDic['size'] = 100
-
-        plot_print_rst(consonanceDic)
-
-        # intervals (bar)
-        print '. Creating intervals chart...'
-
-        intervalDic = {}
-        intervalDic['plotFn'] = plot.dataStackedBarSave
-        intervalDic['out'] = out
-        intervalDic['valuesNumber'] = 8
-        intervalDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.allIntervals, intervalDic['valuesNumber'])
-        intervalDic['title'] = 'Intervals'
-        intervalDic['AllSegmentsObj'] = AllSegmentsObj
-        intervalDic['topComposers'] = topComposers
-        intervalDic['size'] = 100
-
-        plot_print_rst(intervalDic)
-
-        # intervals in semitones (scatter)
-        print '. Creating intervals in semitones chart...'
-
-        intervalSTDic = {}
-        intervalSTDic['plotFn'] = plot.multipleScatterSave
-        intervalSTDic['out'] = out
-        intervalSTDic['attrib'] = 'intervals_with_direction_semitones'
-        intervalSTDic['title'] = 'Intervals in semitones'
-        intervalSTDic['AllSegmentsObj'] = AllSegmentsObj
-        intervalSTDic['topComposers'] = topComposers
-        intervalSTDic['size'] = 100
-
-        intervalSTDic['coordSequence'] = [_utils.makeDataCoordSequence(questions.allIntervalsST(AllSegmentsObj, composer)) for composer in AllAndTopComposers]
-        intervalSTDic['legend'] = ['Segments (%)', 'Semitones']
-        intervalSTDic['labels'] = AllAndTopComposers
-
-        plot_print_rst(intervalSTDic)
-
-        # leaps (bar)
-        print '. Creating leaps chart...'
-
-        leapsDic = {}
-        leapsDic['plotFn'] = plot.dataStackedBarSave
-        leapsDic['out'] = out
-        leapsDic['valuesNumber'] = 8
-        leapsDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.allLeaps, leapsDic['valuesNumber'])
-        leapsDic['title'] = 'Leaps'
-        leapsDic['AllSegmentsObj'] = AllSegmentsObj
-        leapsDic['topComposers'] = topComposers
-        leapsDic['size'] = 100
-
-        plot_print_rst(leapsDic)
-
-        # steps, leaps, 3rds, repetition (bar)
-        print '. Creating steps, leaps and arpeggios chart...'
-
-        stepsLeapsDic = {}
-        stepsLeapsDic['plotFn'] = plot.dataStackedBarSave
-        stepsLeapsDic['out'] = out
-        stepsLeapsDic['valuesNumber'] = 4
-        stepsLeapsDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.stepLeapArpeggio, stepsLeapsDic['valuesNumber'])
-        stepsLeapsDic['title'] = 'Steps, Leaps and Arpeggios'
-        stepsLeapsDic['AllSegmentsObj'] = AllSegmentsObj
-        stepsLeapsDic['topComposers'] = topComposers
-        stepsLeapsDic['size'] = 100
-
-        plot_print_rst(stepsLeapsDic)
-
-        # first movement (bar)
-        print '. Creating first movement chart...'
-
-        firstMovementDic = {}
-        firstMovementDic['plotFn'] = plot.dataStackedBarSave
-        firstMovementDic['out'] = out
-        firstMovementDic['valuesNumber'] = 2
-        firstMovementDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.firstMovement, firstMovementDic['valuesNumber'])
-        firstMovementDic['title'] = 'First movement'
-        firstMovementDic['AllSegmentsObj'] = AllSegmentsObj
-        firstMovementDic['topComposers'] = topComposers
-        firstMovementDic['size'] = 100
-
-        plot_print_rst(firstMovementDic)
-
-        # last movement (bar)
-        print '. Creating last movement chart...'
-
-        lastMovementDic = {}
-        lastMovementDic['plotFn'] = plot.dataStackedBarSave
-        lastMovementDic['out'] = out
-        lastMovementDic['valuesNumber'] = 2
-        lastMovementDic['matrix'] = matrix.dataValuesMatrix(AllSegmentsObj, AllAndTopComposers, questions.lastMovement, lastMovementDic['valuesNumber'])
-        lastMovementDic['title'] = 'Last movement'
-        lastMovementDic['AllSegmentsObj'] = AllSegmentsObj
-        lastMovementDic['topComposers'] = topComposers
-        lastMovementDic['size'] = 100
-
-        plot_print_rst(lastMovementDic)
-
-        # contour prime (bar)
-        print '. Creating prime contour chart...'
-
-        primeContourDic = {}
-        primeContourDic['plotFn'] = plot.attribStackedBarSave
-        primeContourDic['out'] = out
-        primeContourDic['attrib'] = 'contour_prime'
-        primeContourDic['title'] = 'Prime Contour'
-        primeContourDic['AllSegmentsObj'] = AllSegmentsObj
-        primeContourDic['topComposers'] = topComposers
-        primeContourDic['valuesNumber'] = 5
-        primeContourDic['size'] = 100
-
-        plot_print_rst(primeContourDic)
-
-        # DifferentPoints index (scatter)
-        print '. Creating different Contour points chart...'
-
-        differentPointsDic = {}
-        differentPointsDic['plotFn'] = plot.multipleScatterSave
-        differentPointsDic['out'] = out
-        differentPointsDic['attrib'] = 'differentPoints'
-        differentPointsDic['title'] = 'Different Contour Points'
-        differentPointsDic['AllSegmentsObj'] = AllSegmentsObj
-        differentPointsDic['topComposers'] = topComposers
-        differentPointsDic['size'] = 100
-
-        differentPointsDic['coordSequence'] = [_utils.makeDataCoordSequence(questions.differentPoints(AllSegmentsObj, composer)) for composer in AllAndTopComposers]
-        differentPointsDic['legend'] = ['Segments (%)', 'Number of Contour Points']
-        differentPointsDic['labels'] = AllAndTopComposers
-
-        plot_print_rst(differentPointsDic)
-
-        # Oscillation index (scatter)
-        print '. Creating oscillation index chart...'
-
-        oscillationDic = {}
-        oscillationDic['plotFn'] = plot.multipleScatterSave
-        oscillationDic['out'] = out
-        oscillationDic['attrib'] = 'oscillation'
-        oscillationDic['title'] = 'Oscillation index'
-        oscillationDic['AllSegmentsObj'] = AllSegmentsObj
-        oscillationDic['topComposers'] = topComposers
-        oscillationDic['size'] = 100
-
-        oscillationDic['coordSequence'] = [_utils.makeDataCoordSequence(questions.oscillation(AllSegmentsObj, composer)) for composer in AllAndTopComposers]
-        oscillationDic['legend'] = ['Segments (%)', 'Oscillation index']
-        oscillationDic['labels'] = AllAndTopComposers
-
-        plot_print_rst(oscillationDic)
+        makeAmbitusChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
+        makeConsonanceChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
+        makeIntervalChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
+        makeIntervalSTChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
+        makeLeapsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
+        makeStepsLeapsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
+        makeFirstMovementChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
+        makeLastMovementChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
+        makeContourPrimeChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
+        makeDifferentPointsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
+        makeOscillationChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
 
 
 def print_lily(out, SegmentObj, subtitle):
