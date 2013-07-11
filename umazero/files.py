@@ -124,8 +124,19 @@ def copyfiles(path='~/Dropbox/genos-choros/choros-corpus/expandidos'):
     copy_files(pattern, dirs, dest_dir)
 
 
-# FIXME: Check periods with less than 2 phrases
 def formCheckerFile(formFile):
+    def checkPeriods(formFile, errorSeq):
+        def aux(dic):
+            return dic['part_number'], dic['period_number'], dic['segment_number']
+
+        xmlFile = formFile.replace('.form', '.xml')
+        dicSeq = segment.formParser(xmlFile)
+        tuples = [aux(dic) for dic in dicSeq]
+        for tup in _utils.splitTupleSequence(tuples, 1):
+            if len(tup) < 2:
+                errorSeq.append([0, 'There is a period with less than two phrases'])
+
+
     def checkNumbers(n, string, sequence, errorSeq):
         eventNumbers = string.replace('p ', '').replace('l ', '').split(' ')[:2]
         for eventNumber in eventNumbers:
@@ -149,6 +160,8 @@ def formCheckerFile(formFile):
                 pass
             else:
                 error.append([n, line])
+
+        checkPeriods(formFile, error)
 
         if len(error) > 0:
             print 'Error in file {0}'.format(formFile)
