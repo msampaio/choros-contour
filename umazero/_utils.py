@@ -7,6 +7,7 @@ import glob
 import unicodedata
 from PIL import Image, ImageChops
 from collections import Counter
+import itertools
 
 
 def flatten(seq):
@@ -166,3 +167,7 @@ def makeAttribCoordSequence(AllSegmentsObj, attrib, topComposers):
     allAndTopComposers = flatten([['All composers'], topComposers])
 
     return [aux(AllSegmentsObj, attrib, composer) for composer in allAndTopComposers]
+
+
+def splitAdjacentRepetitions(sequence):
+    return [list(g) for k, g in itertools.groupby(sequence)]

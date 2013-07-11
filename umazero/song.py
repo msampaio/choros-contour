@@ -88,13 +88,27 @@ class Song(object):
         """Return a list of all segments of all structures of a given typeof."""
 
         segments = self.segments
-        last_segment = segments[-1]
 
         if typeof == 'Period':
-            structure_number = last_segment.period_number
+            attrib = 'period_number'
         elif typeof == 'Part':
-            structure_number = last_segment.part_number
-        structureSegmentsList = [self.getStructure(n) for n in range(1, structure_number)]
+            attrib = 'part_number'
+
+        structuresNumbers = [getattr(seg, attrib) for seg in segments]
+        groupedNumbers = _utils.splitAdjacentRepetitions(structuresNumbers)
+
+        structureCounter = 0
+        structureSegmentsList = []
+
+        for group in groupedNumbers:
+            structureSequence = []
+            for segmentNumber in group:
+                if segmentNumber != 0:
+                    structureSequence.append(segments[structureCounter])
+                structureCounter += 1
+            if structureSequence != []:
+                structureSegmentsList.append(structureSequence)
+
         if excludeLinks:
             return [[el for el in els if el.typeof != 'Link'] for els in structureSegmentsList]
         else:

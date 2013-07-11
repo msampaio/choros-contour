@@ -160,6 +160,7 @@ def makeSegment(segment_form):
     seg.final_event = final
     seg.part_number = segment_form['part_number']
     seg.period_number = segment_form['period_number']
+    seg.segment_number = segment_form['segment_number']
 
     return seg
 
@@ -184,21 +185,27 @@ def formParser(filename):
     period_number = 0
     phrase_number = 0
     link_number = 0
+    segment_number = 0
 
     for el in seq:
         if el == '# part':
             part_number += 1
+            period_number = 0
         elif el == '# period':
             period_number += 1
         else:
             typeof, i, f = el.split()
             initial = int(i)
             final = int(f)
+            segment_number += 1
+
             segment_form = {}
             segment_form['initial'] = initial
             segment_form['final'] = final
             segment_form['period_number'] = period_number
             segment_form['part_number'] = part_number
+            segment_form['segment_number'] = segment_number
+
             if typeof == 'p':
                 phrase_number += 1
                 segment_form['typeof'] = 'Phrase'
