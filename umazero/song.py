@@ -84,30 +84,21 @@ class Song(object):
         else:
             print 'Wrong typeof {0}'.format(typeof)
 
-    def getStrutureSegmentsList(self, typeof='Period', excludeLinks=False):
+    def getStructureSegmentsList(self, typeof='Period', excludeLinks=False):
         """Return a list of all segments of all structures of a given typeof."""
 
         segments = self.segments
 
         if typeof == 'Period':
             attrib = 'period_number'
+            ind = 1
         elif typeof == 'Part':
             attrib = 'part_number'
+            ind = 0
 
-        structuresNumbers = [getattr(seg, attrib) for seg in segments]
-        groupedNumbers = _utils.splitAdjacentRepetitions(structuresNumbers)
-
-        structureCounter = 0
-        structureSegmentsList = []
-
-        for group in groupedNumbers:
-            structureSequence = []
-            for segmentNumber in group:
-                if segmentNumber != 0:
-                    structureSequence.append(segments[structureCounter])
-                structureCounter += 1
-            if structureSequence != []:
-                structureSegmentsList.append(structureSequence)
+        tuplesSeq = [segment.makeStructureNumbers(seg) for seg in segments]
+        grouped = _utils.splitTupleSequence(tuplesSeq, ind)
+        structureSegmentsList = [[segments[tup[2] - 1] for tup in seq] for seq in grouped]
 
         if excludeLinks:
             return [[el for el in els if el.typeof != 'Link'] for els in structureSegmentsList]
@@ -361,4 +352,4 @@ def makeSongAllCollections(save=True, path='choros-corpus'):
 def makeStructuresList(SongObjList, typeof='Period', excludeLinks=True):
     """Return a list of lists of a given typeof structures."""
 
-    return _utils.flatten([SongObj.getStrutureSegmentsList(typeof, excludeLinks) for SongObj in SongObjList])
+    return _utils.flatten([SongObj.getStructureSegmentsList(typeof, excludeLinks) for SongObj in SongObjList])

@@ -169,5 +169,39 @@ def makeAttribCoordSequence(AllSegmentsObj, attrib, topComposers):
     return [aux(AllSegmentsObj, attrib, composer) for composer in allAndTopComposers]
 
 
-def splitAdjacentRepetitions(sequence):
-    return [list(g) for k, g in itertools.groupby(sequence)]
+def groupby(sequence, index):
+    """Group a given sequence of tuples by a given index value.
+
+    >>> groupby([(1, 1), (1, 2), (2, 3), (3, 3)])
+    [[(1, 1), (1, 2)], [(2, 3), (3, 3)]]
+    """
+    return [list(g) for k, g in itertools.groupby(sequence, key=lambda x: x[index])]
+
+
+def splitTupleSequence(triTupleSequence, index=1):
+    """Return a group of tuples grouped by an index. It assumes that
+    the tuple's second element value is restarted when the first
+    changes.
+
+    >>> seq = [(1, 1, 1), (1, 1, 2), (2, 1, 3), (2, 1, 4), (3, 1, 5), (3,
+    1, 6), (4, 1, 7), (4, 1, 8), (5, 1, 9), (5, 1, 10), (6, 1, 11),
+    (6, 1, 12), (7, 1, 13), (7, 1, 14), (8, 1, 15), (8, 1, 16), (9, 1,
+    17), (9, 1, 18), (10, 1, 19), (10, 1, 20), (11, 1, 21), (11, 1,
+    22)]
+    >>> splitTupleSequence(seq, 1)
+    [[(1, 1, 1), (1, 1, 2)], [(2, 1, 3), (2, 1, 4)], [(3, 1, 5), (3,
+    1, 6)], [(4, 1, 7), (4, 1, 8)], [(5, 1, 9), (5, 1, 10)], [(6, 1,
+    11), (6, 1, 12)], [(7, 1, 13), (7, 1, 14)], [(8, 1, 15), (8, 1,
+    16)], [(9, 1, 17), (9, 1, 18)], [(10, 1, 19), (10, 1, 20)], [(11,
+    1, 21), (11, 1, 22)]]
+    """
+
+    byFirst = groupby(triTupleSequence, 0)
+    if index == 0:
+        return byFirst
+    else:
+        bySecond = []
+        for tupleSeq in byFirst:
+            if not tupleSeq[0][1] == 0:
+                bySecond.extend(groupby(tupleSeq, 1))
+        return bySecond

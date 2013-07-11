@@ -244,3 +244,6 @@ def colorSegmentObj(filename):
                 event.color = 'red'
 
     return s
+
+def makeStructureNumbers(seg):
+    return seg.part_number, seg.period_number, seg.segment_number
