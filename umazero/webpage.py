@@ -215,6 +215,42 @@ def makePickupChart(out, AllSegmentsObj, topComposers, valuesNumber=2):
     plot_print_rst(pickupDic)
 
 
+def makeMeasuresNChart(out, AllSegmentsObj, topComposers, valuesNumber=6):
+    # measuresN (bar)
+    print '. Creating measuresN chart...'
+
+    measuresNDic = {}
+    measuresNDic['plotFn'] = plot.attribStackedBarSave
+    measuresNDic['out'] = out
+    measuresNDic['attrib'] = 'measuresNumber'
+    measuresNDic['title'] = 'Number of measures'
+    measuresNDic['AllSegmentsObj'] = AllSegmentsObj
+    measuresNDic['topComposers'] = topComposers
+    measuresNDic['valuesNumber'] = valuesNumber
+    measuresNDic['size'] = 100
+    plot_print_rst(measuresNDic)
+
+
+def makeTotalLengthChart(out, AllSegmentsObj, topComposers, AllAndTopComposers):
+    # TotalLength (bar)
+    print '. Creating TotalLength chart...'
+
+    totalLengthDic = {}
+    totalLengthDic['plotFn'] = plot.multipleScatterSave
+    totalLengthDic['out'] = out
+    totalLengthDic['attrib'] = 'totalLength'
+    totalLengthDic['title'] = 'Total Length'
+    totalLengthDic['AllSegmentsObj'] = AllSegmentsObj
+    totalLengthDic['topComposers'] = topComposers
+    totalLengthDic['size'] = 100
+
+    totalLengthDic['coordSequence'] = _utils.makeAttribCoordSequence(AllSegmentsObj, 'totalLength', topComposers)
+    totalLengthDic['legend'] = ['Segments (%)', 'Length (in quarter values)']
+    totalLengthDic['labels'] = AllAndTopComposers
+
+    plot_print_rst(totalLengthDic)
+
+
 def makeDurationsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=5):
     # durations (bar)
     print '. Creating durations chart...'
@@ -248,6 +284,8 @@ def make_duration_webpage(AllSegmentsObj, topComposers):
 
         makeMeterChart(out, AllSegmentsObj, topComposers)
         makePickupChart(out, AllSegmentsObj, topComposers)
+        makeMeasuresNChart(out, AllSegmentsObj, topComposers)
+        makeTotalLengthChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
         makeDurationsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
 
 
