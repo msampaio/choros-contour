@@ -112,7 +112,7 @@ def scatterSave(y, x, labels, title=None, filename=None):
     plt.savefig(filename, dpi=72)
 
 
-def multipleScatter(coordSequence, labels, legend, title=None):
+def multipleScatter(coordSequence, labels, legend, title=None, percentual=True):
     """Return a plt object with multiple superposed scatter charts.
     The input data is a sequence of (y, x) coordinates, labels for y
     and x axis, and a legend with plotted data.
@@ -129,8 +129,14 @@ def multipleScatter(coordSequence, labels, legend, title=None):
     c = 0 # color
 
     for y, x in coordSequence:
-        area = [i * 5 for i in y]
-        plots.append(plt.scatter(x, _utils.percentual(y), s=area, color=cm.jet(c)))
+        if percentual:
+            yValues =  _utils.percentual(y)
+            area = [i * 5 for i in y]
+        else:
+            yValues = y
+            pointSize = Counter(y)
+            area = [i * 30 ** pointSize[i] for i in y]
+        plots.append(plt.scatter(x, yValues, s=area, color=cm.jet(c)))
         c += color_increment
 
     plt.title(title)
@@ -147,11 +153,11 @@ def multipleScatter(coordSequence, labels, legend, title=None):
     return plt
 
 
-def multipleScatterSave(coordSequence, labels, legend, title=None, filename=None):
+def multipleScatterSave(coordSequence, labels, legend, title=None, filename=None, percentual=True):
     """Plot a scatter chart. The input data is two sequences of
     values, and a sequence of labels for y and x axis."""
 
-    plt = multipleScatter(coordSequence, labels, legend, title)
+    plt = multipleScatter(coordSequence, labels, legend, title, percentual)
 
     if not filename:
         filename = '/tmp/foo.png'

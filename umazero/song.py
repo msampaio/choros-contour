@@ -6,6 +6,8 @@ import music21
 import segment
 import _utils
 import songcollections
+import contour
+
 
 class Song(object):
     """Class for song objects."""
@@ -30,6 +32,8 @@ class Song(object):
         self.key = None
         self.mode = None
         self.segments = []
+
+        self.contourPrimeSimilarity = None
 
     def __repr__(self):
         return "<Song: {0}. {1}>".format(self.title, self.collection)
@@ -318,6 +322,7 @@ def makeSong(filename, number_show=False, save=False, AllCollectionSongsObj=None
     song.mode = mode
 
     newSong = getSegments(filename, song, save)
+    newSong.contourPrimeSimilarity = contour.primeContourSimilarity(newSong)
 
     if save:
         newSong.score = None

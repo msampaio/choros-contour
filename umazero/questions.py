@@ -174,3 +174,20 @@ def allDurations(allSegmentObj, composer):
     counterObj = Counter(coll)
 
     return _utils.percentage(counterObj)
+
+
+def allContourPrimeSimilarity(songsObj, composer):
+
+    if composer != 'All composers':
+        composerSongs = [songObj for songObj in songsObj if composer in songObj.composers]
+    else:
+        composerSongs = songsObj
+
+    cPSimilarity = []
+    totalLength = []
+
+    for s in composerSongs:
+        cPSimilarity.append(s.contourPrimeSimilarity)
+        totalLength.append(sum([seg.totalLength for seg in s.segments]))
+
+    return [cPSimilarity, totalLength]

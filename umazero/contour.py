@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import itertools
 from collections import Counter
 from music21.contour import Contour
 from music21.contour import comparison
@@ -99,3 +100,48 @@ def period_comparison(periodsList):
             if acmemb != 1:
                 result.append((phrases, acmemb))
     return sorted(result, key=lambda x: x[1])
+
+
+def primeContourSimilarity(songObj):
+    """Return a similarity average mean for comparisons between the
+    contour primes of all song segments.
+
+    >>> songObj = umazero.makeSong(xmlFile)
+    >>> primeContourSimilarity(songObj)
+    0.764157196969697
+    """
+
+    def reductionMorris(segment):
+        reduced = segment.contour_prime
+        # a prime must be a small cseg. Big csegs shows the bug with
+        # Morris reduction algorithm
+        if len(reduced) < 10:
+            return tuple(reduced)
+        else:
+            print '. Removing cseg greater than 10 c-point: {0}'.format(reduced)
+
+    reducedContours = [reductionMorris(seg) for seg in songObj.segments if reductionMorris(seg)]
+
+    contoursSet = [Contour(tup) for tup in set(reducedContours)]
+    pairs = Counter([tuple(sorted(p)) for p in itertools.product(reducedContours, repeat=2)])
+    size = len(reducedContours)
+    total = size ** 2
+
+    comp = []
+    n = 1
+    combinationsSize = len(list(itertools.combinations_with_replacement(contoursSet, 2)))
+
+    for a, b in itertools.combinations_with_replacement(contoursSet, 2):
+
+        tuplePair = tuple(sorted([tuple(cseg) for cseg in a, b]))
+        pair = [Contour(tup) for tup in tuplePair]
+        weight = pairs[tuplePair]
+        if a == b:
+            value = 1.0
+        else:
+            value = comparison.all_contour_mutually_embedded(*pair)
+        comp.append((value, weight))
+
+        n += 1
+
+    return sum([i * w for i, w in comp]) / total

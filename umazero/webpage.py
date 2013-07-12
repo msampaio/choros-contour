@@ -157,7 +157,11 @@ def makePlot(plotDic):
         coordSequence = plotDic['coordSequence']
         legend = plotDic['legend']
         labels = plotDic['labels']
-        plot.multipleScatterSave(coordSequence, legend, labels, title, dest)
+        if 'percentual' not in plotDic:
+            percentual = True
+        else:
+            percentual = plotDic['percentual']
+        plot.multipleScatterSave(coordSequence, legend, labels, title, dest, percentual)
     elif plotFn == plot.dataStackedBarSave:
         dataMatrix = plotDic['matrix']
         plot.dataStackedBarSave(dataMatrix, title, 'Segments (%)', dest)
@@ -500,7 +504,28 @@ def makeReductionBor355Chart(out, AllSegmentsObj, topComposers, AllAndTopCompose
     plot_print_rst(reductionBor355Dic)
 
 
-def make_pitch_webpage(AllSegmentsObj, topComposers):
+def makeContourPrimeSimilarityChart(out, AllSegmentsObj, songsObj, topComposers, AllAndTopComposers):
+    # contour prime similarity (scatter)
+    print '. Creating contour prime similarity chart...'
+
+    contourPrimeSimilarityDic = {}
+    contourPrimeSimilarityDic['plotFn'] = plot.multipleScatterSave
+    contourPrimeSimilarityDic['out'] = out
+    contourPrimeSimilarityDic['attrib'] = 'contourPrimeSimilarity'
+    contourPrimeSimilarityDic['title'] = 'Similarity between Prime Contours in each song'
+    contourPrimeSimilarityDic['AllSegmentsObj'] = AllSegmentsObj
+    contourPrimeSimilarityDic['topComposers'] = topComposers
+    contourPrimeSimilarityDic['size'] = 100
+
+    contourPrimeSimilarityDic['coordSequence'] = [questions.allContourPrimeSimilarity(songsObj, composer) for composer in AllAndTopComposers]
+    contourPrimeSimilarityDic['legend'] = ['Similarity index', 'Song length (in quarter notes)']
+    contourPrimeSimilarityDic['labels'] = AllAndTopComposers
+    contourPrimeSimilarityDic['percentual'] = False
+
+    plot_print_rst(contourPrimeSimilarityDic)
+
+
+def make_pitch_webpage(AllSegmentsObj, songsObj, topComposers):
     """Create and save data of pitch webpage. The input data is
     an AllSegments object and topComposers sequence."""
 
@@ -524,6 +549,7 @@ def make_pitch_webpage(AllSegmentsObj, topComposers):
         makeDifferentPointsChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
         makeOscillationChart(out, AllSegmentsObj, topComposers, AllAndTopComposers)
         makeReductionBor355Chart(out, AllSegmentsObj, topComposers, AllAndTopComposers, 8)
+        makeContourPrimeSimilarityChart(out, AllSegmentsObj, songsObj, topComposers, AllAndTopComposers)
 
 
 def print_lily(out, SegmentObj, subtitle):
@@ -628,7 +654,7 @@ def singleRun(dataSeq):
     make_corpus_webpage(songsObj, collectionsObj)
     make_collections_webpage(collectionsObj)
     make_duration_webpage(AllSegmentsObj, topComposers)
-    make_pitch_webpage(AllSegmentsObj, topComposers)
+    make_pitch_webpage(AllSegmentsObj, songsObj, topComposers)
     make_special_cases_webpage(AllSegmentsObj, songsObj)
 
 
