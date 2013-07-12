@@ -34,6 +34,8 @@ class Segment(song.Song):
         self.meter = None
         self.ambitus = None
         self.pickup = None
+        self.measuresNumber = None
+        self.totalLength = None
 
         self.contour = None
         self.contour_prime = None
@@ -135,6 +137,8 @@ def makeSegment(segment_form):
     seg.time_signature = songObj.time_signature
     seg.meter = songObj.meter
     seg.pickup = score.pickup
+    seg.measuresNumber = len(score.getElementsByClass(music21.stream.Measure))
+    seg.totalLength = sum([n.duration.quarterLength for n in score.flat.notesAndRests])
 
     # analysis
     contourObj = Contour(score)
