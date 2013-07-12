@@ -205,3 +205,12 @@ def splitTupleSequence(triTupleSequence, index=1):
             if not tupleSeq[0][1] == 0:
                 bySecond.extend(groupby(tupleSeq, 1))
         return bySecond
+
+
+def composerSegments(allSegmentsObj, composer):
+    if composer == 'All Composers':
+        composerSegments = allSegmentsObj.segments
+    else:
+        composerSegments = allSegmentsObj.getByComposer(composer).segments
+
+    return composerSegments
