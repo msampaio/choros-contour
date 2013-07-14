@@ -322,7 +322,8 @@ def makeSong(filename, number_show=False, save=False, AllCollectionSongsObj=None
     song.mode = mode
 
     newSong = getSegments(filename, song, save)
-    newSong.contourPrimeSimilarity = contour.primeContourSimilarity(newSong)
+    if newSong.segments:
+        newSong.contourPrimeSimilarity = contour.primeContourSimilarity(newSong)
 
     if save:
         newSong.score = None
