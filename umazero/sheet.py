@@ -16,7 +16,7 @@ def makeQuestion(fn, AllSegmentsObj, composersSeq, percentage=False, filename='/
     composers = sorted(composersSeq)
 
     for composer in composers:
-        dic = fn(AllSegmentsObj, composer, percentage)
+        dic = fn(allSegmentsObj, composer, percentage)
         for key in dic.keys():
             keys.add(key)
         values[composer] = dic
@@ -42,7 +42,7 @@ def makeQuestion(fn, AllSegmentsObj, composersSeq, percentage=False, filename='/
             spamwriter.writerow(row)
 
 
-def runQuestions(allSegmentObj, composersSeq):
+def runQuestions(allSegmentsObj, composersSeq):
 
     fnList = [questions.allIntervals,
               questions.stepLeapArpeggio,
@@ -55,4 +55,4 @@ def runQuestions(allSegmentObj, composersSeq):
 
     for fn in fnList:
         print fn
-        makeQuestion(fn, allSegmentObj, composersSeq, False, filename='/tmp/' + fn.func_name + '.csv')
+        makeQuestion(fn, allSegmentsObj, composersSeq, False, filename='/tmp/' + fn.func_name + '.csv')

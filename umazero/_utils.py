@@ -137,8 +137,8 @@ def get_filename(collection_number, song_number, path='choros-corpus'):
             return f
 
 
-def count_segments(AllSegmentsObj, attrib):
-    return Counter((getattr(seg, attrib) for seg in AllSegmentsObj.segments))
+def count_segments(allSegmentsObj, attrib):
+    return Counter((getattr(seg, attrib) for seg in allSegmentsObj.segments))
 
 
 def dicValueInsertion(dic, key, value):
@@ -156,17 +156,17 @@ def makeDataCoordSequence(seq):
     return [[x[1] for x in newSeq], [y[0] for y in newSeq]]
 
 
-def makeAttribCoordSequence(AllSegmentsObj, attrib, topComposers):
-    def aux(AllSegmentsObj, attrib, composer):
+def makeAttribCoordSequence(allSegmentsObj, attrib, topComposers):
+    def aux(allSegmentsObj, attrib, composer):
         if composer == 'All composers':
-            counted = count_segments(AllSegmentsObj, attrib)
+            counted = count_segments(allSegmentsObj, attrib)
         else:
-            counted = count_segments(AllSegmentsObj.getByComposer(composer), attrib)
+            counted = count_segments(allSegmentsObj.getByComposer(composer), attrib)
         return [counted.values(), counted.keys()]
 
     allAndTopComposers = flatten([['All composers'], topComposers])
 
-    return [aux(AllSegmentsObj, attrib, composer) for composer in allAndTopComposers]
+    return [aux(allSegmentsObj, attrib, composer) for composer in allAndTopComposers]
 
 
 def groupby(sequence, index):

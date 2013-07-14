@@ -49,7 +49,7 @@ def appendMatrix(matrix, valuesSeq, valuesSet):
     return matrix
 
 
-def makeAttribValuesSequence(allSegmentObj, composer, attrib):
+def makeAttribValuesSequence(allSegmentsObj, composer, attrib):
     """Return a sequence of attribute values from a given composer and
     attribute.
 
@@ -59,7 +59,7 @@ def makeAttribValuesSequence(allSegmentObj, composer, attrib):
     [Duple', 'Duple', 'Triple', ... , 'Duple', 'Duple']
     """
 
-    composerSegmentsSeq = allSegmentObj.getByComposer(composer).segments
+    composerSegmentsSeq = allSegmentsObj.getByComposer(composer).segments
 
     if attrib in ('contour', 'contour_prime'):
         valuesSeq = [tuple(getattr(seg, attrib)) for seg in composerSegmentsSeq]
@@ -69,7 +69,7 @@ def makeAttribValuesSequence(allSegmentObj, composer, attrib):
     return valuesSeq
 
 
-def appendAttribMatrix(matrix, allSegmentObj, composer, attrib, valuesSet):
+def appendAttribMatrix(matrix, allSegmentsObj, composer, attrib, valuesSet):
     """Make a sequence of attribute values and append it to a given matrix
 
     # allseg is a query.AllSegments object
@@ -78,7 +78,7 @@ def appendAttribMatrix(matrix, allSegmentObj, composer, attrib, valuesSet):
     [[25.617977528089888, 74.38202247191012, 0, 0]]
     """
 
-    valuesSeq = makeAttribValuesSequence(allSegmentObj, composer, attrib)
+    valuesSeq = makeAttribValuesSequence(allSegmentsObj, composer, attrib)
 
     return appendMatrix(matrix, valuesSeq, valuesSet)
 
@@ -105,7 +105,7 @@ def makeAttribValuesMatrix(allSegmentsObj, attrib, allAndTopComposers, contourTy
     return matrix, valuesSet
 
 
-def makeDataValuesMatrix(allSegmentObj, allAndTopComposers, fn):
+def makeDataValuesMatrix(allSegmentsObj, allAndTopComposers, fn):
     """Return a matrix with data to plot in stackedBar chart, and a
     sequence with the values set.
 
@@ -124,7 +124,7 @@ def makeDataValuesMatrix(allSegmentObj, allAndTopComposers, fn):
                 row.append(0)
         return row
 
-    dicSeq = [fn(allSegmentObj, composer) for composer in allAndTopComposers]
+    dicSeq = [fn(allSegmentsObj, composer) for composer in allAndTopComposers]
 
     valuesSet = dicSeq[0].keys()
     myMatrix = []
@@ -176,10 +176,10 @@ def attribValuesMatrix(allSegmentsObj, topComposers, attrib, valuesNumber=5):
     return makeMatrix(attribMatrix, allAndTopComposers, valuesSet, valuesNumber, contourType)
 
 
-def dataValuesMatrix(allSegmentObj, allAndTopComposers, fn, valuesNumber=5, contourType=False):
+def dataValuesMatrix(allSegmentsObj, allAndTopComposers, fn, valuesNumber=5, contourType=False):
     """Return a Sequence with a Matrix of attribute values, all
     attribute values and top composers."""
 
-    fnMatrix, valuesSet = makeDataValuesMatrix(allSegmentObj, allAndTopComposers, fn)
+    fnMatrix, valuesSet = makeDataValuesMatrix(allSegmentsObj, allAndTopComposers, fn)
 
     return makeMatrix(fnMatrix, allAndTopComposers, valuesSet, valuesNumber, contourType)

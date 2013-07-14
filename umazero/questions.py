@@ -8,7 +8,7 @@ import contour
 import duration
 
 
-def allIntervals(allSegmentObj, composer, percentage=True):
+def allIntervals(allSegmentsObj, composer, percentage=True):
     """Return a Counter dictionary with percentage values of all
     intervals classification of a given composer.
 
@@ -16,7 +16,7 @@ def allIntervals(allSegmentObj, composer, percentage=True):
     {'m10': 1.2170889220069547, 'M7': 0.07451564828614009, ... , 'M10': 0.024838549428713365, 'AA1': 0.09935419771485346}
     """
 
-    composerSegments = _utils.composerSegments(allSegmentObj, composer)
+    composerSegments = _utils.composerSegments(allSegmentsObj, composer)
     counterObj = Counter()
 
     for seg in composerSegments:
@@ -29,7 +29,7 @@ def allIntervals(allSegmentObj, composer, percentage=True):
     return counterObj
 
 
-def stepLeapArpeggio(allSegmentObj, composer, percentage=True):
+def stepLeapArpeggio(allSegmentsObj, composer, percentage=True):
     """Return a Counter dictionary with percentage values of all
     steps, leaps and arpeggios classification of a given composer.
 
@@ -37,7 +37,7 @@ def stepLeapArpeggio(allSegmentObj, composer, percentage=True):
     {'Leap': 21.609538002980624, 'Repetition': 8.917039244908098, 'Step': 47.66517635370094, '3rd': 21.808246398410333}
     """
 
-    composerSegments = _utils.composerSegments(allSegmentObj, composer)
+    composerSegments = _utils.composerSegments(allSegmentsObj, composer)
     counterObj = Counter()
 
     for seg in composerSegments:
@@ -50,7 +50,7 @@ def stepLeapArpeggio(allSegmentObj, composer, percentage=True):
     return counterObj
 
 
-def consonance(allSegmentObj, composer, percentage=True):
+def consonance(allSegmentsObj, composer, percentage=True):
     """Return a Counter dictionary with percentage values consonance
     intervals classification of a given composer.
 
@@ -58,7 +58,7 @@ def consonance(allSegmentObj, composer, percentage=True):
     {False: 9.01639344262295, True: 90.98360655737704}
     """
 
-    composerSegments = _utils.composerSegments(allSegmentObj, composer)
+    composerSegments = _utils.composerSegments(allSegmentsObj, composer)
     counterObj = Counter()
 
     for seg in composerSegments:
@@ -71,14 +71,14 @@ def consonance(allSegmentObj, composer, percentage=True):
     return counterObj
 
 
-def allLeaps(allSegmentObj, composer, percentage=True):
+def allLeaps(allSegmentsObj, composer, percentage=True):
     """Return a Counter dictionary with percentage values of all leaps
     classification of a given composer.
 
     >>> allLeaps(allseg, 'Waldyr Azevedo')
     """
 
-    composerSegments = _utils.composerSegments(allSegmentObj, composer)
+    composerSegments = _utils.composerSegments(allSegmentsObj, composer)
     counterObj = Counter()
 
     for seg in composerSegments:
@@ -91,7 +91,7 @@ def allLeaps(allSegmentObj, composer, percentage=True):
     return counterObj
 
 
-def allIntervalsST(allSegmentObj, composer, percentage=True):
+def allIntervalsST(allSegmentsObj, composer, percentage=True):
     """Return a sequence with percentage values of all intervals in
     semitones classification of a given composer.
 
@@ -99,12 +99,12 @@ def allIntervalsST(allSegmentObj, composer, percentage=True):
     [8, -1, -3, 1, 3, ... , 1, 1, 4, -1, 1, 4]
     """
 
-    composerSegments = _utils.composerSegments(allSegmentObj, composer)
+    composerSegments = _utils.composerSegments(allSegmentsObj, composer)
 
     return _utils.flatten([seg.intervals_with_direction_semitones for seg in composerSegments])
 
 
-def oscillation(allSegmentObj, composer, percentage=True):
+def oscillation(allSegmentsObj, composer, percentage=True):
     """Return a sequence with percentage values of oscillation index
     classification of a given composer.
 
@@ -112,12 +112,12 @@ def oscillation(allSegmentObj, composer, percentage=True):
     [8, -1, -3, 1, 3, ... , 1, 1, 4, -1, 1, 4]
     """
 
-    composerSegments = _utils.composerSegments(allSegmentObj, composer)
+    composerSegments = _utils.composerSegments(allSegmentsObj, composer)
 
     return [seg.contour.oscillation_index() for seg in composerSegments]
 
 
-def differentPoints(allSegmentObj, composer, percentage=True):
+def differentPoints(allSegmentsObj, composer, percentage=True):
     """Return a sequence with percentage values of oscillation index
     classification of a given composer.
 
@@ -125,12 +125,12 @@ def differentPoints(allSegmentObj, composer, percentage=True):
     [8, -1, -3, 1, 3, ... , 1, 1, 4, -1, 1, 4]
     """
 
-    composerSegments = _utils.composerSegments(allSegmentObj, composer)
+    composerSegments = _utils.composerSegments(allSegmentsObj, composer)
 
     return contour.contour_different_cp(composerSegments)
 
 
-def firstMovement(allSegmentObj, composer, percentage=True):
+def firstMovement(allSegmentsObj, composer, percentage=True):
     """Return a Counter dictionary with percentage values of first
     movement classification of a given composer.
 
@@ -138,7 +138,7 @@ def firstMovement(allSegmentObj, composer, percentage=True):
     {1: 65.74074074074075, -1: 34.25925925925926}
     """
 
-    composerSegments = _utils.composerSegments(allSegmentObj, composer)
+    composerSegments = _utils.composerSegments(allSegmentsObj, composer)
     counterObj = Counter()
 
     myData = contour.first_movement(composerSegments)
@@ -149,7 +149,7 @@ def firstMovement(allSegmentObj, composer, percentage=True):
     return myData
 
 
-def lastMovement(allSegmentObj, composer, percentage=True):
+def lastMovement(allSegmentsObj, composer, percentage=True):
     """Return a Counter dictionary with percentage values of last
     movement classification of a given composer.
 
@@ -157,7 +157,7 @@ def lastMovement(allSegmentObj, composer, percentage=True):
     {1: 32.407407407407405, -1: 67.5925925925926}
     """
 
-    composerSegments = _utils.composerSegments(allSegmentObj, composer)
+    composerSegments = _utils.composerSegments(allSegmentsObj, composer)
     counterObj = Counter()
 
     myData = contour.last_movement(composerSegments)
@@ -168,9 +168,9 @@ def lastMovement(allSegmentObj, composer, percentage=True):
     return myData
 
 
-def reductionBor355(allSegmentObj, composer, percentage=True):
+def reductionBor355(allSegmentsObj, composer, percentage=True):
 
-    composerSegments = _utils.composerSegments(allSegmentObj, composer)
+    composerSegments = _utils.composerSegments(allSegmentsObj, composer)
 
     coll = []
     for seg in composerSegments:
@@ -184,8 +184,8 @@ def reductionBor355(allSegmentObj, composer, percentage=True):
     return counterObj
 
 
-def allDurations(allSegmentObj, composer, percentage=True):
-    composerSegments = _utils.composerSegments(allSegmentObj, composer)
+def allDurations(allSegmentsObj, composer, percentage=True):
+    composerSegments = _utils.composerSegments(allSegmentsObj, composer)
     counterObj = Counter()
 
     coll = []
