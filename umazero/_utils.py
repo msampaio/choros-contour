@@ -207,10 +207,5 @@ def splitTupleSequence(triTupleSequence, index=1):
         return bySecond
 
 
-def composerSegments(allSegmentsObj, composer):
-    if composer == 'All Composers':
-        composerSegments = allSegmentsObj.segments
-    else:
-        composerSegments = allSegmentsObj.getByComposer(composer).segments
 
     return composerSegments
