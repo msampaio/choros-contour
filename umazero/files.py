@@ -139,13 +139,18 @@ def formCheckerFile(formFile):
 
     def checkNumbers(n, string, sequence, errorSeq):
         eventNumbers = string.replace('p ', '').replace('l ', '').split(' ')[:2]
-        for eventNumber in eventNumbers:
-            intEventNumber = int(eventNumber)
-            if len(sequence) > 0:
-                last = sequence[-1]
-                if intEventNumber < last:
-                    errorSeq.append([n, string])
-            sequence.append(intEventNumber)
+        numbersSize = len(eventNumbers)
+        if numbersSize == 2:
+            for eventNumber in eventNumbers:
+                intEventNumber = int(eventNumber)
+                if len(sequence) > 0:
+                    last = sequence[-1]
+                    if intEventNumber < last:
+                        errorSeq.append([n, string])
+                sequence.append(intEventNumber)
+        else:
+            errorSeq.append([n, 'Error in p/l lines'])
+            sequence.append(eventNumbers)
 
     with open(formFile, 'r') as f:
         lines = f.readlines()
@@ -161,7 +166,8 @@ def formCheckerFile(formFile):
             else:
                 error.append([n, line])
 
-        checkPeriods(formFile, error)
+        if 'Error in p/l lines' not in _utils.flatten(error):
+            checkPeriods(formFile, error)
 
         if len(error) > 0:
             print 'Error in file {0}'.format(formFile)
