@@ -54,7 +54,7 @@ class AllSegments(object):
 
         return _aux_getBy([seg for seg in self.segments if seg.typeof == typeof], self.save)
 
-    def getByComposer(self, composer, exclusion=False):
+    def getByComposer(self, composer):
         """Return a new AllSegment object with all Segment objects
         with a given composer as attribute. It's possible to exclude
         the given composer, to find the complement of his segments
@@ -63,8 +63,8 @@ class AllSegments(object):
         if composer == 'All composers':
             return self
         else:
-            if exclusion:
-                return _aux_getBy([seg for seg in self.segments if composer not in seg.composers], self.save)
+            if composer[0] == '!':
+                return _aux_getBy([seg for seg in self.segments if composer[1:] not in seg.composers], self.save)
             else:
                 return _aux_getBy([seg for seg in self.segments if composer in seg.composers], self.save)
 

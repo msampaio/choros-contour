@@ -225,14 +225,9 @@ def composersData(allSegmentsObj, composerOne, composerTwo, function, percentage
 
     dic = {}
     for composer in [composerOne, composerTwo]:
-        if composer[0] == '!':
-            composer = composer[1:]
-            exclusion = True
-        else:
-            exclusion = False
         composerData = {}
-        segments = allSegmentsObj.getByComposer(composer, exclusion)
-        values = function(allSegmentsObj, composer, percentage, exclusion)
+        segments = allSegmentsObj.getByComposer(composer)
+        values = function(allSegmentsObj, composer, percentage)
         composerData['segments'] = segments
         composerData['values'] = values
         composerData['function'] = function.func_name
