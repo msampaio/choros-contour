@@ -208,4 +208,3 @@ def splitTupleSequence(triTupleSequence, index=1):
 
 
 
-    return composerSegments
