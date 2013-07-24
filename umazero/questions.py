@@ -202,10 +202,10 @@ def allDurations(allSegmentsObj, composer, percentage=True, exclusion=False):
 
 def allContourPrimeSimilarity(songsObj, composer):
 
-    if composer != 'All composers':
-        composerSongs = [songObj for songObj in songsObj if composer in songObj.composers]
-    else:
+    if composer == 'All composers':
         composerSongs = songsObj
+    else:
+        composerSongs = [songObj for songObj in songsObj if composer in songObj.composers]
 
     cPSimilarity = []
     totalLength = []
