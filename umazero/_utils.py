@@ -214,4 +214,28 @@ def splitTupleSequence(triTupleSequence, index=1):
         return bySecond
 
 
+def composersData(allSegmentsObj, composerOne, composerTwo, function, percentage=True):
+    """Return a dictionary with data processed by a given function of
+    two given composers. It's possible to use exclusion, such as all
+    composers except Pixinguinha. In this case, the composer name must
+    begin with '!', such as '!Pixinguinha'.
 
+    >>> composersData(allSegmentsObj, 'Pixinguinha', '!Pixinguinha')
+    """
+
+    dic = {}
+    for composer in [composerOne, composerTwo]:
+        if composer[0] == '!':
+            composer = composer[1:]
+            exclusion = True
+        else:
+            exclusion = False
+        composerData = {}
+        segments = allSegmentsObj.getByComposer(composer, exclusion)
+        values = function(allSegmentsObj, composer, percentage, exclusion)
+        composerData['segments'] = segments
+        composerData['values'] = values
+        composerData['function'] = function.func_name
+        dic[composer] = composerData
+
+    return dic
