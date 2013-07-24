@@ -274,6 +274,26 @@ def makeDurationsChart(out, allSegmentsObj, topComposers, AllAndTopComposers, va
     plot_print_rst(durationsDic)
 
 
+def makeFocalPointChart(out, allSegmentsObj, topComposers, AllAndTopComposers, valuesNumber=2):
+    # FocalPoint index (scatter)
+    print '. Creating focalPoint index chart...'
+
+    focalPointDic = {}
+    focalPointDic['plotFn'] = plot.multipleScatterSave
+    focalPointDic['out'] = out
+    focalPointDic['attrib'] = 'focalPoint'
+    focalPointDic['title'] = 'Focal point position'
+    focalPointDic['allSegmentsObj'] = allSegmentsObj
+    focalPointDic['topComposers'] = topComposers
+    focalPointDic['size'] = 100
+
+    focalPointDic['coordSequence'] = [_utils.makeDataCoordSequence(questions.allFocalPointProportion(allSegmentsObj, composer)) for composer in AllAndTopComposers]
+    focalPointDic['legend'] = ['Segments (%)', 'Position in segment']
+    focalPointDic['labels'] = AllAndTopComposers
+
+    plot_print_rst(focalPointDic)
+
+
 def make_duration_webpage(allSegmentsObj, topComposers):
     """Create and save data of Duration webpage. The input data is
     an AllSegments object and topComposers sequence."""
@@ -291,6 +311,7 @@ def make_duration_webpage(allSegmentsObj, topComposers):
         makeMeasuresNChart(out, allSegmentsObj, topComposers)
         makeTotalLengthChart(out, allSegmentsObj, topComposers, AllAndTopComposers)
         makeDurationsChart(out, allSegmentsObj, topComposers, AllAndTopComposers)
+        makeFocalPointChart(out, allSegmentsObj, topComposers, AllAndTopComposers)
 
 
 def makeAmbitusChart(out, allSegmentsObj, topComposers, AllAndTopComposers):

@@ -215,3 +215,9 @@ def allContourPrimeSimilarity(songsObj, composer):
         totalLength.append(sum([seg.totalLength for seg in s.segments]))
 
     return [cPSimilarity, totalLength]
+
+
+def allFocalPointProportion(allSegmentsObj, composer):
+    composerSegments = allSegmentsObj.getByComposer(composer).segments
+
+    return [duration.focalPointProportion(seg) for seg in composerSegments]

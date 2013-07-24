@@ -12,6 +12,7 @@ class Note(object):
         self.code = None
         self.duration = None
         self.octave = None
+        self.offset = None
 
     def __repr__(self):
         return u"<Note: {0}{1}>".format(self.name, self.octave)
@@ -36,6 +37,8 @@ def make_note(n):
     note.code = music21.musedata.base40.pitchToBase40(n)
     note.duration = n.duration.quarterLength
     note.octave = n.octave
+    note.offset = n.offset
+
     return note
 
 
