@@ -49,6 +49,13 @@ def subplot_base(plots_number):
     rows_columns = math.ceil(square)
     return int((rows_columns - 1) * 100 + rows_columns * 10)
 
+def permutationSize(n, r):
+    return math.factorial(n) / math.factorial(n - r)
+
+
+def combinationsSize(n, r):
+    return permutationSize(n, r) / math.factorial(r)
+
 
 def filenames_list(collection, extension='form'):
     """Returns a list of paths that have .form."""
