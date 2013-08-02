@@ -174,7 +174,10 @@ def formCheckerFile(formFile):
             for l in error:
                 print '{0}: {1}'.format(*l)
 
-def formChecker(directory='choros-corpus'):
+
+def formChecker(directory='choros-corpus', debug=False):
     allFiles = get_songs_filenames(directory, 'form')
     for f in allFiles:
+        if debug:
+            print f
         formCheckerFile(f)
