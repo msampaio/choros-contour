@@ -663,7 +663,7 @@ def loadData(onlyPhrase=True):
         allSegmentsObj = allSegmentsObj.getByTypeOf('Phrase')
     collectionsSeq = json.load(open('songs_map.json'))
     collectionsObj = songcollections.makeAllCollectionSongs(collectionsSeq)
-    topComposers = query.composersFilter(allSegmentsObj, 0.05)
+    topComposers = query.composersFilter(allSegmentsObj, 0.03)
 
     return songsObj, allSegmentsObj, collectionsSeq, collectionsObj, topComposers
 
