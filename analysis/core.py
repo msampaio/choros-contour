@@ -84,8 +84,10 @@ class Piece(object):
         return _utils.equalityComparisons(self, other, True)
 
     def __repr__(self):
-        composers = ', '.join([composer.completeName() for composer in self.composer])
-        return "<Piece: {0} ({1})>".format(self.title, composers)
+        return "<Piece: {0} ({1})>".format(self.title, self.makeComposersString())
+
+    def makeComposersString(self):
+        return ', '.join([composer.completeName() for composer in self.composer])
 
 
 class Collection(object):
@@ -97,6 +99,7 @@ class Collection(object):
         self.author = None
         self.publisher = None
         self.volume = None
+        self.code = None
 
     def __eq__(self, other):
         return _utils.equalityComparisons(self, other)
@@ -111,7 +114,7 @@ class Collection(object):
         """Return a string with the collection code."""
 
         initials = [word[0] for word in self.title.split(' ') if word[0].isupper()]
-        return ''.join(initials)
+        self.code = ''.join(initials)
     
 
 class Source(object):
@@ -187,6 +190,7 @@ def makeCollection(title, authorList, publisher, volume=None):
     collection.author = authorList
     collection.publisher = publisher
     collection.volume = volume
+    collection.makeCollectionCode()
 
     return collection
 
