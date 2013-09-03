@@ -106,6 +106,12 @@ class Collection(object):
 
     def __repr__(self):
         return "<Collection: {0}, vol.{1}>".format(self.title, self.volume)
+
+    def makeCollectionCode(self):
+        """Return a string with the collection code."""
+
+        initials = [word[0] for word in self.title.split(' ') if word[0].isupper()]
+        return ''.join(initials)
     
 
 class Source(object):
