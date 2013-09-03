@@ -52,12 +52,12 @@ class TestUtils(unittest.TestCase):
         piece = core.Piece()
         piece.title = title
         piece.subtitle = subtitle
-        piece.composer = composerObj
+        piece.composer = [composerObj]
         piece.city = cityObj
         piece.year = year
 
-        args1 = [title, composerObj, year, subtitle, cityObj]
-        args2 = ['Rosa', composerObj, year, subtitle, cityObj]
+        args1 = [title, [composerObj], year, subtitle, cityObj]
+        args2 = ['Rosa', [composerObj], year, subtitle, cityObj]
 
         self.assertEqual(core.makePiece(*args1), piece)
         self.assertNotEqual(core.makePiece(*args2), piece)

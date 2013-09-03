@@ -84,7 +84,8 @@ class Piece(object):
         return _utils.equalityComparisons(self, other, True)
 
     def __repr__(self):
-        return "<Piece: {0}, {1}>".format(self.title, self.composer.completeName())
+        composers = ', '.join([composer.completeName() for composer in self.composer])
+        return "<Piece: {0} ({1})>".format(self.title, composers)
 
 
 class Collection(object):
