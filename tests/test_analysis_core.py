@@ -74,6 +74,7 @@ class TestUtils(unittest.TestCase):
         collection.author = authorList
         collection.publisher = publisher
         collection.volume = volume
+        collection.makeCollectionCode()
         
         self.assertEqual(core.makeCollection(title, authorList, publisher, volume), collection) 
         self.assertNotEqual(core.makeCollection(title, authorList, publisher, "2"), collection)
