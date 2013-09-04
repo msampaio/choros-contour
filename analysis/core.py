@@ -29,8 +29,6 @@ class Composer(object):
     def __init__(self):
 
         self.name = None
-        self.prename = None
-        self.nickname = None
         self.gender = None
         self.bornCity = None
         self.bornYear = None
@@ -51,9 +49,6 @@ class Composer(object):
             bornCity = None
 
         return "<Composer: {0}, {1}, {2}--{3}>".format(self.name, bornCity, self.bornYear, self.deathYear)
-
-    def completeName(self):
-        return ' '.join([self.prename, self.name])
 
 
 class Piece(object):
@@ -137,13 +132,12 @@ def makeCity(name, province):
     return city
 
 
-def makeComposer(completeName, nickname=None, gender='M', bornCityObj=None, bornYear=None, deathCityObj=None, deathYear=None, mainInstrument=None):
+def makeComposer(name, gender='M', bornCityObj=None, bornYear=None, deathCityObj=None, deathYear=None, mainInstrument=None):
     """Return a Composer object with the given attributes. The year
     must be an integer."""
 
     composer = Composer()
-    composer.prename, composer.name = _utils.nameParser(completeName)
-    composer.nickname = nickname
+    composer.name = name
     composer.gender = gender
     composer.bornCity = bornCityObj
     composer.deathCity = deathCityObj

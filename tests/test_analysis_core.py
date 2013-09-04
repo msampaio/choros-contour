@@ -17,8 +17,7 @@ class TestUtils(unittest.TestCase):
         self.assertNotEqual(core.makeCity('Juazeiro', province), city)
 
     def test_makeComposer(self):
-        completeName = 'Alfredo da Rocha Viana Jr.'
-        nickname = 'Pixinguinha'
+        name = 'Pixinguinha'
         gender = 'M'
         bornCityObj = core.makeCity('Rio de Janeiro', 'Rio de Janeiro')
         bornYear = 1897
@@ -27,8 +26,7 @@ class TestUtils(unittest.TestCase):
         mainInstrument = 'Flute'
 
         composer = core.Composer()
-        composer.prename, composer.name = _utils.nameParser(completeName)
-        composer.nickname = nickname
+        composer.name = name
         composer.gender = gender
         composer.bornCity = bornCityObj
         composer.bornYear = bornYear
@@ -36,8 +34,8 @@ class TestUtils(unittest.TestCase):
         composer.deathYear = deathYear
         composer.mainInstrument = mainInstrument
         
-        args1 = [completeName, nickname, gender, bornCityObj, bornYear, deathCityObj, deathYear, mainInstrument]
-        args2 = [completeName, nickname, 'F', bornCityObj, bornYear, deathCityObj, deathYear, mainInstrument]
+        args1 = [name, gender, bornCityObj, bornYear, deathCityObj, deathYear, mainInstrument]
+        args2 = [name, 'F', bornCityObj, bornYear, deathCityObj, deathYear, mainInstrument]
 
         self.assertEqual(core.makeComposer(*args1), composer)
         self.assertNotEqual(core.makeComposer(*args2), composer)
@@ -45,7 +43,7 @@ class TestUtils(unittest.TestCase):
 
     def test_makePiece(self):
         cityObj = core.makeCity('Rio de Janeiro', 'Rio de Janeiro')
-        composerObj = core.makeComposer('Alfredo da Rocha Viana Jr.', 'Pixinguinha')
+        composerObj = core.makeComposer('Pixinguinha')
         title = 'Lamentos'
         subtitle = None
         year = 1928
@@ -81,7 +79,7 @@ class TestUtils(unittest.TestCase):
         self.assertNotEqual(core.makeCollection(title, authorList, publisher, "2"), collection)
 
     def test_makeSource(self):
-        composerObj = core.makeComposer('Alfredo da Rocha Viana Jr.', 'Pixinguinha')
+        composerObj = core.makeComposer('Pixinguinha')
         collectionObj = core.makeCollection('O melhor do Choro Brasileiro', None, 'Irmãos Vitale', "1")
         pieceObj = core.makePiece('Lamentos', composerObj, 1928)
         filenameOne = '/Users/marcos/Downloads/TOMCB1_34E.xml'
