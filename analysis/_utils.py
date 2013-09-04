@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import os
+import csv
+import json
 
 
 def dateParser(dateString):
@@ -43,3 +46,21 @@ def equalityComparisons(objectOne, objectTwo, inequality=False):
             return not all(comparisons)
         else:
             return all(comparisons)
+
+
+def csvToJson(filename):
+    dirname = os.path.dirname(filename)
+    basename = os.path.basename(filename)
+    baseprename = os.path.splitext(basename)[0]
+    jsonname = os.path.join(dirname, baseprename + '.json')
+
+    with open(filename, 'r') as csvfile:
+        fieldnames = csvfile.readline().strip('\n').split(';')[:-1]
+        reader = csv.DictReader(csvfile, fieldnames = tuple(fieldnames), delimiter=';')
+        out = []
+        for row in reader:
+            del row[None]
+            out.append(row)
+
+    with open(jsonname, 'w') as jsonfile:
+        jsonfile.write(json.dumps(out, indent=4))
