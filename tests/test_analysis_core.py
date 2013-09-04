@@ -3,6 +3,7 @@
 import unittest
 import analysis.core as core
 import analysis._utils as _utils
+import analysis.idcode as idcode
 
 
 class TestUtils(unittest.TestCase):
@@ -83,15 +84,17 @@ class TestUtils(unittest.TestCase):
         composerObj = core.makeComposer('Alfredo da Rocha Viana Jr.', 'Pixinguinha')
         collectionObj = core.makeCollection('O melhor do Choro Brasileiro', None, 'Irmãos Vitale', "1")
         pieceObj = core.makePiece('Lamentos', composerObj, 1928)
-        idCode = 'TMCB1_34E'
+        filenameOne = '/Users/marcos/Downloads/TOMCB1_34E.xml'
+        filenameTwo = '/Users/marcos/Downloads/FOMCB1_34.xml'
 
         source = core.Source()
         source.piece = pieceObj
         source.collection = collectionObj
-        source.idCode = idCode
+        source.filename = filenameOne
+        source.idCode = idcode.getIdCodeByFilename(filenameOne)
         
-        self.assertEqual(core.makeSource(pieceObj, collectionObj, idCode), source)
-        self.assertNotEqual(core.makeSource(pieceObj, collectionObj, 'FMCB1_34'), source)
+        self.assertEqual(core.makeSource(pieceObj, collectionObj, filenameOne), source)
+        self.assertNotEqual(core.makeSource(pieceObj, collectionObj, filenameTwo), source)
 
 if __name__ == '__main__':
     unittest.main()

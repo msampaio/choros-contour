@@ -115,6 +115,7 @@ class Source(object):
         self.piece = None
         self.collection = None
         self.idCode = None
+        self.filename = None
 
     def __eq__(self, other):
         return _utils.equalityComparisons(self, other)
@@ -182,17 +183,14 @@ def makeCollection(title, authorList, publisher, volume=None):
     return collection
 
 
-def makeSource(pieceObj, collectionObj, idCode):
+def makeSource(pieceObj, collectionObj, filename):
     """Return a Source object with the given attributes."""
 
     source = Source()
-    
+
     source.piece = pieceObj
     source.collection = collectionObj
-    source.idCode = idCode
-        
-    try:
-        idcode.idCodeParser(idCode)
-        return source
-    except idcode.IdCodeError('Error'):
-        print 'IdCode Error'
+    source.filename = filename
+    source.idCode = idcode.getIdCodeByFilename(filename)
+
+    return source

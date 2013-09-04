@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import _utils
 
 class IdCodeError(Exception):
@@ -125,3 +126,10 @@ def idCodeParser(idCode):
         return idCodeObj
     except IdCodeError('Error'):
         print 'IdCode Error'
+
+
+def getIdCodeByFilename(filename):
+    """Return the idCode object from a given filename."""
+
+    idCode = os.path.splitext(os.path.basename(filename))[0]
+    return idCodeParser(idCode)
