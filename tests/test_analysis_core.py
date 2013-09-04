@@ -20,9 +20,9 @@ class TestUtils(unittest.TestCase):
         nickname = 'Pixinguinha'
         gender = 'M'
         bornCityObj = core.makeCity('Rio de Janeiro', 'Rio de Janeiro')
-        bornDate = '18970423'
+        bornYear = 1897
         deathCityObj = core.makeCity('Rio de Janeiro', 'Rio de Janeiro')
-        deathDate = '19730207'
+        deathYear = 1973
         mainInstrument = 'Flute'
 
         composer = core.Composer()
@@ -30,13 +30,13 @@ class TestUtils(unittest.TestCase):
         composer.nickname = nickname
         composer.gender = gender
         composer.bornCity = bornCityObj
-        composer.bornDate = _utils.dateParser(bornDate)
+        composer.bornYear = bornYear
         composer.deathCity = deathCityObj
-        composer.deathDate = _utils.dateParser(deathDate)
+        composer.deathYear = deathYear
         composer.mainInstrument = mainInstrument
         
-        args1 = [completeName, nickname, gender, bornCityObj, bornDate, deathCityObj, deathDate, mainInstrument]
-        args2 = [completeName, nickname, 'F', bornCityObj, bornDate, deathCityObj, deathDate, mainInstrument]
+        args1 = [completeName, nickname, gender, bornCityObj, bornYear, deathCityObj, deathYear, mainInstrument]
+        args2 = [completeName, nickname, 'F', bornCityObj, bornYear, deathCityObj, deathYear, mainInstrument]
 
         self.assertEqual(core.makeComposer(*args1), composer)
         self.assertNotEqual(core.makeComposer(*args2), composer)

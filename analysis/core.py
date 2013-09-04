@@ -33,9 +33,9 @@ class Composer(object):
         self.nickname = None
         self.gender = None
         self.bornCity = None
-        self.bornDate = None
+        self.bornYear = None
         self.deathCity = None
-        self.deathDate = None
+        self.deathYear = None
         self.mainInstrument = None
 
     def __eq__(self, other):
@@ -45,22 +45,12 @@ class Composer(object):
         return _utils.equalityComparisons(self, other, True)
 
     def __repr__(self):
-        if self.bornDate:
-            bornDate = self.bornDate.year
-        else:
-            bornDate = None
-
-        if self.deathDate:
-            deathDate = self.deathDate.year
-        else:
-            deathDate = None
-
         if self.bornCity:
             bornCity = self.bornCity.province
         else:
             bornCity = None
 
-        return "<Composer: {0}, {1}, {2}--{3}>".format(self.name, bornCity, bornDate, deathDate)
+        return "<Composer: {0}, {1}, {2}--{3}>".format(self.name, bornCity, self.bornYear, self.deathYear)
 
     def completeName(self):
         return ' '.join([self.prename, self.name])
@@ -75,7 +65,7 @@ class Piece(object):
         self.subtitle = None
         self.composer = None
         self.city = None
-        self.date = None
+        self.year = None
 
     def __eq__(self, other):
         return _utils.equalityComparisons(self, other)
@@ -146,9 +136,9 @@ def makeCity(name, province):
     return city
 
 
-def makeComposer(completeName, nickname=None, gender='M', bornCityObj=None, bornDate=None, deathCityObj=None, deathDate=None, mainInstrument=None):
-    """Return a Composer object with the given attributes. The dates
-    must be in a string with the format YYYYMMDD."""
+def makeComposer(completeName, nickname=None, gender='M', bornCityObj=None, bornYear=None, deathCityObj=None, deathYear=None, mainInstrument=None):
+    """Return a Composer object with the given attributes. The year
+    must be an integer."""
 
     composer = Composer()
     composer.prename, composer.name = _utils.nameParser(completeName)
@@ -157,11 +147,8 @@ def makeComposer(completeName, nickname=None, gender='M', bornCityObj=None, born
     composer.bornCity = bornCityObj
     composer.deathCity = deathCityObj
     composer.mainInstrument = mainInstrument
-
-    if bornDate:
-        composer.bornDate = _utils.dateParser(bornDate)
-    if deathDate:
-        composer.deathDate = _utils.dateParser(deathDate)
+    composer.bornYear = bornYear
+    composer.deathYear = deathYear
 
     return composer
 
