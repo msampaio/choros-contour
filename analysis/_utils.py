@@ -3,6 +3,7 @@
 
 import datetime
 import os
+import unicodedata
 import csv
 import json
 
@@ -64,3 +65,13 @@ def csvToJson(filename):
 
     with open(jsonname, 'w') as jsonfile:
         jsonfile.write(json.dumps(out, indent=4))
+
+
+def unicodeNormalize(string):
+    """Return a normalized string. It's useful to process filenames
+    with special characters."""
+
+    new_string = unicodedata.normalize('NFKD', unicode(string)).encode('ascii', 'ignore')
+    return new_string.replace(',', '').replace('?', '').replace('(', '').replace(')', '').replace(' ', '_')
+
+
