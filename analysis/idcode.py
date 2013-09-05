@@ -104,6 +104,7 @@ def idCodeParser(idCode):
     else:
         idCodeObj.pieceTitle = None
 
+    # FIXME: test if '_' exists
     pre, post = splitted[0].split('_')
     idCodeObj.type = pre[0]
 

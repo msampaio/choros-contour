@@ -10,11 +10,15 @@ import parse
 
 class City(object):
     """Class for City objects."""
-    
+
     def __init__(self):
 
         self.name = None
         self.province = None
+
+    @declared_attr
+    def __tablename__(cls):
+        return cls.__name__.lower()
 
     def __eq__(self, other):
         return _utils.equalityComparisons(self, other)
@@ -60,7 +64,6 @@ class Piece(object):
     def __init__(self):
 
         self.title = None
-        self.subtitle = None
         self.composer = None
         self.city = None
         self.year = None
@@ -75,7 +78,7 @@ class Piece(object):
         return "<Piece: {0} ({1})>".format(self.title, self.makeComposersString())
 
     def makeComposersString(self):
-        return ', '.join([composer.completeName() for composer in self.composer])
+        return ', '.join([composer.name for composer in self.composer])
 
 
 class Collection(object):
