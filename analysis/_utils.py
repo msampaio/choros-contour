@@ -49,6 +49,11 @@ def equalityComparisons(objectOne, objectTwo, inequality=False):
             return all(comparisons)
 
 
+def changeSuffix(filename, suffix):
+    basename = os.path.splitext(filename)[0]
+    return '.'.join([basename, suffix])
+
+
 def csvToJson(filename):
     dirname = os.path.dirname(filename)
     basename = os.path.basename(filename)
