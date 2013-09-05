@@ -112,6 +112,7 @@ class Source(object):
         self.collection = None
         self.idCode = None
         self.filename = None
+        self.formSeq = None
         self.score = None
 
     def __eq__(self, other):
@@ -185,14 +186,17 @@ def makeCollection(title, authorList, publisher, volume=None):
     return collection
 
 
-def makeSource(pieceObj, collectionObj, filename):
+def makeSource(pieceObj, collectionObj, filename=None):
     """Return a Source object with the given attributes."""
 
     source = Source()
 
     source.piece = pieceObj
     source.collection = collectionObj
-    source.filename = filename
-    source.idCode = idcode.getIdCodeByFilename(filename)
+    if filename:
+        source.filename = filename
+        source.idCode = idcode.getIdCodeByFilename(filename)
+        source.score = parse.sourceParse(filename)
+        source.formSeq = parse.formParse(filename)
 
     return source
