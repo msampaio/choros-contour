@@ -1,8 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import music21
 import _utils
+import copy
 
 
 def sourceParse(filename):
@@ -45,3 +43,23 @@ def formParse(filename):
             form.append(segment_form)
 
     return form
+
+
+def scoreEventsEnumerator(score, showNumbers=True):
+    """Return a Music21 score stream with all notes and rests numbered
+    in order. Each event (note and rest) receives a eventNumber
+    attribute."""
+
+    newScore = copy.deepcopy(score)
+    part = newScore.getElementsByClass('Part')[0]
+    measures = part.getElementsByClass('Measure')
+    eventCounter = 0
+    for measure in measures:
+        events = measure.notesAndRests
+        for event in events:
+            event.eventNumber = eventCounter
+            if showNumbers:
+                event.lyric = eventCounter
+            eventCounter += 1
+
+    return newScore

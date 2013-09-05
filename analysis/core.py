@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
 import copy
 import music21
 import _utils
@@ -253,6 +254,18 @@ class Source(object):
 
         return newScore
 
+    def xmlWrite(self, path=None, suffix='numbered'):
+        """Save a score object in a xml file."""
+
+        if not self.score:
+            self.makeScore()
+        dirname = os.path.dirname(self.filename)
+        basename = os.path.basename(self.filename).split('.')[0] + ' - {0}.xml'.format(suffix)
+        if path:
+            dirname = path
+        dest = os.path.join(dirname, basename)
+        print "Writing xml file in {0}".format(dest)
+        parse.scoreEventsEnumerator(self.score).write('musicxml', dest)
 
 def makeCity(name, province):
     """Return a City object with the given attributes."""
