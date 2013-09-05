@@ -3,6 +3,7 @@
 
 import _utils
 import idcode
+import parse
 
 
 class City(object):
@@ -111,6 +112,7 @@ class Source(object):
         self.collection = None
         self.idCode = None
         self.filename = None
+        self.score = None
 
     def __eq__(self, other):
         return _utils.equalityComparisons(self, other)
@@ -120,6 +122,12 @@ class Source(object):
 
     def __repr__(self):
         return "<Source: {0}, {1}>".format(self.piece.title, self.idCode.idCode)
+
+    def makeScore(self):
+        """Create a Music21 stream object in score attribute."""
+
+        if not self.score:
+            self.score = parse.sourceParse(self.filename)
 
 
 def makeCity(name, province):
