@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import copy
+import music21
 import _utils
 import idcode
 import parse
@@ -129,6 +131,124 @@ class Source(object):
 
         if not self.score:
             self.score = parse.sourceParse(self.filename)
+
+    def getExcerpt(self, initial, final, showNumbers=False):
+        """Return a score (music21.stream.Stream) object with a
+        portion of the Song. The portion includes all numbered music
+        events between initial and final values."""
+
+        def getParameters(measures):
+            """Return a dictionary with clef, key and time parameters of
+            the given measures."""
+
+            m1 = measures[0]
+            # song data
+            params = {}
+            params['clef'] = m1.getElementsByClass('Clef')[0]
+            params['key_signature'] = m1.getElementsByClass('KeySignature')[0]
+            params['time_signature'] = m1.getElementsByClass('TimeSignature')[0]
+            return params
+
+        def makeMeasure(measure, params, keepList, firstMeasureTest):
+            """Returns a music21.stream.Measure object from a given
+            measure and list of numbers of the events that will be
+            kept in the new object."""
+
+            events = [event for event in measure.notesAndRests if event.eventNumber in keepList]
+            newMeasure = music21.stream.Measure()
+
+            # padding value for small length measures. Pickup measures or not
+            eventsLength = sum((event.quarterLength for event in events))
+            measureLength = params['time_signature'].totalLength
+            pad = measureLength - eventsLength
+
+            # tests if measure has pickup
+            if measure.notesAndRests[0] != events[0]:
+                newMeasure.pickup = True
+                if pad != 0:
+                    newMeasure.paddingLeft = pad
+            else:
+                newMeasure.pickup = None
+
+            # insert params only in segment's first measure
+            if firstMeasureTest:
+                for values in params.values():
+                    newMeasure.append(values)
+
+            for event in events:
+                newMeasure.append(event)
+
+            # complete last measure with pad
+            if pad != 0 and not newMeasure.pickup:
+                newMeasure.paddingRight = pad
+
+            return newMeasure
+
+        def enumerateEvents(part):
+            """Save 'eventNumber' and 'lyric' in note/rest events, and
+            'events' with event numbers in measures."""
+
+            eventCounter = 0
+            for measure in part:
+                if type(measure) == music21.stream.Measure:
+                    measureEventNumbers = []
+                    for event in measure:
+                        if type(event) in (music21.note.Note, music21.note.Rest):
+                            eventCounter += 1
+                            event.eventNumber = eventCounter
+                            # show enumeration as lyrics
+                            if showNumbers:
+                                event.lyric = eventCounter
+                            measureEventNumbers.append(eventCounter)
+                    measure.events = measureEventNumbers
+
+        def makeNewScore(measures, params, keepList, measureNumber, newMeasureNumberCounter):
+            """Make a new score with events given in keepList. Return
+            counters."""
+
+            for measure in measures:
+                if any([(ev in keepList) for ev in measure.events]):
+                    newMeasureNumberCounter += 1
+                    if newMeasureNumberCounter == 1:
+                        firstMeasureTest = True
+                    else:
+                        firstMeasureTest = False
+                    newMeasure = makeMeasure(measure, params, keepList, firstMeasureTest)
+                    if newMeasure.pickup:
+                        newScore.pickup = True
+                        newMeasure.pickup = None
+                        newMeasure.number = 0
+                        measureNumberCounter = 0
+                    else:
+                        newMeasure.number = measureNumberCounter
+                    measureNumberCounter += 1
+                    newScore.append(newMeasure)
+            return measureNumberCounter, newMeasureNumberCounter
+
+        keepList = range(initial, final + 1)
+
+        part = copy.deepcopy(self.score).getElementsByClass('Part')[0]
+        measures = part.getElementsByClass('Measure')
+        params = getParameters(measures)
+
+        # create score
+        newScore = music21.stream.Stream()
+        newScore.initial = initial
+        newScore.final = final
+        newScore.pickup = False
+
+        # FIXME: retrieve from musicological file
+        # newScore.metadata.title = self.title
+        # newScore.metadata.composer = self.composersString
+        # newScore.insert(music21.metadata.Metadata())
+
+        measureNumberCounter = 1
+        newMeasureNumberCounter = 0
+
+        enumerateEvents(part)
+        measureNumberCounter, newMeasureNumberCounter = makeNewScore(measures, params, keepList, measureNumberCounter, newMeasureNumberCounter)
+
+        return newScore
 
 
 def makeCity(name, province):
