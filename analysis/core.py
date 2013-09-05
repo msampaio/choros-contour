@@ -119,7 +119,7 @@ class Source(object):
         return _utils.equalityComparisons(self, other, True)
 
     def __repr__(self):
-        return "<Source: {0}, {1}>".format(self.piece.title, self.idCode)
+        return "<Source: {0}, {1}>".format(self.piece.title, self.idCode.idCode)
 
 
 def makeCity(name, province):
