@@ -55,10 +55,7 @@ def changeSuffix(filename, suffix):
 
 
 def csvToJson(filename):
-    dirname = os.path.dirname(filename)
-    basename = os.path.basename(filename)
-    baseprename = os.path.splitext(basename)[0]
-    jsonname = os.path.join(dirname, baseprename + '.json')
+    jsonname = changeSuffix(filename, 'json')
 
     with open(filename, 'r') as csvfile:
         fieldnames = csvfile.readline().strip('\n').split(';')[:-1]
