@@ -17,10 +17,6 @@ class City(object):
         self.name = None
         self.province = None
 
-    @declared_attr
-    def __tablename__(cls):
-        return cls.__name__.lower()
-
     def __eq__(self, other):
         return _utils.equalityComparisons(self, other)
 
