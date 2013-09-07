@@ -321,7 +321,7 @@ def makeCollection(title, authorList, publisher, volume=None):
     return collection
 
 
-def makeSource(pieceObj, collectionObj, filename=None):
+def makeSource(pieceObj, collectionObj, filename=None, score=False):
     """Return a Source object with the given attributes."""
 
     source = Source()
@@ -331,7 +331,8 @@ def makeSource(pieceObj, collectionObj, filename=None):
     if filename:
         source.filename = filename
         source.idCode = idcode.getIdCodeByFilename(filename)
-        source.score = parse.sourceParse(filename)
+        if score:
+            source.score = parse.sourceParse(filename)
         source.formSeq = parse.formParse(filename)
 
     return source
