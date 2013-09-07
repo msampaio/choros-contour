@@ -128,7 +128,11 @@ class Source(object):
         return _utils.equalityComparisons(self, other, True)
 
     def __repr__(self):
-        return "<Source: {0}, {1}>".format(self.piece.title, self.idCode.idCode)
+        if self.idCode:
+            idCode = self.idCode.idCode
+        else:
+            idCode = None
+        return "<Source: {0}, {1}>".format(self.piece.title, idCode)
 
     def makeScore(self):
         """Create a Music21 stream object in score attribute."""
@@ -293,7 +297,7 @@ def makeComposer(name, gender='M', bornCityObj=None, bornYear=None, deathCityObj
     return composer
 
 
-def makePiece(title, composer, year=None, subtitle=None, city=None):
+def makePiece(title, composer, year=None, city=None):
     """Return a Piece object with the given attributes. The year must
     be an integer such as 1977."""
 
@@ -301,7 +305,6 @@ def makePiece(title, composer, year=None, subtitle=None, city=None):
 
     piece.title = title
     piece.year = year
-    piece.subtitle = subtitle
     piece.composer = composer
     piece.city = city
 
