@@ -77,7 +77,7 @@ def idCodeMaker(documentType, collectionCode, pieceNumber, expansion=False, coll
     idCodeObj.collectionVolume = collectionVolume
     idCodeObj.pieceNumber = pieceNumber
     idCodeObj.expansion = expansion
-    idCodeObj.pieceTitle = pieceTitle
+    idCodeObj.pieceTitle = pieceTitle.replace(' ', '_')
     idCodeObj.makeStringCode()
 
     return idCodeObj

@@ -7,3 +7,5 @@ from core import makeComposer
 from core import makePiece
 from core import makeCollection
 from core import makeSource
+
+from retrieval import getMusicologicalInfo
