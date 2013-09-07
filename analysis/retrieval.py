@@ -77,7 +77,7 @@ def getCoreObjFromJson(jsonFile, objClass):
     return [getSingleCoreObjFromJson(row, objClass) for row in jsonSeq]
 
 
-def getMusicologicalInfo(jsonDir='tmp'):
+def getMusicologicalInfo(jsonDir='json'):
 
     def pieceAux(pieceDic, composersSeq):
         composerNames = pieceDic['piece.composer']
