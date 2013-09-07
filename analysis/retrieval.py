@@ -31,7 +31,6 @@ def csvSourcesProcess(filename):
         collectionVolume = row['collection.volume']
         pieceNumber = row['idcode.pieceNumber']
         pieceTitle = row['piece.title']
-        newSeq.append(row)
         idCodeObj = idcode.idCodeMaker('T', collectionCode, pieceNumber, True, collectionVolume, _utils.unicodeNormalize(pieceTitle))
         row['idcode'] = idCodeObj.idCode
         newSeq.append(row)
