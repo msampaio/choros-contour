@@ -9,3 +9,5 @@ from core import makeCollection
 from core import makeSource
 
 from retrieval import getMusicologicalInfo
+from retrieval import saveAll
+from retrieval import loadAll

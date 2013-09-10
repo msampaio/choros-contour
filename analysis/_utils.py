@@ -77,3 +77,8 @@ def unicodeNormalize(string):
     return new_string.replace(',', '').replace('?', '').replace('(', '').replace(')', '').replace(' ', '_')
 
 
+def mkdir(path):
+    """Make a path of a given path, if it doesn't exist."""
+
+    if not os.path.exists(path):
+        os.mkdir(path)

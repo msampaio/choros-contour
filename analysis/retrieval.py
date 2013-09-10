@@ -7,6 +7,7 @@ import json
 import idcode
 import _utils
 import copy
+import pickle
 
 
 def csvSourcesProcess(filename):
@@ -116,3 +117,35 @@ def getMusicologicalInfo(jsonDir='json'):
     sources = [sourceAux(sourceDic, collections, composers, pieces) for sourceDic in sourcesSeq]
 
     return composers, collections, pieces, sources
+
+
+def savePickle(data, filename):
+    """Save the given data in the filename."""
+
+    _utils.mkdir("data")
+    with open(os.path.join("data", filename), 'w') as fileobj:
+        pickle.dump(data, fileobj)
+
+
+def loadPickle(filename):
+    """Load pickle file."""
+
+    with open(os.path.join("data", filename)) as fileobj:
+        return pickle.load(fileobj)
+
+
+def saveAll():
+    """Save composer, collection, piece and source objects in pickle
+    files."""
+
+    for seq in getMusicologicalInfo():
+        className = type(seq[0]).__name__
+        savePickle(seq, className)
+
+
+def loadAll():
+    """Load composer, collection, piece and source objects lists from
+    the pickle files saved in data directory."""
+
+    classes = ['Composer', 'Collection', 'Piece', 'Source']
+    return [loadPickle(f) for f in classes]
