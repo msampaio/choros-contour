@@ -101,7 +101,7 @@ def getMusicologicalInfo(jsonDir='json'):
         source.piece = piece
         source.collection = collection
         source.idCode = idCode
-        source.filename = os.path.join('corpus', '.'.join([idCode.idCode, 'xml']))
+        source.filename = os.path.join('choros-corpus/corpus', '.'.join([idCode.idCode, 'xml']))
         source.formSeq = None
         source.score = None
 
