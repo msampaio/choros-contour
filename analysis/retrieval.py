@@ -8,6 +8,7 @@ import idcode
 import _utils
 import copy
 import pickle
+import parse
 
 
 def csvSourcesProcess(filename):
@@ -103,7 +104,10 @@ def getMusicologicalInfo(jsonDir='json'):
         source.collection = collection
         source.idCode = idCode
         source.filename = os.path.join('choros-corpus/corpus', '.'.join([idCode.idCode, 'xml']))
+        formSeqFile = _utils.changeSuffix(source.filename, 'form', True)
         source.formSeq = None
+        if os.path.exists(formSeqFile):
+            source.formSeq = parse.formParse(source.filename)
         source.score = None
 
         return source

@@ -12,7 +12,7 @@ def formParse(filename):
     parsed. The argument is the name of xml file, but the function
     parses the .form file in the same directory of the xml one."""
 
-    formName = _utils.changeSuffix(filename, 'form')
+    formName = _utils.changeSuffix(filename, 'form', True)
 
     with open(formName, 'r') as f:
         lines = f.readlines()

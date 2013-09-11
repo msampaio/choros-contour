@@ -48,11 +48,10 @@ def makeSegment(sourceObj):
 
     if not sourceObj.score:
         sourceObj.makeScore()
-    formFile = _utils.changeSuffix(sourceObj.filename, 'form', True)
-    formDic = parse.formParse(formFile)
 
     segments = []
-    for dic in formDic:
+
+    for dic in sourceObj.formSeq:
         typeof = dic['typeof']
         if typeof == 'Phrase':
             orderNumber = dic['number']
