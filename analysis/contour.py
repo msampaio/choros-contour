@@ -23,3 +23,17 @@ def sampaio(cseg):
     r = cseg.retrogression()
     ri = i.retrogression()
     return Contour(sorted([list(cseg), list(i), list(r), list(ri)])[0])
+
+
+def removeDuplicate(csegSeq, sortR=True):
+    """Remove all the csegs in the given cseg sequence. Optionally
+    returns a sorted result."""
+
+    result = set()
+    for cseg in csegSeq:
+        result.add(tuple(cseg.items))
+    result = list(result)
+    if sortR:
+        result = sorted(result)
+
+    return [Contour(tup) for tup in result]
