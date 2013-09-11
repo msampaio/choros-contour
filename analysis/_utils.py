@@ -110,3 +110,13 @@ def organizeAndSort(seq):
     """Return a given seq sorted and without element duplication."""
 
     return sorted(list(set(seq)))
+
+
+def saveCsvFile(data, csvFilename):
+    """Save a given data in a given csv filename."""
+
+    with open(csvFilename, 'wb') as f:
+        spamwriter = csv.writer(f, delimiter=';',
+                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for row in data:
+            spamwriter.writerow(row)
