@@ -161,9 +161,11 @@ def saveAll(partial=False):
     if not partial:
         savePickle(getSegmentsInfo(loadPickle('Source')), 'Segment')
 
-def loadAll():
+def loadAll(segments=False):
     """Load composer, collection, piece and source objects lists from
     the pickle files saved in data directory."""
 
     classes = ['Composer', 'Collection', 'Piece', 'Source']
+    if segments:
+        classes.append('Segment')
     return [loadPickle(f) for f in classes]
