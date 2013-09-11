@@ -49,8 +49,14 @@ def equalityComparisons(objectOne, objectTwo, inequality=False):
             return all(comparisons)
 
 
-def changeSuffix(filename, suffix):
+def changeSuffix(filename, suffix, xmlToForm=False):
     basename = os.path.splitext(filename)[0]
+    if xmlToForm:
+        dn = os.path.dirname(basename)
+        bn = os.path.basename(basename)
+        newBn = list(bn)
+        newBn[0] = 'A'
+        basename = os.path.join(dn, ''.join(newBn))
     return '.'.join([basename, suffix])
 
 

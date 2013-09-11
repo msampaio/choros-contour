@@ -3,6 +3,7 @@
 
 import _utils
 import idcode
+import parse
 
 
 class Segment():
@@ -40,3 +41,35 @@ class Segment():
         title = self.source.piece.title
         composer = self.source.piece.makeComposersString()
         return "<Segment {0}: {1} ({2})>".format(self.orderNumber, title, composer)
+
+
+def makeSegment(sourceObj):
+    """Return a segment object from a given idCode string."""
+
+    if not sourceObj.score:
+        sourceObj.makeScore()
+    formFile = _utils.changeSuffix(sourceObj.filename, 'form', True)
+    formDic = parse.formParse(formFile)
+
+    segments = []
+    for dic in formDic:
+        typeof = dic['typeof']
+        if typeof == 'Phrase':
+            orderNumber = dic['number']
+            initial = dic['initial']
+            final = dic['final']
+
+            seg = Segment()
+            seg.source = sourceObj
+            seg.orderNumber = orderNumber
+            seg.typeof = typeof
+            seg.initial = initial
+            seg.final = final
+
+            print '. Making segment {0}'.format(seg)
+            seg.score = sourceObj.getExcerpt(initial, final)
+
+            # FIXME: insert music21 info
+            segments.append(seg)
+
+    return segments
