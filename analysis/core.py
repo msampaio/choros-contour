@@ -29,7 +29,7 @@ class City(object):
 
 class Composer(object):
     """Class for Composer objects."""
-    
+
     def __init__(self):
 
         self.name = None
@@ -103,7 +103,7 @@ class Collection(object):
 
         initials = [word[0] for word in self.title.split(' ') if word[0].isupper()]
         self.code = ''.join(initials)
-    
+
 
 class Source(object):
     """Class for Source objects."""
@@ -312,7 +312,7 @@ def makeCollection(title, authorList, publisher, volume=None):
     """Return a Collection object with the given attributes."""
 
     collection = Collection()
-    
+
     collection.title = title
     collection.author = authorList
     collection.publisher = publisher
