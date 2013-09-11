@@ -457,3 +457,51 @@ def makeSegments(segmentsObjList):
     segments.lastIntervals = _utils.organizeAndSort([obj.lastInterval for obj in segments.objects if obj.lastInterval])
 
     return segments
+
+
+def makeMatrixComposerName(segmentsObj, fn):
+    matrix = []
+    for composer in segmentsObj.composers.composers:
+        seg = segmentsObj.getByComposerName(composer)
+        matrix.append((composer, getattr(seg, fn)()))
+    return matrix
+
+
+def makeMatrixComposerInstrument(segmentsObj, fn):
+    matrix = []
+    for instrument in segmentsObj.composers.mainInstruments:
+        seg = segmentsObj.getByComposerName(composer)
+        matrix.append((instrument, getattr(seg, fn)()))
+    return matrix
+
+
+def makeMatrixComposerBornYear(segmentsObj, fn):
+    matrix = []
+    for bornYear in segmentsObj.composers.bornYears:
+        seg = segmentsObj.getByComposerBornYear(bornYear)
+        matrix.append((bornYear, getattr(seg, fn)()))
+    return matrix
+
+
+def makeMatrixComposerBornCity(segmentsObj, fn):
+    matrix = []
+    for bornCity in segmentsObj.composers.bornCities:
+        seg = segmentsObj.getByComposerBornCity(bornCity)
+        matrix.append((bornCity, getattr(seg, fn)()))
+    return matrix
+
+
+def makeMatrixComposerDeathYear(segmentsObj, fn):
+    matrix = []
+    for deathYear in segmentsObj.composers.deathYears:
+        seg = segmentsObj.getByComposerDeathYear(deathYear)
+        matrix.append((deathYear, getattr(seg, fn)()))
+    return matrix
+
+
+def makeMatrixComposerDeathCity(segmentsObj, fn):
+    matrix = []
+    for deathCity in segmentsObj.composers.deathCities:
+        seg = segmentsObj.getByComposerDeathCity(deathCity)
+        matrix.append((deathCity, getattr(seg, fn)()))
+    return matrix
