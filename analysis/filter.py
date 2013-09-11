@@ -4,6 +4,7 @@
 import core
 import segment
 import _utils
+import contour
 
 
 class FilterError(Exception):
@@ -222,6 +223,141 @@ class Sources(object):
         return makeSources([obj for obj in self.objects if filename in obj.filename])
 
 
+class Segments(object):
+    """Class for Segment objects filtering."""
+
+    def __init__(self):
+        self.objects = None
+        self.composers = None
+        self.collections = None
+        self.pieces = None
+        self.sources = None
+        self.size = None
+        self.timeSignatures = None
+        self.meters = None
+        self.ambitus = None
+        self.measuresNumbers = None
+
+        self.contourPrimes = None
+
+        self.intervals = None
+        self.firstIntervals = None
+        self.lastIntervals = None
+
+    def __eq__(self, other):
+        return _utils.equalityComparisons(self, other)
+
+    def __ne__(self, other):
+        return _utils.equalityComparisons(self, other, True)
+
+    def __repr__(self):
+        return "<Segments: {0}>".format(self.size)
+
+    def getByComposerName(self, composerName):
+        def aux(obj, composerName):
+            return composerName in ', '.join([o.name for o in obj.source.piece.composer])
+        return makeSegments([obj for obj in self.objects if aux(obj, composerName)])
+
+    def getByComposerGender(self, composerGender):
+        def aux(obj, composerGender):
+            return composerGender in ', '.join([o.gender for o in obj.source.piece.composer])
+        return makeSegments([obj for obj in self.objects if aux(obj, composerGender)])
+
+    def getByComposerInstrument(self, composerInstrument):
+        def aux(obj, composerInstrument):
+            return composerInstrument in ', '.join([o.mainInstrument for o in obj.source.piece.composer])
+        return makeSegments([obj for obj in self.objects if aux(obj, composerInstrument)])
+
+    def getByComposerBornYear(self, composerBornYear):
+        def aux(obj, composerBornYear):
+            if type(composerBornYear) == int:
+                composerBornYear = str(composerBornYear)
+            return composerBornYear in ', '.join([o.bornYear for o in obj.source.piece.composer])
+        return makeSegments([obj for obj in self.objects if aux(obj, composerBornYear)])
+
+    def getByComposerBornCity(self, composerBornCity):
+        def aux(obj, composerBornCity):
+            return composerBornCity in ', '.join([o.bornCity.name for o in obj.source.piece.composer if o.bornCity])
+        return makeSegments([obj for obj in self.objects if aux(obj, composerBornCity)])
+
+    def getByComposerDeathYear(self, composerDeathYear):
+        def aux(obj, composerDeathYear):
+            if type(composerDeathYear) == int:
+                composerDeathYear = str(composerDeathYear)
+            return composerDeathYear in ', '.join([o.deathYear for o in obj.source.piece.composer])
+        return makeSegments([obj for obj in self.objects if aux(obj, composerDeathYear)])
+
+    def getByComposerDeathCity(self, composerDeathCity):
+        def aux(obj, composerDeathCity):
+            return composerDeathCity in ', '.join([o.deathCity.name for o in obj.source.piece.composer if o.deathCity])
+        return makeSegments([obj for obj in self.objects if aux(obj, composerDeathCity)])
+
+    def getByPieceTitle(self, title):
+        return makeSegments([obj for obj in self.objects if title in obj.source.piece.title])
+
+    def getByPieceCity(self, city):
+        return makeSegments([obj for obj in self.objects if city in obj.source.piece.city])
+
+    def getByPieceYear(self, year):
+        if type(year) == int:
+            year = str(year)
+        return makeSegments([obj for obj in self.objects if year in obj.source.piece.year])
+
+    def getByCollectionCode(self, code, volume=None):
+        def aux(obj, code, volume):
+            cond1 = code in obj.source.collection.code
+            cond2 = True
+            if volume not in (None, u''):
+                if type(volume) == int:
+                    volume = str(volume)
+                cond2 = volume in obj.collection.volume
+            return cond1 and cond2
+
+        return makeSegments([obj for obj in self.objects if aux(obj, code, volume)])
+
+    def getByIdCode(self, idCode):
+        return makeSegments([obj for obj in self.objects if idCode in obj.source.idCode.idCode])
+
+    def getByFilename(self, filename):
+        return makeSegments([obj for obj in self.objects if filename in obj.source.filename])
+
+    def getByTimeSignature(self, timeSignature):
+        return makeSegments([obj for obj in self.objects if timeSignature in obj.timeSignature])
+
+    def getByMeter(self, meter):
+        return makeSegments([obj for obj in self.objects if meter in obj.meter])
+
+    def getByAmbitus(self, ambitus, higherAmbitus=None):
+        """Returns a Segments object with a given ambitus, or the min
+        and max of an ambitus range."""
+
+        if higherAmbitus:
+            return makeSegments([obj for obj in self.objects if ambitus <= obj.ambitus <= higherAmbitus])
+        else:
+            return makeSegments([obj for obj in self.objects if ambitus == obj.ambitus])
+
+    def getByMeasureNumber(self, measuresNumber, higherMeasureNumber=None):
+        """Returns a Segments object with a given number of measures,
+        or the min and max of a measures' number range."""
+
+        if higherMeasureNumber:
+            return makeSegments([obj for obj in self.objects if measuresNumber <= obj.measuresNumber <= higherMeasureNumber])
+        else:
+            return makeSegments([obj for obj in self.objects if measuresNumber == obj.measuresNumber])
+
+    def getByContourPrime(self, contourPrime):
+        return makeSegments([obj for obj in self.objects if contourPrime == obj.contourPrime])
+
+    def getByIntervals(self, interval):
+        return makeSegments([obj for obj in self.objects if interval in obj.intervals])
+
+    def getByFirstInterval(self, interval):
+        return makeSegments([obj for obj in self.objects if interval == obj.firstInterval])
+
+    def getByLastInterval(self, interval):
+        return makeSegments([obj for obj in self.objects if interval == obj.lastInterval])
+
+
 def makeComposers(composersObjList):
     """Make a Composers object from a list of Composer objects."""
 
@@ -264,3 +400,27 @@ def makeSources(sourcesObjList):
     sources.size = len(sources.objects)
 
     return sources
+
+
+def makeSegments(segmentsObjList):
+    """Make a Segments object from a list of Segment objects."""
+
+    segments = Segments()
+    segments.objects = _utils.organizeAndSort(segmentsObjList)
+    segments.sources = makeSources([obj.source for obj in segments.objects if obj.source])
+    segments.pieces = makePieces([obj.source.piece for obj in segments.objects if obj.source.piece])
+    segments.composers = makeComposers(_utils.flatten([obj.source.piece.composer for obj in segments.objects if obj.source.piece.composer]))
+    segments.collections = _utils.organizeAndSort([obj.source.collection for obj in segments.objects if obj.source.collection])
+    segments.size = len(segments.objects)
+
+    segments.timeSignatures = _utils.organizeAndSort([obj.timeSignature for obj in segments.objects if obj.timeSignature])
+    segments.meters = _utils.organizeAndSort([obj.meter for obj in segments.objects if obj.meter])
+    segments.ambitus = _utils.organizeAndSort([obj.ambitus for obj in segments.objects if obj.ambitus])
+    segments.measuresNumbers = _utils.organizeAndSort([obj.measuresNumber for obj in segments.objects if obj.measuresNumber])
+    segments.contourPrimes = contour.removeDuplicate([obj.contourPrime for obj in segments.objects if obj.contourPrime])
+    segments.intervals = _utils.organizeAndSort(_utils.flatten([obj.intervals for obj in segments.objects if obj.intervals]))
+    segments.ambitus = _utils.organizeAndSort([obj.ambitus for obj in segments.objects if obj.ambitus])
+    segments.firstIntervals = _utils.organizeAndSort([obj.firstInterval for obj in segments.objects if obj.firstInterval])
+    segments.lastIntervals = _utils.organizeAndSort([obj.lastInterval for obj in segments.objects if obj.lastInterval])
+
+    return segments
