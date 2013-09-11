@@ -119,7 +119,7 @@ def getMusicologicalInfo(jsonDir='json'):
     piecesSeq = json.load(open(os.path.join(jsonDir, 'pieces.json')))
     sourcesSeq = json.load(open(os.path.join(jsonDir, 'sources.json')))
     pieces = [pieceAux(pieceDic, composers) for pieceDic in piecesSeq]
-    sources = [sourceAux(sourceDic, collections, composers, pieces) for sourceDic in sourcesSeq]
+    sources = [sourceAux(sourceDic, collections, composers, pieces) for sourceDic in sourcesSeq if sourceDic['collection.title'] != 'Songbook Choro']
 
     return composers, collections, pieces, sources
 
