@@ -104,3 +104,9 @@ def remove_endline(string):
     """Return a given string without new line or crlf."""
 
     return string.replace('\n', '').replace('\r', '')
+
+
+def organizeAndSort(seq):
+    """Return a given seq sorted and without element duplication."""
+
+    return sorted(list(set(seq)))

@@ -38,6 +38,9 @@ class Composers(object):
     def getByName(self, composerName):
         return makeComposers([obj for obj in self.objects if composerName in obj.name])
 
+    def getByGender(self, gender):
+        return makeComposers([obj for obj in self.objects if gender in obj.gender])
+
     def getByInstrument(self, instrument):
         return makeComposers([obj for obj in self.objects if instrument in obj.mainInstrument])
 
@@ -62,13 +65,13 @@ def makeComposers(composersObjList):
     """Make a Composers object from a list of Composer objects."""
 
     composers = Composers()
-    composers.objects = composersObjList
-    composers.composers = _utils.organizeAndSort([obj.name for obj in composersObjList if obj.name])
-    composers.bornCities = _utils.organizeAndSort([obj.bornCity for obj in composersObjList if obj.bornCity])
-    composers.bornYears = _utils.organizeAndSort([obj.bornYear for obj in composersObjList if obj.bornYear])
-    composers.deathCities = _utils.organizeAndSort([obj.deathCity for obj in composersObjList if obj.deathCity])
-    composers.deathYears = _utils.organizeAndSort([obj.deathYear for obj in composersObjList if obj.deathYear])
-    composers.size = len(composersObjList)
+    composers.objects = _utils.organizeAndSort(composersObjList)
+    composers.composers = _utils.organizeAndSort([obj.name for obj in composers.objects if obj.name])
+    composers.bornCities = _utils.organizeAndSort([obj.bornCity for obj in composers.objects if obj.bornCity])
+    composers.bornYears = _utils.organizeAndSort([obj.bornYear for obj in composers.objects if obj.bornYear])
+    composers.deathCities = _utils.organizeAndSort([obj.deathCity for obj in composers.objects if obj.deathCity])
+    composers.deathYears = _utils.organizeAndSort([obj.deathYear for obj in composers.objects if obj.deathYear])
+    composers.size = len(composers.objects)
 
     return composers
 
