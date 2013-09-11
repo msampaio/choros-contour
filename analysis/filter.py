@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from collections import Counter
 import core
 import segment
 import _utils
@@ -349,6 +350,45 @@ class Segments(object):
 
     def getByLastInterval(self, interval):
         return makeSegments([obj for obj in self.objects if interval == obj.lastInterval])
+
+    def countComposerBornYears(self):
+        return Counter(_utils.flatten([[o.bornYear for o in obj.source.piece.composer] for obj in self.objects]))
+
+    def countComposerBornCities(self):
+        return Counter(_utils.flatten([[o.bornCity for o in obj.source.piece.composer] for obj in self.objects]))
+
+    def countComposerDeathYears(self):
+        return Counter(_utils.flatten([[o.deathYear for o in obj.source.piece.composer] for obj in self.objects]))
+
+    def countComposerDeathCities(self):
+        return Counter(_utils.flatten([[o.deathCity for o in obj.source.piece.composer] for obj in self.objects]))
+
+    def countComposerInstruments(self):
+        return Counter(_utils.flatten([[o.mainInstrument for o in obj.source.piece.composer] for obj in self.objects]))
+
+    def countContourPrimes(self):
+        return contour.counting([obj.contourPrime for obj in self.objects])
+
+    def countIntervals(self):
+        return Counter(_utils.flatten([obj.intervals for obj in self.objects]))
+
+    def countFirstIntervals(self):
+        return Counter([obj.firstInterval for obj in self.objects])
+
+    def countLastIntervals(self):
+        return Counter([obj.lastInterval for obj in self.objects])
+
+    def countMeasuresNumbers(self):
+        return Counter([obj.measuresNumber for obj in self.objects])
+
+    def countAmbitus(self):
+        return Counter([obj.ambitus for obj in self.objects])
+
+    def countMeter(self):
+        return Counter([obj.meter for obj in self.objects])
+
+    def countTimeSignature(self):
+        return Counter([obj.timeSignature for obj in self.objects])
 
 
 def makeComposers(composersObjList):
