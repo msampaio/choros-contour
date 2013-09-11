@@ -3,6 +3,7 @@
 
 import core
 import segment
+import _utils
 
 
 class FilterError(Exception):
@@ -11,6 +12,65 @@ class FilterError(Exception):
     def __str__(self):
         return repr(self.value)
 
+
+class Composers(object):
+    """Class for Composer objects filtering."""
+
+    def __init__(self):
+        self.objects = None
+        self.composers = None
+        self.bornCities = None
+        self.bornYears = None
+        self.deathCities = None
+        self.deathYears = None
+        self.mainInstruments = None
+        self.size = None
+
+    def __eq__(self, other):
+        return _utils.equalityComparisons(self, other)
+
+    def __ne__(self, other):
+        return _utils.equalityComparisons(self, other, True)
+
+    def __repr__(self):
+        return "<Composers: {0}>".format(self.size)
+
+    def getByName(self, composerName):
+        return makeComposers([obj for obj in self.objects if composerName in obj.name])
+
+    def getByInstrument(self, instrument):
+        return makeComposers([obj for obj in self.objects if instrument in obj.mainInstrument])
+
+    def getByBornCity(self, bornCity):
+        return makeComposers([obj for obj in self.objects if bornCity in obj.bornCity])
+
+    def getByBornYear(self, bornYear):
+        if type(bornYear) == int:
+            bornYear = str(bornYear)
+        return makeComposers([obj for obj in self.objects if bornYear in obj.bornYear])
+
+    def getByDeathCity(self, deathCity):
+        return makeComposers([obj for obj in self.objects if deathCity in obj.deathCity])
+
+    def getByDeathYear(self, deathYear):
+        if type(deathYear) == int:
+            deathYear = str(deathYear)
+        return makeComposers([obj for obj in self.objects if deathYear in obj.deathYear])
+
+
+def makeComposers(composersObjList):
+    """Make a Composers object from a list of Composer objects."""
+
+    composers = Composers()
+    composers.objects = composersObjList
+    composers.composers = _utils.organizeAndSort([obj.name for obj in composersObjList if obj.name])
+    composers.bornCities = _utils.organizeAndSort([obj.bornCity for obj in composersObjList if obj.bornCity])
+    composers.bornYears = _utils.organizeAndSort([obj.bornYear for obj in composersObjList if obj.bornYear])
+    composers.deathCities = _utils.organizeAndSort([obj.deathCity for obj in composersObjList if obj.deathCity])
+    composers.deathYears = _utils.organizeAndSort([obj.deathYear for obj in composersObjList if obj.deathYear])
+    composers.size = len(composersObjList)
+
+    return composers
 
 def getByComposer(objList, composerName):
     """Return a filtered list of objects by a given composer name."""
