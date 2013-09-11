@@ -88,3 +88,9 @@ def mkdir(path):
 
     if not os.path.exists(path):
         os.mkdir(path)
+
+
+def remove_endline(string):
+    """Return a given string without new line or crlf."""
+
+    return string.replace('\n', '').replace('\r', '')
