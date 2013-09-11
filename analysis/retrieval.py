@@ -125,7 +125,7 @@ def getMusicologicalInfo(jsonDir='json'):
 
 
 def getSegmentsInfo(sourcesObjList):
-    return [segment.makeSegment(source, True) for source in sourcesObjList]
+    return _utils.flatten([segment.makeSegment(source, True) for source in sourcesObjList])
 
 def getMusicInfo(jsonDir='json'):
     """Return sequence of objects."""
