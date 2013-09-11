@@ -256,6 +256,7 @@ def makeSources(sourcesObjList):
 
     sources = Sources()
     sources.objects = _utils.organizeAndSort(sourcesObjList)
+    sources.composers = makeComposers(_utils.flatten([obj.piece.composer for obj in sources.objects if obj.piece.composer]))
     sources.pieces = makePieces([obj.piece for obj in sources.objects if obj.piece])
     sources.collections = _utils.organizeAndSort([obj.collection for obj in sources.objects if obj.collection])
     sources.idCodes = _utils.organizeAndSort([obj.idCode for obj in sources.objects if obj.idCode])
