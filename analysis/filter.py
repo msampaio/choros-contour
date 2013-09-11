@@ -93,42 +93,42 @@ class Pieces(object):
         return makePieces([obj for obj in self.objects if year in obj.year])
 
     def getByComposerName(self, composerName):
-        def aux(objects, composerName):
-            return composerName in ', '.join([o.name for o in objects.composer])
+        def aux(obj, composerName):
+            return composerName in ', '.join([o.name for o in obj.composer])
         return makePieces([obj for obj in self.objects if aux(obj, composerName)])
 
     def getByComposerGender(self, composerGender):
-        def aux(objects, composerGender):
-            return composerGender in ', '.join([o.gender for o in objects.composer])
+        def aux(obj, composerGender):
+            return composerGender in ', '.join([o.gender for o in obj.composer])
         return makePieces([obj for obj in self.objects if aux(obj, composerGender)])
 
     def getByComposerInstrument(self, composerInstrument):
-        def aux(objects, composerInstrument):
-            return composerInstrument in ', '.join([o.mainInstrument for o in objects.composer])
+        def aux(obj, composerInstrument):
+            return composerInstrument in ', '.join([o.mainInstrument for o in obj.composer])
         return makePieces([obj for obj in self.objects if aux(obj, composerInstrument)])
 
     def getByComposerBornYear(self, composerBornYear):
-        def aux(objects, composerBornYear):
+        def aux(obj, composerBornYear):
             if type(composerBornYear) == int:
                 composerBornYear = str(composerBornYear)
-            return composerBornYear in ', '.join([o.bornYear for o in objects.composer])
+            return composerBornYear in ', '.join([o.bornYear for o in obj.composer])
         return makePieces([obj for obj in self.objects if aux(obj, composerBornYear)])
 
     def getByComposerBornCity(self, composerBornCity):
-        def aux(objects, composerBornCity):
-            return composerBornCity in ', '.join([o.bornCity.name for o in objects.composer if o.bornCity])
+        def aux(obj, composerBornCity):
+            return composerBornCity in ', '.join([o.bornCity.name for o in obj.composer if o.bornCity])
         return makePieces([obj for obj in self.objects if aux(obj, composerBornCity)])
 
     def getByComposerDeathYear(self, composerDeathYear):
-        def aux(objects, composerDeathYear):
+        def aux(obj, composerDeathYear):
             if type(composerDeathYear) == int:
                 composerDeathYear = str(composerDeathYear)
-            return composerDeathYear in ', '.join([o.deathYear for o in objects.composer])
+            return composerDeathYear in ', '.join([o.deathYear for o in obj.composer])
         return makePieces([obj for obj in self.objects if aux(obj, composerDeathYear)])
 
     def getByComposerDeathCity(self, composerDeathCity):
-        def aux(objects, composerDeathCity):
-            return composerDeathCity in ', '.join([o.deathCity.name for o in objects.composer if o.deathCity])
+        def aux(obj, composerDeathCity):
+            return composerDeathCity in ', '.join([o.deathCity.name for o in obj.composer if o.deathCity])
         return makePieces([obj for obj in self.objects if aux(obj, composerDeathCity)])
 
 
