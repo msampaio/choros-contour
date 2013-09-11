@@ -117,6 +117,11 @@ class Source(object):
         self.formSeq = None
         self.score = None
 
+        self.timeSignature = None
+        self.meter = None
+        self.key = None
+        self.mode = None
+
     def __eq__(self, other):
         return _utils.equalityComparisons(self, other)
 
@@ -334,6 +339,7 @@ def makeSource(pieceObj, collectionObj, filename=None, score=False):
         source.idCode = idcode.getIdCodeByFilename(filename)
         if score:
             source.score = parse.sourceParse(filename)
+            parse.getInfoAboutSource(source.score)
         source.formSeq = parse.formParse(filename)
 
     return source
