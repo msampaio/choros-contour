@@ -48,6 +48,7 @@ def makeSegment(sourceObj):
 
     if not sourceObj.score:
         sourceObj.makeScore()
+    sourceObj = parse.getInfoAboutSource(sourceObj)
 
     segments = []
 
@@ -67,8 +68,7 @@ def makeSegment(sourceObj):
 
             print '. Making segment {0}'.format(seg)
             seg.score = sourceObj.getExcerpt(initial, final)
-
-            # FIXME: insert music21 info
+            seg = parse.getInfoAboutSegment(seg)
             segments.append(seg)
 
     return segments
