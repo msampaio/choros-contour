@@ -10,7 +10,6 @@ class Segment():
     
     def __init__(self):
 
-        self.id = None
         self.source = None
 
         self.score = None
@@ -40,4 +39,4 @@ class Segment():
     def __repr__(self):
         title = self.source.piece.title
         composer = self.source.piece.makeComposersString()
-        return "<Segment {0}: {1} - ({2}) [{3}]>".format(self.id, title, composer, self.orderNumber)
+        return "<Segment {0}: {1} ({2})>".format(self.orderNumber, title, composer)
