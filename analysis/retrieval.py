@@ -9,6 +9,7 @@ import _utils
 import copy
 import pickle
 import parse
+import segment
 
 
 def csvSourcesProcess(filename):
@@ -123,6 +124,17 @@ def getMusicologicalInfo(jsonDir='json'):
     return composers, collections, pieces, sources
 
 
+def getSegmentsInfo(sourcesObjList):
+    return [segment.makeSegment(source, True) for source in sourcesObjList]
+
+def getMusicInfo(jsonDir='json'):
+    """Return sequence of objects."""
+
+    composers, collections, pieces, sources = getMusicologicalInfo(jsonDir)
+    segments = getSegmentsInfo(sourcesObjList)
+    return composers, collections, pieces, sources, segments
+
+
 def savePickle(data, filename):
     """Save the given data in the filename."""
 
@@ -138,7 +150,7 @@ def loadPickle(filename):
         return pickle.load(fileobj)
 
 
-def saveAll():
+def saveAll(partial=False):
     """Save composer, collection, piece and source objects in pickle
     files."""
 
@@ -146,6 +158,8 @@ def saveAll():
         className = type(seq[0]).__name__
         savePickle(seq, className)
 
+    if not partial:
+        savePickle(getSegmentsInfo(loadPickle('Source')), 'Segment')
 
 def loadAll():
     """Load composer, collection, piece and source objects lists from

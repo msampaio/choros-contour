@@ -16,7 +16,7 @@ webpage:
 	python -c "import umazero; umazero.makeWebpage()"
 
 saveAll:
-	python -c "import umazero; umazero.saveAll()"
+	python -c "import analysis; analysis.saveAll()"
 
 copy:
 	python -c "import umazero; umazero.copyfiles()"

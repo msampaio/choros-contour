@@ -43,7 +43,7 @@ class Segment():
         return "<Segment {0}: {1} ({2})>".format(self.orderNumber, title, composer)
 
 
-def makeSegment(sourceObj):
+def makeSegment(sourceObj, savePickle=False):
     """Return a segment object from a given idCode string."""
 
     if not sourceObj.score:
@@ -52,23 +52,29 @@ def makeSegment(sourceObj):
 
     segments = []
 
-    for dic in sourceObj.formSeq:
-        typeof = dic['typeof']
-        if typeof == 'Phrase':
-            orderNumber = dic['number']
-            initial = dic['initial']
-            final = dic['final']
+    if sourceObj.formSeq:
+        for dic in sourceObj.formSeq:
+            typeof = dic['typeof']
+            if typeof == 'Phrase':
+                orderNumber = dic['number']
+                initial = dic['initial']
+                final = dic['final']
 
-            seg = Segment()
-            seg.source = sourceObj
-            seg.orderNumber = orderNumber
-            seg.typeof = typeof
-            seg.initial = initial
-            seg.final = final
+                seg = Segment()
+                seg.source = sourceObj
+                seg.orderNumber = orderNumber
+                seg.typeof = typeof
+                seg.initial = initial
+                seg.final = final
 
-            print '. Making segment {0}'.format(seg)
-            seg.score = sourceObj.getExcerpt(initial, final)
-            seg = parse.getInfoAboutSegment(seg)
-            segments.append(seg)
-
+                print '. Making segment {0}'.format(seg)
+                seg.score = sourceObj.getExcerpt(initial, final)
+                seg = parse.getInfoAboutSegment(seg)
+                if savePickle:
+                    seg.score = None
+                segments.append(seg)
+    else:
+        print sourceObj
+    if savePickle:
+        sourceObj.score = None
     return segments
