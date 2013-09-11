@@ -6,7 +6,7 @@ import idcode
 import parse
 
 
-class Segment():
+class Segment(object):
     """Class for segment objects."""
     
     def __init__(self):
