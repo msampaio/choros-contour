@@ -132,6 +132,96 @@ class Pieces(object):
         return makePieces([obj for obj in self.objects if aux(obj, composerDeathCity)])
 
 
+class Sources(object):
+    """Class for Source objects filtering."""
+
+    def __init__(self):
+        self.objects = None
+        self.composers = None
+        self.pieces = None
+        self.collections = None
+        self.idCodes = None
+        self.filenames = None
+        self.size = None
+
+    def __eq__(self, other):
+        return _utils.equalityComparisons(self, other)
+
+    def __ne__(self, other):
+        return _utils.equalityComparisons(self, other, True)
+
+    def __repr__(self):
+        return "<Sources: {0}>".format(self.size)
+
+    def getByComposerName(self, composerName):
+        def aux(obj, composerName):
+            return composerName in ', '.join([o.name for o in obj.piece.composer])
+        return makeSources([obj for obj in self.objects if aux(obj, composerName)])
+
+    def getByComposerGender(self, composerGender):
+        def aux(obj, composerGender):
+            return composerGender in ', '.join([o.gender for o in obj.piece.composer])
+        return makeSources([obj for obj in self.objects if aux(obj, composerGender)])
+
+    def getByComposerInstrument(self, composerInstrument):
+        def aux(obj, composerInstrument):
+            return composerInstrument in ', '.join([o.mainInstrument for o in obj.piece.composer])
+        return makeSources([obj for obj in self.objects if aux(obj, composerInstrument)])
+
+    def getByComposerBornYear(self, composerBornYear):
+        def aux(obj, composerBornYear):
+            if type(composerBornYear) == int:
+                composerBornYear = str(composerBornYear)
+            return composerBornYear in ', '.join([o.bornYear for o in obj.piece.composer])
+        return makeSources([obj for obj in self.objects if aux(obj, composerBornYear)])
+
+    def getByComposerBornCity(self, composerBornCity):
+        def aux(obj, composerBornCity):
+            return composerBornCity in ', '.join([o.bornCity.name for o in obj.piece.composer if o.bornCity])
+        return makeSources([obj for obj in self.objects if aux(obj, composerBornCity)])
+
+    def getByComposerDeathYear(self, composerDeathYear):
+        def aux(obj, composerDeathYear):
+            if type(composerDeathYear) == int:
+                composerDeathYear = str(composerDeathYear)
+            return composerDeathYear in ', '.join([o.deathYear for o in obj.piece.composer])
+        return makeSources([obj for obj in self.objects if aux(obj, composerDeathYear)])
+
+    def getByComposerDeathCity(self, composerDeathCity):
+        def aux(obj, composerDeathCity):
+            return composerDeathCity in ', '.join([o.deathCity.name for o in obj.piece.composer if o.deathCity])
+        return makeSources([obj for obj in self.objects if aux(obj, composerDeathCity)])
+
+    def getByPieceTitle(self, title):
+        return makeSources([obj for obj in self.objects if title in obj.piece.title])
+
+    def getByPieceCity(self, city):
+        return makeSources([obj for obj in self.objects if city in obj.piece.city])
+
+    def getByPieceYear(self, year):
+        if type(year) == int:
+            year = str(year)
+        return makeSources([obj for obj in self.objects if year in obj.piece.year])
+
+    def getByCollectionCode(self, code, volume=None):
+        def aux(obj, code, volume):
+            cond1 = code in obj.collection.code
+            cond2 = True
+            if volume not in (None, u''):
+                if type(volume) == int:
+                    volume = str(volume)
+                cond2 = volume in obj.collection.volume
+            return cond1 and cond2
+
+        return makeSources([obj for obj in self.objects if aux(obj, code, volume)])
+
+    def getByIdCode(self, idCode):
+        return makeSources([obj for obj in self.objects if idCode in obj.idCode.idCode])
+
+    def getByFilename(self, filename):
+        return makeSources([obj for obj in self.objects if filename in obj.filename])
+
+
 def makeComposers(composersObjList):
     """Make a Composers object from a list of Composer objects."""
 
@@ -159,6 +249,20 @@ def makePieces(piecesObjList):
     pieces.size = len(pieces.objects)
 
     return pieces
+
+
+def makeSources(sourcesObjList):
+    """Make a Sources object from a list of Source objects."""
+
+    sources = Sources()
+    sources.objects = _utils.organizeAndSort(sourcesObjList)
+    sources.pieces = makePieces([obj.piece for obj in sources.objects if obj.piece])
+    sources.collections = _utils.organizeAndSort([obj.collection for obj in sources.objects if obj.collection])
+    sources.idCodes = _utils.organizeAndSort([obj.idCode for obj in sources.objects if obj.idCode])
+    sources.filenames = _utils.organizeAndSort([obj.filename for obj in sources.objects if obj.filename])
+    sources.size = len(sources.objects)
+
+    return sources
 
 
 def getByComposer(objList, composerName):
