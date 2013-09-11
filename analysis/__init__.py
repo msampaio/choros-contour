@@ -13,3 +13,8 @@ from retrieval import saveAll
 from retrieval import loadAll
 
 from segment import makeSegment
+
+from sift import makeComposers
+from sift import makePieces
+from sift import makeSources
+from sift import makeSegments

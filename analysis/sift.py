@@ -459,49 +459,18 @@ def makeSegments(segmentsObjList):
     return segments
 
 
-def makeMatrixComposerName(segmentsObj, countFn):
-    matrix = []
-    for composer in segmentsObj.composers.composers:
-        seg = segmentsObj.getByComposerName(composer)
-        matrix.append((composer, getattr(seg, countFn)()))
-    return matrix
 
+def makeMatrix(segmentsObj, getFn, attrib, countFn):
+    """Return a sequence with counted objects.
 
-def makeMatrixComposerInstrument(segmentsObj, countFn):
-    matrix = []
-    for instrument in segmentsObj.composers.mainInstruments:
-        seg = segmentsObj.getByComposerName(composer)
-        matrix.append((instrument, getattr(seg, countFn)()))
-    return matrix
+    >>> makeMatrix(segs, 'getByComposerName', 'composers', 'countIntervals')
+    """
 
+    def aux(segmentsObj, getFn, countFn, el):
+        return getattr(segmentsObj, getFn)(el)
 
-def makeMatrixComposerBornYear(segmentsObj, countFn):
-    matrix = []
-    for bornYear in segmentsObj.composers.bornYears:
-        seg = segmentsObj.getByComposerBornYear(bornYear)
-        matrix.append((bornYear, getattr(seg, countFn)()))
-    return matrix
-
-
-def makeMatrixComposerBornCity(segmentsObj, countFn):
-    matrix = []
-    for bornCity in segmentsObj.composers.bornCities:
-        seg = segmentsObj.getByComposerBornCity(bornCity)
-        matrix.append((bornCity, getattr(seg, countFn)()))
-    return matrix
-
-
-def makeMatrixComposerDeathYear(segmentsObj, countFn):
-    matrix = []
-    for deathYear in segmentsObj.composers.deathYears:
-        seg = segmentsObj.getByComposerDeathYear(deathYear)
-        matrix.append((deathYear, getattr(seg, countFn)()))
-    return matrix
-
-
-def makeMatrixComposerDeathCity(segmentsObj, countFn):
-    matrix = []
-    for deathCity in segmentsObj.composers.deathCities:
-        seg = segmentsObj.getByComposerDeathCity(deathCity)
-        matrix.append((deathCity, getattr(seg, countFn)()))
+    matrix = {}
+    for el in getattr(segmentsObj.composers, attrib):
+        seg = aux(segmentsObj, getFn, countFn, el)
+        matrix[el] = getattr(seg, countFn)()
     return matrix
