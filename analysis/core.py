@@ -206,7 +206,7 @@ class Source(object):
                             measureEventNumbers.append(eventCounter)
                     measure.events = measureEventNumbers
 
-        def makeNewScore(measures, params, keepList, measureNumber, newMeasureNumberCounter):
+        def makeNewScore(measures, params, keepList, measureNumberCounter, newMeasureNumberCounter):
             """Make a new score with events given in keepList. Return
             counters."""
 
@@ -266,6 +266,7 @@ class Source(object):
         dest = os.path.join(dirname, basename)
         print "Writing xml file in {0}".format(dest)
         parse.scoreEventsEnumerator(self.score).write('musicxml', dest)
+
 
 def makeCity(name, province):
     """Return a City object with the given attributes."""
