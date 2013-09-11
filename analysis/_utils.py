@@ -90,6 +90,16 @@ def mkdir(path):
         os.mkdir(path)
 
 
+def flatten(seq):
+    """Flatten Sequences.
+
+    >>> flatten([[0, 1], [2, 3]])
+    [0, 1, 2, 3]
+    """
+
+    return [item for sublist in seq for item in sublist]
+
+
 def remove_endline(string):
     """Return a given string without new line or crlf."""
 
