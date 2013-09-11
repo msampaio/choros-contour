@@ -459,49 +459,49 @@ def makeSegments(segmentsObjList):
     return segments
 
 
-def makeMatrixComposerName(segmentsObj, fn):
+def makeMatrixComposerName(segmentsObj, countFn):
     matrix = []
     for composer in segmentsObj.composers.composers:
         seg = segmentsObj.getByComposerName(composer)
-        matrix.append((composer, getattr(seg, fn)()))
+        matrix.append((composer, getattr(seg, countFn)()))
     return matrix
 
 
-def makeMatrixComposerInstrument(segmentsObj, fn):
+def makeMatrixComposerInstrument(segmentsObj, countFn):
     matrix = []
     for instrument in segmentsObj.composers.mainInstruments:
         seg = segmentsObj.getByComposerName(composer)
-        matrix.append((instrument, getattr(seg, fn)()))
+        matrix.append((instrument, getattr(seg, countFn)()))
     return matrix
 
 
-def makeMatrixComposerBornYear(segmentsObj, fn):
+def makeMatrixComposerBornYear(segmentsObj, countFn):
     matrix = []
     for bornYear in segmentsObj.composers.bornYears:
         seg = segmentsObj.getByComposerBornYear(bornYear)
-        matrix.append((bornYear, getattr(seg, fn)()))
+        matrix.append((bornYear, getattr(seg, countFn)()))
     return matrix
 
 
-def makeMatrixComposerBornCity(segmentsObj, fn):
+def makeMatrixComposerBornCity(segmentsObj, countFn):
     matrix = []
     for bornCity in segmentsObj.composers.bornCities:
         seg = segmentsObj.getByComposerBornCity(bornCity)
-        matrix.append((bornCity, getattr(seg, fn)()))
+        matrix.append((bornCity, getattr(seg, countFn)()))
     return matrix
 
 
-def makeMatrixComposerDeathYear(segmentsObj, fn):
+def makeMatrixComposerDeathYear(segmentsObj, countFn):
     matrix = []
     for deathYear in segmentsObj.composers.deathYears:
         seg = segmentsObj.getByComposerDeathYear(deathYear)
-        matrix.append((deathYear, getattr(seg, fn)()))
+        matrix.append((deathYear, getattr(seg, countFn)()))
     return matrix
 
 
-def makeMatrixComposerDeathCity(segmentsObj, fn):
+def makeMatrixComposerDeathCity(segmentsObj, countFn):
     matrix = []
     for deathCity in segmentsObj.composers.deathCities:
         seg = segmentsObj.getByComposerDeathCity(deathCity)
-        matrix.append((deathCity, getattr(seg, fn)()))
+        matrix.append((deathCity, getattr(seg, countFn)()))
     return matrix
