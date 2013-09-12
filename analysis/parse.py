@@ -116,4 +116,3 @@ def getInfoAboutSegment(segmentObj):
     segmentObj.contourPrime = contour.sampaio(segmentObj.contour.reduction_morris()[0])
 
     return segmentObj
-

@@ -8,7 +8,7 @@ import parse
 
 class Segment(object):
     """Class for segment objects."""
-    
+
     def __init__(self):
 
         self.source = None

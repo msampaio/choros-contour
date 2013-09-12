@@ -479,6 +479,7 @@ def makeMatrix(segmentsObj, getFn, attrib, countFn):
         return getattr(segmentsObj, getFn)(el)
 
     matrix = {}
+
     for el in getattr(segmentsObj.composers, attrib):
         seg = aux(segmentsObj, getFn, countFn, el)
         matrix[el] = getattr(seg, countFn)()
