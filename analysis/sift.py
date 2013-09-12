@@ -249,6 +249,7 @@ class Segments(object):
     def __repr__(self):
         return "<Segments: {0}>".format(self.size)
 
+    # getby
     def getByComposerName(self, composerName):
         def aux(obj, composerName):
             return composerName in ', '.join([o.name for o in obj.source.piece.composer])
@@ -353,6 +354,13 @@ class Segments(object):
     def getByLastInterval(self, interval):
         return makeSegments([obj for obj in self.objects if interval == obj.lastInterval])
 
+    def getByDuration(self, duration):
+        return makeSegments([obj for obj in self.objects if duration in obj.durations])
+
+    def getByBeatContents(self, beatContents):
+        return makeSegments([obj for obj in self.objects if beatContents in obj.beatContents])
+
+    # count
     def countComposerBornYears(self):
         return Counter(_utils.flatten([[o.bornYear for o in obj.source.piece.composer] for obj in self.objects]))
 
