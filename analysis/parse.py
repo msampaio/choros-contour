@@ -103,6 +103,8 @@ def getInfoAboutSegment(segmentObj):
     _size = len(notes)
 
     segmentObj.notes = [note.makeNote(n) for n in notes]
+    segmentObj.duration = note.durations(notes)
+    segmentObj.beatContents = note.beatContents(notes)
     segmentObj.intervals = note.intervalsWithoutDirection(notes)
     segmentObj.intervalsWithDirection = note.intervalsWithDirection(notes)
     segmentObj.firstInterval = note.notesToChromatic(notes[0], notes[1]).directed

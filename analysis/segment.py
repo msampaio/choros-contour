@@ -31,6 +31,9 @@ class Segment(object):
         self.firstInterval = None
         self.lastInterval = None
 
+        self.durations = None
+        self.beatContents = None
+
         self.typeof = None
         self.orderNumber = None
 

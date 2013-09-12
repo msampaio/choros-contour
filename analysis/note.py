@@ -5,6 +5,7 @@ import music21
 from music21.contour import Contour
 from music21.musedata.base40 import pitchToBase40
 from music21.interval import notesToInterval, notesToChromatic
+import itertools
 
 
 class Note(object):
@@ -62,3 +63,23 @@ def intervalsWithDirectionSemitones(notes):
     size = len(notes)
     pos = zip(range(size-1), range(1, size))
     return [notesToInterval(notes[x], notes[y]).semitones for x, y in pos]
+
+
+def durations(notes):
+    """Return a sequence of durations of a given sequence of notes."""
+
+    return [note.duration.quarterLength for note in notes]
+
+
+def splitByBeat(notes):
+    """Return a given sequence of notes split by beats."""
+
+    seq = [(n.offset, n) for n in notes]
+    return [[x[1] for x in list(lst)] for _, lst in itertools.groupby(seq, lambda x: int(x[0]))]
+
+
+def beatContents(notes):
+    """Return the beat contents of a given sequence of notes in
+    quarterLengths."""
+
+    return [[n.duration.quarterLength for n in beat] for beat in splitByBeat(notes)]
