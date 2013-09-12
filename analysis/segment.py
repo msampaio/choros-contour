@@ -70,7 +70,7 @@ def makeSegment(sourceObj, savePickle=False):
                 seg.initial = initial
                 seg.final = final
 
-                print '. Making segment {0}'.format(seg)
+                print '. Making object {0}'.format(seg)
                 seg.score = sourceObj.getExcerpt(initial, final)
                 seg = parse.getInfoAboutSegment(seg)
                 if savePickle:
