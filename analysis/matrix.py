@@ -5,6 +5,7 @@ import os
 import copy
 import _utils
 import sift
+import retrieval
 
 
 def countedToCsv(dic, filename='/tmp/foo.csv'):
@@ -42,4 +43,4 @@ def makeStatisticalTables(segmentsObj=None):
     for fn in countedSeq:
         print 'Processing {0}'.format(fn)
         cData = sift.makeMatrix(segmentsObj, 'getByComposerName', 'composers', fn)
-        countedToXls(cData, os.path.join('/tmp', fn + '.csv'))
+        countedToCsv(cData, os.path.join('/tmp', fn + '.csv'))
