@@ -35,7 +35,8 @@ def makeStatisticalTables(segmentsObj=None):
 
     countedSeq = ['countIntervals', 'countFirstIntervals', 'countLastIntervals',
                   'countContourPrimes', 'countMeasuresNumbers', 'countAmbitus',
-                  'countMeter', 'countTimeSignature']
+                  'countMeter', 'countTimeSignature', 'countDuration',
+                  'countBeatContent']
 
     countedData = {}
     for fn in countedSeq:

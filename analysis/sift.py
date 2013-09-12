@@ -237,6 +237,8 @@ class Segments(object):
         self.intervals = None
         self.firstIntervals = None
         self.lastIntervals = None
+        self.durations = None
+        self.beatContents = None
 
     def __eq__(self, other):
         return _utils.equalityComparisons(self, other)
@@ -390,6 +392,12 @@ class Segments(object):
     def countTimeSignature(self):
         return Counter([obj.timeSignature for obj in self.objects])
 
+    def countDuration(self):
+        return Counter(_utils.flatten([obj.durations for obj in self.objects]))
+
+    def countBeatContent(self):
+        return Counter(_utils.flatten([obj.beatContents for obj in self.objects]))
+
 
 def makeComposers(composersObjList):
     """Make a Composers object from a list of Composer objects."""
@@ -452,9 +460,10 @@ def makeSegments(segmentsObjList):
     segments.measuresNumbers = _utils.organizeAndSort([obj.measuresNumber for obj in segments.objects if obj.measuresNumber])
     segments.contourPrimes = contour.removeDuplicate([obj.contourPrime for obj in segments.objects if obj.contourPrime])
     segments.intervals = _utils.organizeAndSort(_utils.flatten([obj.intervals for obj in segments.objects if obj.intervals]))
-    segments.ambitus = _utils.organizeAndSort([obj.ambitus for obj in segments.objects if obj.ambitus])
     segments.firstIntervals = _utils.organizeAndSort([obj.firstInterval for obj in segments.objects if obj.firstInterval])
     segments.lastIntervals = _utils.organizeAndSort([obj.lastInterval for obj in segments.objects if obj.lastInterval])
+    segments.durations = _utils.organizeAndSort(_utils.flatten([obj.durations for obj in segments.objects if obj.durations]))
+    segments.beatContents = _utils.organizeAndSort(_utils.flatten([obj.beatContents for obj in segments.objects if obj.beatContents]))
 
     return segments
 

@@ -6,6 +6,7 @@ from music21.contour import Contour
 from music21.musedata.base40 import pitchToBase40
 from music21.interval import notesToInterval, notesToChromatic
 import itertools
+import _utils
 
 
 class Note(object):
@@ -71,15 +72,36 @@ def durations(notes):
     return [note.duration.quarterLength for note in notes]
 
 
-def splitByBeat(notes):
+def simpleSplitByBeat(notes):
     """Return a given sequence of notes split by beats."""
 
     seq = [(n.offset, n) for n in notes]
     return [[x[1] for x in list(lst)] for _, lst in itertools.groupby(seq, lambda x: int(x[0]))]
 
 
-def beatContents(notes):
+def splitByBeat(score):
+    """Return a sequence of notes and rests split by beats from a
+    given music21 stream."""
+
+    def noteOrRest(el):
+        return type(el) in (music21.note.Note, music21.note.Rest)
+
+    measures = score.getElementsByClass('Measure')
+    notes = []
+
+    r = []
+    for m in measures:
+        g = []
+        for el in m:
+            if noteOrRest(el):
+                g.append(el)
+        r.extend(simpleSplitByBeat(g))
+
+    return r
+
+
+def beatContents(score):
     """Return the beat contents of a given sequence of notes in
     quarterLengths."""
 
-    return [[n.duration.quarterLength for n in beat] for beat in splitByBeat(notes)]
+    return [tuple([n.duration.quarterLength for n in beat]) for beat in splitByBeat(score)]
