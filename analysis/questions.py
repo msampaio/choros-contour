@@ -41,3 +41,14 @@ def compareComposerWithOthers(segmentsObj, method, composerName):
     dic['Others'] = segmentsObj.getByComposerName(composerName, True).__getattribute__(method)()
 
     return dic
+
+
+def composersFrequency(segmentsObj):
+    """Return a dictionary with frequency of composers segments."""
+
+    dic = {}
+    composers = segmentsObj.composers.composers
+    for composer in composers:
+        dic[composer] = segmentsObj.getByComposerName(composer).size
+
+    return {'frequency': dic}
