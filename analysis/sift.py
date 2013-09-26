@@ -30,30 +30,30 @@ class Composers(object):
     def __repr__(self):
         return "<Composers: {0}>".format(self.size)
 
-    def getByName(self, composerName):
-        return makeComposers([obj for obj in self.objects if composerName in obj.name])
+    def getByName(self, composerName, exclusion=False):
+        return makeComposers([obj for obj in self.objects if _utils.testIn(composerName, obj.name, exclusion)])
 
-    def getByGender(self, gender):
-        return makeComposers([obj for obj in self.objects if gender in obj.gender])
+    def getByGender(self, gender, exclusion=False):
+        return makeComposers([obj for obj in self.objects if _utils.testIn(gender, obj.gender, exclusion)])
 
-    def getByInstrument(self, instrument):
-        return makeComposers([obj for obj in self.objects if instrument in obj.mainInstrument])
+    def getByInstrument(self, instrument, exclusion=False):
+        return makeComposers([obj for obj in self.objects if _utils.testIn(instrument, obj.mainInstrument, exclusion)])
 
-    def getByBornCity(self, bornCity):
-        return makeComposers([obj for obj in self.objects if bornCity in obj.bornCity])
+    def getByBornCity(self, bornCity, exclusion=False):
+        return makeComposers([obj for obj in self.objects if _utils.testIn(bornCity, obj.bornCity, exclusion)])
 
-    def getByBornYear(self, bornYear):
+    def getByBornYear(self, bornYear, exclusion=False):
         if type(bornYear) == int:
             bornYear = str(bornYear)
-        return makeComposers([obj for obj in self.objects if bornYear in obj.bornYear])
+        return makeComposers([obj for obj in self.objects if _utils.testIn(bornYear, obj.bornYear, exclusion)])
 
-    def getByDeathCity(self, deathCity):
-        return makeComposers([obj for obj in self.objects if deathCity in obj.deathCity])
+    def getByDeathCity(self, deathCity, exclusion=False):
+        return makeComposers([obj for obj in self.objects if _utils.testIn(deathCity, obj.deathCity, exclusion)])
 
-    def getByDeathYear(self, deathYear):
+    def getByDeathYear(self, deathYear, exclusion=False):
         if type(deathYear) == int:
             deathYear = str(deathYear)
-        return makeComposers([obj for obj in self.objects if deathYear in obj.deathYear])
+        return makeComposers([obj for obj in self.objects if _utils.testIn(deathYear, obj.deathYear, exclusion)])
 
 
 class Pieces(object):
@@ -76,54 +76,54 @@ class Pieces(object):
     def __repr__(self):
         return "<Pieces: {0}>".format(self.size)
 
-    def getByTitle(self, title):
-        return makePieces([obj for obj in self.objects if title in obj.title])
+    def getByTitle(self, title, exclusion=False):
+        return makePieces([obj for obj in self.objects if _utils.testIn(title, obj.title, exclusion)])
 
-    def getByCity(self, city):
-        return makePieces([obj for obj in self.objects if city in obj.city])
+    def getByCity(self, city, exclusion=False):
+        return makePieces([obj for obj in self.objects if _utils.testIn(city, obj.city, exclusion)])
 
-    def getByYear(self, year):
+    def getByYear(self, year, exclusion=False):
         if type(year) == int:
             year = str(year)
-        return makePieces([obj for obj in self.objects if year in obj.year])
+        return makePieces([obj for obj in self.objects if _utils.testIn(year, obj.year, exclusion)])
 
-    def getByComposerName(self, composerName):
+    def getByComposerName(self, composerName, exclusion=False):
         def aux(obj, composerName):
-            return composerName in ', '.join([o.name for o in obj.composer])
+            return _utils.testIn(composerName, ', '.join([o.name for o in obj.composer]), exclusion)
         return makePieces([obj for obj in self.objects if aux(obj, composerName)])
 
-    def getByComposerGender(self, composerGender):
+    def getByComposerGender(self, composerGender, exclusion=False):
         def aux(obj, composerGender):
-            return composerGender in ', '.join([o.gender for o in obj.composer])
+            return _utils.testIn(composerGender, ', '.join([o.gender for o in obj.composer]), exclusion)
         return makePieces([obj for obj in self.objects if aux(obj, composerGender)])
 
-    def getByComposerInstrument(self, composerInstrument):
+    def getByComposerInstrument(self, composerInstrument, exclusion=False):
         def aux(obj, composerInstrument):
-            return composerInstrument in ', '.join([o.mainInstrument for o in obj.composer])
+            return _utils.testIn(composerInstrument, ', '.join([o.mainInstrument for o in obj.composer]), exclusion)
         return makePieces([obj for obj in self.objects if aux(obj, composerInstrument)])
 
-    def getByComposerBornYear(self, composerBornYear):
+    def getByComposerBornYear(self, composerBornYear, exclusion=False):
         def aux(obj, composerBornYear):
             if type(composerBornYear) == int:
                 composerBornYear = str(composerBornYear)
-            return composerBornYear in ', '.join([o.bornYear for o in obj.composer])
+            return _utils.testIn(composerBornYear, ', '.join([o.bornYear for o in obj.composer]), exclusion)
         return makePieces([obj for obj in self.objects if aux(obj, composerBornYear)])
 
-    def getByComposerBornCity(self, composerBornCity):
+    def getByComposerBornCity(self, composerBornCity, exclusion=False):
         def aux(obj, composerBornCity):
-            return composerBornCity in ', '.join([o.bornCity.name for o in obj.composer if o.bornCity])
+            return _utils.testIn(composerBornCity, ', '.join([o.bornCity.name for o in obj.composer if o.bornCity]), exclusion)
         return makePieces([obj for obj in self.objects if aux(obj, composerBornCity)])
 
-    def getByComposerDeathYear(self, composerDeathYear):
+    def getByComposerDeathYear(self, composerDeathYear, exclusion=False):
         def aux(obj, composerDeathYear):
             if type(composerDeathYear) == int:
                 composerDeathYear = str(composerDeathYear)
-            return composerDeathYear in ', '.join([o.deathYear for o in obj.composer])
+            return _utils.testIn(composerDeathYear, ', '.join([o.deathYear for o in obj.composer]), exclusion)
         return makePieces([obj for obj in self.objects if aux(obj, composerDeathYear)])
 
-    def getByComposerDeathCity(self, composerDeathCity):
+    def getByComposerDeathCity(self, composerDeathCity, exclusion=False):
         def aux(obj, composerDeathCity):
-            return composerDeathCity in ', '.join([o.deathCity.name for o in obj.composer if o.deathCity])
+            return _utils.testIn(composerDeathCity, ', '.join([o.deathCity.name for o in obj.composer if o.deathCity]), exclusion)
         return makePieces([obj for obj in self.objects if aux(obj, composerDeathCity)])
 
 
@@ -148,57 +148,57 @@ class Sources(object):
     def __repr__(self):
         return "<Sources: {0}>".format(self.size)
 
-    def getByComposerName(self, composerName):
+    def getByComposerName(self, composerName, exclusion=False):
         def aux(obj, composerName):
-            return composerName in ', '.join([o.name for o in obj.piece.composer])
+            return _utils.testIn(composerName, ', '.join([o.name for o in obj.piece.composer]), exclusion)
         return makeSources([obj for obj in self.objects if aux(obj, composerName)])
 
-    def getByComposerGender(self, composerGender):
+    def getByComposerGender(self, composerGender, exclusion=False):
         def aux(obj, composerGender):
-            return composerGender in ', '.join([o.gender for o in obj.piece.composer])
+            return _utils.testIn(composerGender, ', '.join([o.gender for o in obj.piece.composer]), exclusion)
         return makeSources([obj for obj in self.objects if aux(obj, composerGender)])
 
-    def getByComposerInstrument(self, composerInstrument):
+    def getByComposerInstrument(self, composerInstrument, exclusion=False):
         def aux(obj, composerInstrument):
-            return composerInstrument in ', '.join([o.mainInstrument for o in obj.piece.composer])
+            return _utils.testIn(composerInstrument, ', '.join([o.mainInstrument for o in obj.piece.composer]), exclusion)
         return makeSources([obj for obj in self.objects if aux(obj, composerInstrument)])
 
-    def getByComposerBornYear(self, composerBornYear):
+    def getByComposerBornYear(self, composerBornYear, exclusion=False):
         def aux(obj, composerBornYear):
             if type(composerBornYear) == int:
                 composerBornYear = str(composerBornYear)
-            return composerBornYear in ', '.join([o.bornYear for o in obj.piece.composer])
+            return _utils.testIn(composerBornYear, ', '.join([o.bornYear for o in obj.piece.composer]), exclusion)
         return makeSources([obj for obj in self.objects if aux(obj, composerBornYear)])
 
-    def getByComposerBornCity(self, composerBornCity):
+    def getByComposerBornCity(self, composerBornCity, exclusion=False):
         def aux(obj, composerBornCity):
-            return composerBornCity in ', '.join([o.bornCity.name for o in obj.piece.composer if o.bornCity])
+            return _utils.testIn(composerBornCity, ', '.join([o.bornCity.name for o in obj.piece.composer if o.bornCity]), exclusion)
         return makeSources([obj for obj in self.objects if aux(obj, composerBornCity)])
 
-    def getByComposerDeathYear(self, composerDeathYear):
+    def getByComposerDeathYear(self, composerDeathYear, exclusion=False):
         def aux(obj, composerDeathYear):
             if type(composerDeathYear) == int:
                 composerDeathYear = str(composerDeathYear)
-            return composerDeathYear in ', '.join([o.deathYear for o in obj.piece.composer])
+            return _utils.testIn(composerDeathYear, ', '.join([o.deathYear for o in obj.piece.composer]), exclusion)
         return makeSources([obj for obj in self.objects if aux(obj, composerDeathYear)])
 
-    def getByComposerDeathCity(self, composerDeathCity):
+    def getByComposerDeathCity(self, composerDeathCity, exclusion=False):
         def aux(obj, composerDeathCity):
-            return composerDeathCity in ', '.join([o.deathCity.name for o in obj.piece.composer if o.deathCity])
+            return _utils.testIn(composerDeathCity, ', '.join([o.deathCity.name for o in obj.piece.composer if o.deathCity]), exclusion)
         return makeSources([obj for obj in self.objects if aux(obj, composerDeathCity)])
 
-    def getByPieceTitle(self, title):
-        return makeSources([obj for obj in self.objects if title in obj.piece.title])
+    def getByPieceTitle(self, title, exclusion=False):
+        return makeSources([obj for obj in self.objects if _utils.testIn(title, obj.piece.title, exclusion)])
 
-    def getByPieceCity(self, city):
-        return makeSources([obj for obj in self.objects if city in obj.piece.city])
+    def getByPieceCity(self, city, exclusion=False):
+        return makeSources([obj for obj in self.objects if _utils.testIn(city, obj.piece.city, exclusion)])
 
-    def getByPieceYear(self, year):
+    def getByPieceYear(self, year, exclusion=False):
         if type(year) == int:
             year = str(year)
-        return makeSources([obj for obj in self.objects if year in obj.piece.year])
+        return makeSources([obj for obj in self.objects if _utils.testIn(year, obj.piece.year, exclusion)])
 
-    def getByCollectionCode(self, code, volume=None):
+    def getByCollectionCode(self, code, volume=None, exclusion=False):
         def aux(obj, code, volume):
             cond1 = code in obj.collection.code
             cond2 = True
@@ -210,11 +210,11 @@ class Sources(object):
 
         return makeSources([obj for obj in self.objects if aux(obj, code, volume)])
 
-    def getByIdCode(self, idCode):
-        return makeSources([obj for obj in self.objects if idCode in obj.idCode.idCode])
+    def getByIdCode(self, idCode, exclusion=False):
+        return makeSources([obj for obj in self.objects if _utils.testIn(idCode, obj.idCode.idCode, exclusion)])
 
-    def getByFilename(self, filename):
-        return makeSources([obj for obj in self.objects if filename in obj.filename])
+    def getByFilename(self, filename, exclusion=False):
+        return makeSources([obj for obj in self.objects if _utils.testIn(filename, obj.filename, exclusion)])
 
 
 class Segments(object):
@@ -250,57 +250,57 @@ class Segments(object):
         return "<Segments: {0}>".format(self.size)
 
     # getby
-    def getByComposerName(self, composerName):
+    def getByComposerName(self, composerName, exclusion=False):
         def aux(obj, composerName):
-            return composerName in ', '.join([o.name for o in obj.source.piece.composer])
+            return _utils.testIn(composerName, ', '.join([o.name for o in obj.source.piece.composer]), exclusion)
         return makeSegments([obj for obj in self.objects if aux(obj, composerName)])
 
-    def getByComposerGender(self, composerGender):
+    def getByComposerGender(self, composerGender, exclusion=False):
         def aux(obj, composerGender):
-            return composerGender in ', '.join([o.gender for o in obj.source.piece.composer])
+            return _utils.testIn(composerGender, ', '.join([o.gender for o in obj.source.piece.composer]), exclusion)
         return makeSegments([obj for obj in self.objects if aux(obj, composerGender)])
 
-    def getByComposerInstrument(self, composerInstrument):
+    def getByComposerInstrument(self, composerInstrument, exclusion=False):
         def aux(obj, composerInstrument):
-            return composerInstrument in ', '.join([o.mainInstrument for o in obj.source.piece.composer])
+            return _utils.testIn(composerInstrument, ', '.join([o.mainInstrument for o in obj.source.piece.composer]), exclusion)
         return makeSegments([obj for obj in self.objects if aux(obj, composerInstrument)])
 
-    def getByComposerBornYear(self, composerBornYear):
+    def getByComposerBornYear(self, composerBornYear, exclusion=False):
         def aux(obj, composerBornYear):
             if type(composerBornYear) == int:
                 composerBornYear = str(composerBornYear)
-            return composerBornYear in ', '.join([o.bornYear for o in obj.source.piece.composer])
+            return _utils.testIn(composerBornYear, ', '.join([o.bornYear for o in obj.source.piece.composer]), exclusion)
         return makeSegments([obj for obj in self.objects if aux(obj, composerBornYear)])
 
-    def getByComposerBornCity(self, composerBornCity):
+    def getByComposerBornCity(self, composerBornCity, exclusion=False):
         def aux(obj, composerBornCity):
-            return composerBornCity in ', '.join([o.bornCity.name for o in obj.source.piece.composer if o.bornCity])
+            return _utils.testIn(composerBornCity, ', '.join([o.bornCity.name for o in obj.source.piece.composer if o.bornCity]), exclusion)
         return makeSegments([obj for obj in self.objects if aux(obj, composerBornCity)])
 
-    def getByComposerDeathYear(self, composerDeathYear):
+    def getByComposerDeathYear(self, composerDeathYear, exclusion=False):
         def aux(obj, composerDeathYear):
             if type(composerDeathYear) == int:
                 composerDeathYear = str(composerDeathYear)
-            return composerDeathYear in ', '.join([o.deathYear for o in obj.source.piece.composer])
+            return _utils.testIn(composerDeathYear, ', '.join([o.deathYear for o in obj.source.piece.composer]), exclusion)
         return makeSegments([obj for obj in self.objects if aux(obj, composerDeathYear)])
 
-    def getByComposerDeathCity(self, composerDeathCity):
+    def getByComposerDeathCity(self, composerDeathCity, exclusion=False):
         def aux(obj, composerDeathCity):
-            return composerDeathCity in ', '.join([o.deathCity.name for o in obj.source.piece.composer if o.deathCity])
+            return _utils.testIn(composerDeathCity, ', '.join([o.deathCity.name for o in obj.source.piece.composer if o.deathCity]), exclusion)
         return makeSegments([obj for obj in self.objects if aux(obj, composerDeathCity)])
 
-    def getByPieceTitle(self, title):
-        return makeSegments([obj for obj in self.objects if title in obj.source.piece.title])
+    def getByPieceTitle(self, title, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testIn(title, obj.source.piece.title, exclusion)])
 
-    def getByPieceCity(self, city):
-        return makeSegments([obj for obj in self.objects if city in obj.source.piece.city])
+    def getByPieceCity(self, city, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testIn(city, obj.source.piece.city, exclusion)])
 
-    def getByPieceYear(self, year):
+    def getByPieceYear(self, year, exclusion=False):
         if type(year) == int:
             year = str(year)
-        return makeSegments([obj for obj in self.objects if year in obj.source.piece.year])
+        return makeSegments([obj for obj in self.objects if _utils.testIn(year, obj.source.piece.year, exclusion)])
 
-    def getByCollectionCode(self, code, volume=None):
+    def getByCollectionCode(self, code, volume=None, exclusion=False):
         def aux(obj, code, volume):
             cond1 = code in obj.source.collection.code
             cond2 = True
@@ -312,19 +312,19 @@ class Segments(object):
 
         return makeSegments([obj for obj in self.objects if aux(obj, code, volume)])
 
-    def getByIdCode(self, idCode):
-        return makeSegments([obj for obj in self.objects if idCode in obj.source.idCode.idCode])
+    def getByIdCode(self, idCode, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testIn(idCode, obj.source.idCode.idCode, exclusion)])
 
-    def getByFilename(self, filename):
-        return makeSegments([obj for obj in self.objects if filename in obj.source.filename])
+    def getByFilename(self, filename, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testIn(filename, obj.source.filename, exclusion)])
 
-    def getByTimeSignature(self, timeSignature):
-        return makeSegments([obj for obj in self.objects if timeSignature in obj.timeSignature])
+    def getByTimeSignature(self, timeSignature, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testIn(timeSignature, obj.timeSignature, exclusion)])
 
-    def getByMeter(self, meter):
-        return makeSegments([obj for obj in self.objects if meter in obj.meter])
+    def getByMeter(self, meter, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testIn(meter, obj.meter, exclusion)])
 
-    def getByAmbitus(self, ambitus, higherAmbitus=None):
+    def getByAmbitus(self, ambitus, higherAmbitus=None, exclusion=False):
         """Returns a Segments object with a given ambitus, or the min
         and max of an ambitus range."""
 
@@ -333,32 +333,32 @@ class Segments(object):
         else:
             return makeSegments([obj for obj in self.objects if ambitus == obj.ambitus])
 
-    def getByMeasureNumber(self, measuresNumber, higherMeasureNumber=None):
+    def getByMeasureNumber(self, measuresNumber, higherMeasureNumber=None, exclusion=False):
         """Returns a Segments object with a given number of measures,
         or the min and max of a measures' number range."""
 
         if higherMeasureNumber:
             return makeSegments([obj for obj in self.objects if measuresNumber <= obj.measuresNumber <= higherMeasureNumber])
         else:
-            return makeSegments([obj for obj in self.objects if measuresNumber == obj.measuresNumber])
+            return makeSegments([obj for obj in self.objects if _utils.testEqual(measuresNumber, obj.measuresNumber, exclusion)])
 
-    def getByContourPrime(self, contourPrime):
-        return makeSegments([obj for obj in self.objects if contourPrime == obj.contourPrime])
+    def getByContourPrime(self, contourPrime, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testEqual(contourPrime, obj.contourPrime, exclusion)])
 
-    def getByIntervals(self, interval):
-        return makeSegments([obj for obj in self.objects if interval in obj.intervals])
+    def getByIntervals(self, interval, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testIn(interval, obj.intervals, exclusion)])
 
-    def getByFirstInterval(self, interval):
-        return makeSegments([obj for obj in self.objects if interval == obj.firstInterval])
+    def getByFirstInterval(self, interval, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testEqual(interval, obj.firstInterval, exclusion)])
 
-    def getByLastInterval(self, interval):
-        return makeSegments([obj for obj in self.objects if interval == obj.lastInterval])
+    def getByLastInterval(self, interval, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testEqual(interval, obj.lastInterval, exclusion)])
 
-    def getByDuration(self, duration):
-        return makeSegments([obj for obj in self.objects if duration in obj.durations])
+    def getByDuration(self, duration, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testIn(duration, obj.durations, exclusion)])
 
-    def getByBeatContents(self, beatContents):
-        return makeSegments([obj for obj in self.objects if beatContents in obj.beatContents])
+    def getByBeatContents(self, beatContents, exclusion=False):
+        return makeSegments([obj for obj in self.objects if _utils.testIn(beatContents, obj.beatContents, exclusion)])
 
     # count
     def countComposerBornYears(self):

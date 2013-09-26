@@ -120,3 +120,16 @@ def saveCsvFile(data, csvFilename):
                             quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for row in data:
             spamwriter.writerow(row)
+
+
+def testIn(a, b, exclusion=False):
+    if exclusion:
+        return a not in b
+    else:
+        return a in b
+
+def testEqual(a, b, exclusion=False):
+    if exclusion:
+        return a != b
+    else:
+        return a == b
