@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import itertools
+import sift
+import os
+import matrix
+import _utils
+
 
 def __singleComparison(segmentsObj, mFilter, mStructure, value, exclusion=False):
     """Return a Counter object with the given mStructure filtered by a
@@ -65,3 +71,72 @@ def composersFrequency(segmentsObj):
         dic[composer] = segmentsObj.getByComposerName(composer).size
 
     return {'frequency': dic}
+
+
+def allQuestions(segmentsObj):
+    """Return all research questions in dictionaries of Counter."""
+
+    # all composers
+    counters = (
+        "countAmbitus",
+        "countDuration",
+        "countBeatContent",
+        "countFirstIntervals",
+        "countComposerBornCities",
+        "countIntervals",
+        "countComposerBornYears",
+        "countLastIntervals",
+        "countComposerDeathCities",
+        "countMeasuresNumbers",
+        "countComposerDeathYears",
+        "countMeter",
+        "countComposerInstruments",
+        "countTimeSignature",
+        "countContourPrimes"
+        )
+
+    getMethods = (
+	"getByAmbitus",
+	"getByBeatContents",
+	"getByFirstInterval",
+	"getByCollectionCode",
+	"getByComposerBornCity",
+	"getByComposerBornYear",
+	"getByLastInterval",
+	"getByComposerDeathCity",
+	"getByMeasureNumber",
+	"getByComposerDeathYear",
+	"getByMeter",
+	"getByComposerGender",
+	"getByPieceCity",
+	"getByComposerInstrument",
+	"getByComposerName",
+	"getByPieceYear",
+	"getByContourPrime",
+	"getByTimeSignature",
+	"getByDuration"
+        )
+
+    getInfo = (
+        ('composers', 'getByComposerName', 'composers'),
+        ('composers', 'getByComposerBornCity', 'bornCities'),
+        ('composers', 'getByComposerDeathCity', 'deathCities'),
+        ('composers', 'getByComposerBornYear', 'bornYears'),
+        ('composers', 'getByComposerDeathYear', 'deathYears'),
+        # ('composers', 'getByComposerInstrument', 'mainInstruments'),
+        ('pieces', 'getByPieceYear', 'years'),
+        )
+
+
+    for countFn, (nestedObj, getFn, attrib) in itertools.product(counters, getInfo):
+
+        dirname = os.path.join('/tmp', 'umazero')
+        _utils.mkdir(dirname)
+
+        tableName = countFn.replace('count', '')
+        f = '_'.join([nestedObj, attrib, tableName]) + '.csv'
+        filename = os.path.join(dirname, f)
+
+        dic = sift.makeMatrix(segmentsObj, nestedObj, getFn, attrib, countFn)
+        if dic:
+            matrix.countedToCsv(dic, filename)
