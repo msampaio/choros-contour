@@ -476,19 +476,21 @@ def makeSegments(segmentsObjList):
     return segments
 
 
-
-def makeMatrix(segmentsObj, getFn, attrib, countFn):
+def makeMatrix(segmentsObj, nestedObj, getFn, attrib, countFn):
     """Return a sequence with counted objects.
 
-    >>> makeMatrix(segs, 'getByComposerName', 'composers', 'countIntervals')
+    >>> makeMatrix(segs, 'composers' 'getByComposerName', 'composers', 'countIntervals')
+    >>> makeMatrix(segs, 'pieces' 'getByYear', 'years', 'countIntervals')
     """
 
     def aux(segmentsObj, getFn, countFn, el):
-        return getattr(segmentsObj, getFn)(el)
+        return segmentsObj.__getattribute__(getFn)(el)
 
     matrix = {}
 
-    for el in getattr(segmentsObj.composers, attrib):
+    els = segmentsObj.__getattribute__(nestedObj).__getattribute__(attrib)
+    for el in els:
         seg = aux(segmentsObj, getFn, countFn, el)
-        matrix[el] = getattr(seg, countFn)()
+        matrix[el] = seg.__getattribute__(countFn)()
+
     return matrix
