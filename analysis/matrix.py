@@ -27,20 +27,3 @@ def countedToCsv(dic, filename='/tmp/foo.csv'):
         csvTable.append(csvRow)
 
     _utils.saveCsvFile(csvTable, filename)
-
-def makeStatisticalTables(segmentsObj=None):
-
-    if not segmentsObj:
-        segmentObjs = retrieval.loadPickle('Segment')
-        segmentsObj = sift.makeSegments(segmentObjs)
-
-    countedSeq = ['countIntervals', 'countFirstIntervals', 'countLastIntervals',
-                  'countContourPrimes', 'countMeasuresNumbers', 'countAmbitus',
-                  'countMeter', 'countTimeSignature', 'countDuration',
-                  'countBeatContent']
-
-    countedData = {}
-    for fn in countedSeq:
-        print 'Processing {0}'.format(fn)
-        cData = sift.makeMatrix(segmentsObj, 'getByComposerName', 'composers', fn)
-        countedToCsv(cData, os.path.join('/tmp', fn + '.csv'))

@@ -12,11 +12,14 @@ docs: webpage html
 html:
 	$(MAKE) -C docs html
 
-webpage:
-	python -c "import umazero; umazero.makeWebpage()"
-
 saveAll:
 	python -c "import analysis; analysis.saveAll()"
+
+tables:
+	python -c "import analysis; analysis.makeCollectedDataTables()"
+
+webpage:
+	python -c "import umazero; umazero.makeWebpage()"
 
 copy:
 	python -c "import umazero; umazero.copyfiles()"

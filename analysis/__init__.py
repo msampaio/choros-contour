@@ -19,4 +19,4 @@ from sift import makePieces
 from sift import makeSources
 from sift import makeSegments
 
-from matrix import makeStatisticalTables
+from questions import makeCollectedDataTables

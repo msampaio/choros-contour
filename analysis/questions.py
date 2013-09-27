@@ -6,6 +6,7 @@ import sift
 import os
 import matrix
 import _utils
+import retrieval
 
 
 def __singleComparison(segmentsObj, mFilter, mStructure, value, exclusion=False):
@@ -73,8 +74,12 @@ def composersFrequency(segmentsObj):
     return {'frequency': dic}
 
 
-def allQuestions(segmentsObj):
+def makeCollectedDataTables(segmentsObj=None):
     """Return all research questions in dictionaries of Counter."""
+
+    if not segmentsObj:
+        segmentObjs = retrieval.loadPickle('Segment')
+        segmentsObj = sift.makeSegments(segmentObjs)
 
     # all composers
     counters = (
