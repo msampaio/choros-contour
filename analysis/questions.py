@@ -27,7 +27,7 @@ def comparison(segmentsObj, mFilter, mStructure, *values):
     return dic
 
 
-def comparisonWithAll(segmentsObj, mFilter, mStructure, value):
+def comparisonWithAll(segmentsObj, mFilter, mStructure, *values):
     """Return a dictionary with data for the given value and all. The
     data is a counter object with the given mStructure filtered by the
     value filtered by mFilter.
@@ -35,8 +35,7 @@ def comparisonWithAll(segmentsObj, mFilter, mStructure, value):
     >>> comparisonWithAll(segmentsObj, 'getByComposerName', 'countIntervals', 'Pixinguinha')
     """
 
-    dic = {}
-    dic[value] = __singleComparison(segmentsObj, mFilter, mStructure, value)
+    dic = comparison(segmentsObj, mFilter, mStructure, *values)
     dic['All'] = segmentsObj.__getattribute__(mStructure)()
 
     return dic
