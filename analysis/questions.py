@@ -2,43 +2,57 @@
 # -*- coding: utf-8 -*-
 
 
-def compareComposers(segmentsObj, method, *composers):
-    """Return the data of a given list of composers.
+def __singleComparison(segmentsObj, mFilter, mStructure, value, exclusion=False):
+    """Return a Counter object with the given mStructure filtered by a
+    value filtered by mFilter.
 
-    >>> compareComposers(segmentsObj, 'countIntervals', 'Pixinguinha', 'Pecci', 'Nazareth')
+    >>> __singleComparison(segmentsObj, 'getByComposerName', 'countIntervals', 'Pixinguinha')
     """
 
-    def aux(segmentsObj, method, composer):
-        dic[composer] = segmentsObj.getByComposerName(composer).__getattribute__(method)()
+    return segmentsObj.__getattribute__(mFilter)(value, exclusion).__getattribute__(mStructure)()
+
+
+def comparison(segmentsObj, mFilter, mStructure, *values):
+    """Return a dictionary with data for each given value. The data is
+    a counter object with the given mStructure filtered by the value
+    filtered by mFilter.
+
+    >>> comparison(segmentsObj, 'getByComposerName', 'countIntervals', 'Pixinguinha', 'Pecci', 'Nazareth')
+    >>> comparison(segmentsObj, 'getByComposerBornYear', 'countIntervals', '1929')
+    """
 
     dic = {}
-    for composer in composers:
-        aux(segmentsObj, method, composer)
+    for value in values:
+        dic[value] = __singleComparison(segmentsObj, mFilter, mStructure, value)
     return dic
 
 
-def compareComposerWithAll(segmentsObj, method, composerName):
-    """Return the data of a given list of composers.
+def comparisonWithAll(segmentsObj, mFilter, mStructure, value):
+    """Return a dictionary with data for the given value and all. The
+    data is a counter object with the given mStructure filtered by the
+    value filtered by mFilter.
 
-    >>> compareComposersWithAll(segmentsObj, 'countIntervals', 'Pixinguinha')
+    >>> comparisonWithAll(segmentsObj, 'getByComposerName', 'countIntervals', 'Pixinguinha')
     """
 
     dic = {}
-    dic[composerName] = segmentsObj.getByComposerName(composerName).__getattribute__(method)()
-    dic['All composers'] = segmentsObj.__getattribute__(method)()
+    dic[value] = __singleComparison(segmentsObj, mFilter, mStructure, value)
+    dic['All'] = segmentsObj.__getattribute__(mStructure)()
 
     return dic
 
 
-def compareComposerWithOthers(segmentsObj, method, composerName):
-    """Return the data of a given list of composers.
+def comparisonWithOthers(segmentsObj, mFilter, mStructure, value):
+    """Return a dictionary with data for the given value and others.
+    The data is a counter object with the given mStructure filtered by
+    the value filtered by mFilter.
 
-    >>> compareComposersWithOthers(segmentsObj, 'countIntervals', 'Pixinguinha')
+    >>> comparisonWithOthers(segmentsObj, 'getByComposerName', 'countIntervals', 'Pixinguinha')
     """
 
     dic = {}
-    dic[composerName] = segmentsObj.getByComposerName(composerName).__getattribute__(method)()
-    dic['Others'] = segmentsObj.getByComposerName(composerName, True).__getattribute__(method)()
+    dic[value] = __singleComparison(segmentsObj, mFilter, mStructure, value)
+    dic['Others'] = __singleComparison(segmentsObj, mFilter, mStructure, value, True)
 
     return dic
 
