@@ -474,23 +474,3 @@ def makeSegments(segmentsObjList):
     segments.beatContents = _utils.organizeAndSort(_utils.flatten([obj.beatContents for obj in segments.objects if obj.beatContents]))
 
     return segments
-
-
-def makeMatrix(segmentsObj, nestedObj, getFn, attrib, countFn):
-    """Return a sequence with counted objects.
-
-    >>> makeMatrix(segs, 'composers' 'getByComposerName', 'composers', 'countIntervals')
-    >>> makeMatrix(segs, 'pieces' 'getByYear', 'years', 'countIntervals')
-    """
-
-    def aux(segmentsObj, getFn, countFn, el):
-        return segmentsObj.__getattribute__(getFn)(el)
-
-    matrix = {}
-
-    els = segmentsObj.__getattribute__(nestedObj).__getattribute__(attrib)
-    for el in els:
-        seg = aux(segmentsObj, getFn, countFn, el)
-        matrix[el] = seg.__getattribute__(countFn)()
-
-    return matrix
