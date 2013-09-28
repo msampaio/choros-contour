@@ -36,7 +36,7 @@ class OutMatrix(object):
             nestedList = [xOne]
             for xKey in xValuesSet:
                 x = [xKey]
-                x.extend[xDic[xKey][yKey] for yKey in yValuesSet]
+                x.extend([xDic[xKey][yKey] for yKey in yValuesSet])
                 nestedList.append(x)
             return nestedList
 
