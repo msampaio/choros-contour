@@ -51,6 +51,18 @@ class OutMatrix(object):
 
         return aux(xValuesSet, yValuesSet, xDic)
 
+    def csvSave(self, invert=False, path=None):
+        """Save the object as a csv table."""
+
+        if not path:
+            path = '/tmp/umazero'
+            _utils.mkdir(path)
+
+        f = self.title.replace(' ', '_') + '.csv'
+        filename = os.path.join(path, f)
+        table = self.nestedLists(invert)
+        _utils.saveCsvFile(table, filename)
+
     def transpose(self):
         """Return the OutMatrix with the matrix transposed."""
 
