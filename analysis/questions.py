@@ -132,16 +132,6 @@ def makeCollectedDataTables(segmentsObj=None):
         ('pieces', 'getByPieceYear', 'years'),
         )
 
-
     for countFn, (nestedObj, getFn, attrib) in itertools.product(counters, getInfo):
-
-        dirname = os.path.join('/tmp', 'umazero')
-        _utils.mkdir(dirname)
-
-        tableName = countFn.replace('count', '')
-        f = '_'.join([nestedObj, attrib, tableName]) + '.csv'
-        filename = os.path.join(dirname, f)
-
-        dic = sift.makeMatrix(segmentsObj, nestedObj, getFn, attrib, countFn)
-        if dic:
-            matrix.countedToCsv(dic, filename)
+        outMatrix = matrix.makeOutMatrix(segmentsObj, nestedObj, getFn, attrib, countFn)
+        outMatrix.csvSave()
