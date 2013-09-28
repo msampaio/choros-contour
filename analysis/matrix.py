@@ -23,6 +23,46 @@ class OutMatrix(object):
     def __repr__(self):
         return "<OutMatrix: {0}>".format(self.title)
 
+    def nestedLists(self, invert=False):
+        """Returns a list of lists with the object matrix. It's
+        possible to invert the lists."""
+
+        rValuesSet = copy.copy(self.rowsValuesSet)
+        cValuesSet = copy.copy(self.columnsValuesSet)
+
+        def aux(xValuesSet, yValuesSet, xDic):
+            xOne = copy.copy(yValuesSet)
+            xOne.insert(0, '')
+            nestedList = [xOne]
+            for xKey in xValuesSet:
+                x = [xKey]
+                x.extend[xDic[xKey][yKey] for yKey in yValuesSet]
+                nestedList.append(x)
+            return nestedList
+
+        if invert:
+            xDic = self.__getattribute__('columnsValues')
+            xValuesSet = cValuesSet
+            yValuesSet = rValuesSet
+        else:
+            xDic = self.__getattribute__('rowsValues')
+            xValuesSet = rValuesSet
+            yValuesSet = cValuesSet
+
+        return aux(xValuesSet, yValuesSet, xDic)
+
+    def transpose(self):
+        """Return the OutMatrix with the matrix transposed."""
+
+        outMatrix = OutMatrix()
+        outMatrix.title = self.title
+        outMatrix.rowsName = self.columnsName
+        outMatrix.rowsValues = self.columnsValues
+        outMatrix.rowsValuesSet = self.columnsValuesSet
+        outMatrix.columnsName = self.rowsName
+        outMatrix.columnsValues = self.rowsValues
+        outMatrix.columnsValuesSet = self.rowsValuesSet
+
 
 def makeOutMatrix(segmentsObj, nestedObj, getFn, attrib, countFn):
     """Returns an OutMatrix object."""
