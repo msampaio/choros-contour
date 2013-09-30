@@ -1,44 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
 import copy
 import music21
-import _utils
 import idcode
-import parse
+import music
 
 
-class City(object):
-    """Class for City objects."""
-
-    def __init__(self):
-
-        self.name = None
-        self.province = None
-
-    def __eq__(self, other):
-        return _utils.equalityComparisons(self, other)
-
-    def __ne__(self, other):
-        return _utils.equalityComparisons(self, other, True)
-
-    def __repr__(self):
-        return "<City: {0}, {1}>".format(self.name, self.province)
-
-
+# classes
 class Composer(object):
     """Class for Composer objects."""
 
     def __init__(self):
-
         self.name = None
         self.gender = None
-        self.bornCity = None
         self.bornYear = None
-        self.deathCity = None
         self.deathYear = None
-        self.mainInstrument = None
+        self.instrument = None
 
     def __eq__(self, other):
         return _utils.equalityComparisons(self, other)
@@ -47,21 +25,21 @@ class Composer(object):
         return _utils.equalityComparisons(self, other, True)
 
     def __repr__(self):
-        if self.bornCity:
-            bornCity = self.bornCity.province
-        else:
-            bornCity = None
+        return "<Composer: {0}, {1}--{2}>".format(self.name, self.bornYear, self.deathYear)
 
-        return "<Composer: {0}, {1}, {2}--{3}>".format(self.name, bornCity, self.bornYear, self.deathYear)
+    def lifeTime(self):
+        """Returns the composer's lifetime."""
+
+        if self.deathYear and self.bornYear:
+            return self.deathYear - self.bornYear
 
 
 class Piece(object):
     """Class for Piece objects."""
 
     def __init__(self):
-
         self.title = None
-        self.composer = None
+        self.composers = None # a sequence of Composer objects
         self.city = None
         self.year = None
 
@@ -75,7 +53,10 @@ class Piece(object):
         return "<Piece: {0} ({1})>".format(self.title, self.makeComposersString())
 
     def makeComposersString(self):
-        return ', '.join([composer.name for composer in self.composer])
+        if len(self.composers) > 1:
+            return ', '.join([composer.name for composer in self.composers])
+        else:
+            return self.composers[0].name
 
 
 class Collection(object):
@@ -109,13 +90,12 @@ class Source(object):
     """Class for Source objects."""
 
     def __init__(self):
-
-        self.piece = None
-        self.collection = None
-        self.idCode = None
+        self.piece = None # a Piece object
+        self.collection = None # a Collection object
+        self.idCode = None # an idcode.IdCode object
         self.filename = None
-        self.formSeq = None
-        self.score = None
+        self.form = None # a music.Form object
+        self.score = None # a music21.stream object
 
         self.timeSignature = None
         self.meter = None
@@ -136,10 +116,12 @@ class Source(object):
         return "<Source: {0}, {1}>".format(self.piece.title, idCode)
 
     def makeScore(self):
-        """Create a Music21 stream object in score attribute."""
+        """Create a Music21 stream object in score attribute and get
+        all info about the source."""
 
-        if not self.score:
-            self.score = parse.sourceParse(self.filename)
+        if not self.score and self.filename:
+            self.score = music.makeStream(self.filename)
+            self = music.getInfoAboutSource(self)
 
     def getExcerpt(self, initial, final, showNumbers=False):
         """Return a score (music21.stream.Stream) object with a
@@ -259,55 +241,73 @@ class Source(object):
 
         return newScore
 
-    def xmlWrite(self, path=None, suffix='numbered'):
-        """Save a score object in a xml file."""
 
-        if not self.score:
-            self.makeScore()
-        dirname = os.path.dirname(self.filename)
-        basename = os.path.basename(self.filename).split('.')[0] + ' - {0}.xml'.format(suffix)
-        if path:
-            dirname = path
-        dest = os.path.join(dirname, basename)
-        print "Writing xml file in {0}".format(dest)
-        parse.scoreEventsEnumerator(self.score).write('musicxml', dest)
+class Segment(object):
+    """Class for segment objects."""
+
+    def __init__(self):
+
+        self.source = None # a Source object
+
+        self.score = None # a music21.stream object
+        self.timeSignature = None
+        self.meter = None
+        self.ambitus = None
+        self.pickup = None
+        self.measuresNumber = None
+        self.totalLength = None
+
+        self.contour = None # a music.Contour object
+
+        self.notes = None # a music.Note object
+        self.intervals = None # a sequence of music.Interval objects
+        self.intervalsWithDirection = None
+        self.firstInterval = None # a music.Interval object
+        self.lastInterval = None # a music.Interval object
+
+        self.durations = None # an array of float numbers
+        self.beatPatterns = None # an array
+
+        self.typeOf = None # a string
+        self.orderNumber = None # an integer
+
+        self.initialEvent = None # an integer
+        self.finalEvent = None # an integer
+
+    def __repr__(self):
+        title = self.source.piece.title
+        composers = self.source.piece.makeComposersString()
+        return "<Segment {0}: {1} ({2})>".format(self.orderNumber, title, composers)
 
 
-def makeCity(name, province):
-    """Return a City object with the given attributes."""
-
-    city = City()
-    city.name = name
-    city.province = province
-
-    return city
-
-
-def makeComposer(name, gender='M', bornCityObj=None, bornYear=None, deathCityObj=None, deathYear=None, mainInstrument=None):
+# functions
+def makeComposer(name, bornYear=None, deathYear=None, gender='M', instrument=None):
     """Return a Composer object with the given attributes. The year
     must be an integer."""
 
     composer = Composer()
     composer.name = name
     composer.gender = gender
-    composer.bornCity = bornCityObj
-    composer.deathCity = deathCityObj
-    composer.mainInstrument = mainInstrument
+    composer.instrument = instrument
     composer.bornYear = bornYear
     composer.deathYear = deathYear
 
     return composer
 
 
-def makePiece(title, composer, year=None, city=None):
-    """Return a Piece object with the given attributes. The year must
-    be an integer such as 1977."""
+def makePiece(title, composers, year=None, city=None):
+    """Return a Piece object with the given attributes. The composer
+    attribute must be a sequence of Composer objects, and the year
+    must be an integer such as 1977.
+
+    >>> makePiece('Lamentos', [<Composer: Pixinguinha, 1897--1973>], 1928, 'Rio de Janeiro')
+    """
 
     piece = Piece()
 
     piece.title = title
     piece.year = year
-    piece.composer = composer
+    piece.composers = composers
     piece.city = city
 
     return piece
@@ -327,19 +327,57 @@ def makeCollection(title, authorList, publisher, volume=None):
     return collection
 
 
-def makeSource(pieceObj, collectionObj, filename=None, score=False):
-    """Return a Source object with the given attributes."""
+def makeSource(piece, collection, filename=None, score=False):
+    """Return a Source object with the given attributes. The arguments
+    piece and collection must be Piece and Collection objects,
+    respectively. The score argument define if a score argument will
+    be return.
+
+    >>> makeSource(<Piece: Lamentos, Pixinguinha>, <Collection: O melhor de Pixinguinha>, 'TOMP_33E-Lamentos.xml')
+    """
 
     source = Source()
 
-    source.piece = pieceObj
-    source.collection = collectionObj
+    source.piece = piece
+    source.collection = collection
     if filename:
         source.filename = filename
         source.idCode = idcode.getIdCodeByFilename(filename)
         if score:
-            source.score = parse.sourceParse(filename)
-            parse.getInfoAboutSource(source.score)
-        source.formSeq = parse.formParse(filename)
+            source.score = music.makeStream(filename)
+            source = music.getInfoAboutSource(source)
+        source.form = music.makeForm(filename)
 
     return source
+
+
+def makeSegment(source, formStructure, savePickle):
+    """Return a Segment object from given Source object, formStructure object,
+    and an order number."""
+
+    print '. Making segment {0}'.format(formStructure.number)
+    segment = Segment()
+
+    segment.typeOf = formStructure.typeOf
+    segment.orderNumber = formStructure.number
+    segment.initialEvent = formStructure.initial
+    segment.finalEvent = formStructure.final
+
+    segment.source = source
+    segment.score = segment.source.getExcerpt(segment.initialEvent, segment.finalEvent)
+    segment = music.getInfoAboutSegment(segment)
+    if savePickle:
+        segment.score = None
+
+    return segment
+
+
+def makeSegments(source, savePickle=False):
+    """Return a segment object from a given Source Object."""
+
+    if not source.score:
+        source.makeScore()
+
+    source = music.getInfoAboutSource(source)
+
+    return [makeSegment(source, formStructure, savePickle) for formStructure in source.form.sequence]
