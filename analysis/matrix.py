@@ -75,6 +75,8 @@ class OutMatrix(object):
         outMatrix.columnsValues = self.rowsValues
         outMatrix.columnsValuesSet = self.rowsValuesSet
 
+        return outMatrix
+
 
 def makeOutMatrix(segmentsObj, nestedObj, getFn, attrib, countFn):
     """Returns an OutMatrix object."""
