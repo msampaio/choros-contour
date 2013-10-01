@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import copy
+import os
 import music21
+import _utils
 import idcode
 import music
 
@@ -119,9 +121,13 @@ class Source(object):
         """Create a Music21 stream object in score attribute and get
         all info about the source."""
 
-        if not self.score and self.filename:
-            self.score = music.makeStream(self.filename)
-            self = music.getInfoAboutSource(self)
+        if self.filename:
+            if not self.score:
+                self.score = music.makeStream(self.filename)
+                self = music.getInfoAboutSource(self)
+            if not self.form and os.path.exists(_utils.changeSuffix(self.filename, 'form', True)):
+                self.form = music.makeForm(self.filename)
+
 
     def getExcerpt(self, initial, final, showNumbers=False):
         """Return a score (music21.stream.Stream) object with a
@@ -340,13 +346,20 @@ def makeSource(piece, collection, filename=None, score=False):
 
     source.piece = piece
     source.collection = collection
-    if filename:
+    if filename :
         source.filename = filename
         source.idCode = idcode.getIdCodeByFilename(filename)
+        if os.path.exists(_utils.changeSuffix(filename, 'form', True)):
+            source.form = music.makeForm(filename)
         if score:
-            source.score = music.makeStream(filename)
-            source = music.getInfoAboutSource(source)
-        source.form = music.makeForm(filename)
+            source.makeScore()
+        else:
+            source.score = None
+    #     if score:
+    #         source.score = music.makeStream(filename)
+    #         source = music.getInfoAboutSource(source)
+    #     if os.path.exists(_utils.changeSuffix(filename, 'form', True)):
+    #         source.form = music.makeForm(filename)
 
     return source
 
@@ -355,7 +368,7 @@ def makeSegment(source, formStructure, savePickle):
     """Return a Segment object from given Source object, formStructure object,
     and an order number."""
 
-    print '. Making segment {0}'.format(formStructure.number)
+    print '.. Making segment {0}'.format(formStructure.number)
     segment = Segment()
 
     segment.typeOf = formStructure.typeOf
@@ -379,5 +392,10 @@ def makeSegments(source, savePickle=False):
         source.makeScore()
 
     source = music.getInfoAboutSource(source)
-
-    return [makeSegment(source, formStructure, savePickle) for formStructure in source.form.sequence]
+    if source.form:
+        segments = [makeSegment(source, formStructure, savePickle) for formStructure in source.form.sequence]
+    else:
+        segments = None
+    if savePickle:
+        source.score = None
+    return segments
