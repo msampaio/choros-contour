@@ -2,14 +2,14 @@
 # -*- coding: utf-8 -*-
 
 import os
-import core
 import json
-import idcode
-import _utils
 import copy
 import pickle
-import parse
-import segment
+import _utils
+import structure
+import idcode
+import music
+import query
 
 
 def csvSourcesProcess(filename):
@@ -65,7 +65,7 @@ def csvPiecesProcess(filename):
         f.write(json.dumps(newSeq, indent=4))
 
 
-def getSingleCoreObjFromJson(jsonDic, objClass):
+def getSingleStructureObjFromJson(jsonDic, objClass):
     obj = copy.deepcopy(objClass)
     attribList = obj.__dict__.keys()
     for key, value in jsonDic.items():
@@ -75,46 +75,39 @@ def getSingleCoreObjFromJson(jsonDic, objClass):
     return obj
 
 
-def getCoreObjFromJson(jsonFile, objClass):
+def getStructureObjFromJson(jsonFile, objClass):
     jsonSeq = json.load(open(jsonFile))
-    return [getSingleCoreObjFromJson(row, objClass) for row in jsonSeq]
+    return [getSingleStructureObjFromJson(row, objClass) for row in jsonSeq]
 
 
 def getMusicologicalInfo(jsonDir='json'):
 
     def pieceAux(pieceDic, composersSeq):
-        composerNames = pieceDic['piece.composer']
-        composer = [comp for comp in composersSeq if comp.name in composerNames]
+        composerNames = pieceDic['piece.composers']
+        composers = [comp for comp in composersSeq if comp.name in composerNames]
+        return structure.makePiece(pieceDic['piece.title'], composers, pieceDic['piece.year'], pieceDic['piece.city'])
 
-        return core.makePiece(pieceDic['piece.title'], composer, pieceDic['piece.year'], pieceDic['piece.city'])
-
-    def sourceAux(sourceDic, collectionsSeq, composersSeq, piecesSeq):
-        composerNames = sourceDic['piece.composer']
+    def sourceAux(sourceDic, collections, composers, pieces):
+        composerNames = sourceDic['piece.composers']
         collectionTitle = sourceDic['collection.title']
         collectionVolume = sourceDic['collection.volume']
         pieceTitle = sourceDic['piece.title']
         pieceNumber = sourceDic['idcode.pieceNumber']
-        composer = [comp for comp in composersSeq if comp.name in composerNames]
-        collection = [coll for coll in collectionsSeq if coll.title == collectionTitle and coll.volume == collectionVolume][0]
+        composers = [comp for comp in composers if comp.name in composerNames]
+        collection = [coll for coll in collections if coll.title == collectionTitle and coll.volume == collectionVolume][0]
         collection.makeCollectionCode()
         idCode = idcode.idCodeMaker('T', collection.code, pieceNumber, True, collectionVolume, pieceTitle)
-        piece = [pc for pc in piecesSeq if pc.title == pieceTitle and pc.composer == composer][0]
+        piece = [pc for pc in pieces if pc.title == pieceTitle and pc.composers == composers][0]
 
-        source = copy.deepcopy(core.Source())
-        source.piece = piece
-        source.collection = collection
-        source.idCode = idCode
-        source.filename = os.path.join('choros-corpus/corpus', '.'.join([idCode.idCode, 'xml']))
-        formSeqFile = _utils.changeSuffix(source.filename, 'form', True)
-        source.formSeq = None
-        if os.path.exists(formSeqFile):
-            source.formSeq = parse.formParse(source.filename)
-        source.score = None
+
+        filename = os.path.join('choros-corpus/corpus', '.'.join([idCode.idCode, 'xml']))
+
+        source = structure.makeSource(piece, collection, filename)
 
         return source
 
-    collections = getCoreObjFromJson(os.path.join(jsonDir, 'collections.json'), core.Collection())
-    composers = getCoreObjFromJson(os.path.join(jsonDir, 'composers.json'), core.Composer())
+    collections = getStructureObjFromJson(os.path.join(jsonDir, 'collections.json'), structure.Collection())
+    composers = getStructureObjFromJson(os.path.join(jsonDir, 'composers.json'), structure.Composer())
 
     piecesSeq = json.load(open(os.path.join(jsonDir, 'pieces.json')))
     sourcesSeq = json.load(open(os.path.join(jsonDir, 'sources.json')))
@@ -125,7 +118,7 @@ def getMusicologicalInfo(jsonDir='json'):
 
 
 def getSegmentsInfo(sourcesObjList):
-    return _utils.flatten([segment.makeSegment(source, True) for source in sourcesObjList])
+    return [structure.makeSegments(source, True) for source in sourcesObjList]
 
 def getMusicInfo(jsonDir='json'):
     """Return sequence of objects."""
@@ -160,6 +153,7 @@ def saveAll(partial=False):
 
     if not partial:
         savePickle(getSegmentsInfo(loadPickle('Source')), 'Segment')
+
 
 def loadAll(segments=False):
     """Load composer, collection, piece and source objects lists from
