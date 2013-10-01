@@ -12,7 +12,7 @@ class IdCodeError(Exception):
 
 class IdCode(object):
     """Class for idCode objects."""
-    
+
     def __init__(self):
 
         self.type = None
@@ -40,7 +40,8 @@ class IdCode(object):
             self.pieceNumber.isdigit(),
             not self.collectionVolume or self.collectionVolume.isdigit(),
             self.expansion in (True, False),
-            not self.pieceTitle or ' ' not in self.pieceTitle,
+            ' ' not in self.idCode,
+            self.pieceTitle,
             not (self.type == 'F' and self.expansion)
             ]
 
@@ -100,7 +101,7 @@ def idCodeParser(idCode):
     idCodeObj.idCode = idCode
 
     if len(splitted) > 1:
-        idCodeObj.pieceTitle = ' '.join(splitted[1:])
+        idCodeObj.pieceTitle = '-'.join(splitted[1:]).replace('_', ' ')
     else:
         idCodeObj.pieceTitle = None
 
