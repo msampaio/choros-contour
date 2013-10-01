@@ -324,6 +324,7 @@ def getInfoAboutSource(source):
     """Insert Music information such as Time Signature in Source
     object."""
 
+    print '. Making source {0}'.format(source.idCode.idCode)
     score = source.score
     part = score.getElementsByClass('Part')[0]
     measures = part.getElementsByClass('Measure')
