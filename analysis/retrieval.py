@@ -214,3 +214,10 @@ def loadAll(segments=False):
     if segments:
         classes.append('Segment')
     return [loadPickle(f) for f in classes]
+
+
+def loadToQuery(structureType='Segment'):
+    """Return a Query object with the given structure type saved in
+    pickle files."""
+
+    return query.makeQuery(loadPickle(structureType))

@@ -14,3 +14,4 @@ from retrieval import getMusicologicalInfo
 from retrieval import saveAll
 from retrieval import saveSegments
 from retrieval import loadAll
+from retrieval import loadToQuery
