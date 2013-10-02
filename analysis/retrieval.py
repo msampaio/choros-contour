@@ -133,6 +133,7 @@ def savePickle(data, filename):
 
     _utils.mkdir("data")
     with open(os.path.join("data", filename), 'w') as fileobj:
+        print 'Saving in {0}'.format(filename)
         pickle.dump(data, fileobj)
 
 
@@ -148,8 +149,7 @@ def saveAll(partial=False):
     files."""
 
     for seq in getMusicologicalInfo():
-        className = type(seq[0]).__name__
-        savePickle(seq, className)
+        savePickle(seq, seq[0].__class__.__name__)
 
     if not partial:
         savePickle(getSegmentsInfo(loadPickle('Source')), 'Segment')

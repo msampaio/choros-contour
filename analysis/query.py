@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import core
-import inspect
 import _utils
 import auxiliar
 import structure
