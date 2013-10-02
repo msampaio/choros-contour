@@ -10,7 +10,32 @@ import music
 
 
 # classes
-class Composer(object):
+class Structure(object):
+    """Class for Structure objects. It's a super class for the classes
+    Composer, Collection, Piece, Source and Segment."""
+
+    def __init__(self):
+        self.type = None
+
+    def getAttrib(self, attribString):
+        """Return the object's attribute from the attribstring.
+
+        >>> Source().getAttrib('piece.composers')
+        """
+
+        obj = copy.deepcopy(self)
+        args = attribString.split('.')
+        for arg in args:
+            if type(obj) == list and structureTypeCheck(obj[0]):
+                obj = [singleObj.getAttrib(arg) for singleObj in obj]
+                if len(obj) == 1:
+                    obj = obj[0]
+            else:
+                obj = copy.deepcopy(obj.__getattribute__(arg))
+        return obj
+
+
+class Composer(Structure):
     """Class for Composer objects."""
 
     def __init__(self):
@@ -36,7 +61,7 @@ class Composer(object):
             return self.deathYear - self.bornYear
 
 
-class Piece(object):
+class Piece(Structure):
     """Class for Piece objects."""
 
     def __init__(self):
@@ -61,7 +86,7 @@ class Piece(object):
             return self.composers[0].name
 
 
-class Collection(object):
+class Collection(Structure):
     """Class for Collection objects."""
 
     def __init__(self):
@@ -88,7 +113,7 @@ class Collection(object):
         self.code = ''.join(initials)
 
 
-class Source(object):
+class Source(Structure):
     """Class for Source objects."""
 
     def __init__(self):
@@ -248,7 +273,7 @@ class Source(object):
         return newScore
 
 
-class Segment(object):
+class Segment(Structure):
     """Class for segment objects."""
 
     def __init__(self):
@@ -399,3 +424,11 @@ def makeSegments(source, savePickle=False):
     if savePickle:
         source.score = None
     return segments
+
+
+def structureTypeCheck(obj):
+    """Returns True if the given object is a musical structure."""
+
+    objectType = obj.__class__.__name__
+    classes = ['Segment', 'Source', 'Collection', 'Piece', 'Composer']
+    return objectType in classes
