@@ -15,6 +15,9 @@ html:
 saveAll:
 	python -c "import analysis; analysis.saveAll()"
 
+saveSegments:
+	python -c "import analysis; analysis.retrieval.saveSegments()"
+
 tables:
 	python -c "import analysis; analysis.makeCollectedDataTables()"
 
