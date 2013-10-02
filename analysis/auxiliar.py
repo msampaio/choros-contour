@@ -3,6 +3,7 @@
 
 import copy
 from collections import Counter
+import music
 
 
 class ExtCounter(object):
@@ -22,7 +23,7 @@ class ExtCounter(object):
         def perc(val, total):
             return val * 100.0 / total
 
-        newExtCounter = copy.copy(self)
+        newExtCounter = copy.deepcopy(self)
         total = sum(newExtCounter.counter.values())
 
         for k, v in newExtCounter.counter.items():
@@ -37,7 +38,7 @@ class ExtCounter(object):
         othersValues = 0
         loopCounter = 0
 
-        for k, v in percentualCounter.items():
+        for k, v in percentualCounter.counter.items():
             if v <= m:
                 loopCounter += 1
                 othersValues += self.counter[k]

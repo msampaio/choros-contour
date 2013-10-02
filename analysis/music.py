@@ -229,7 +229,7 @@ def contourSequenceToTuple(csegsSequence):
     of Contour objects."""
 
     if len(csegsSequence) > 1:
-        if type(data[0]) == Contour:
+        if type(csegsSequence[0]) == Contour:
             csegsSequence = [cseg.cpoints for cseg in csegsSequence]
     return csegsSequence
 
