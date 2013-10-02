@@ -35,6 +35,7 @@ class Form(core.Structure):
         self.xmlFilename = None
         self.formFilename = None
         self.sequence = None
+        self.length = None
 
     def __repr__(self):
         return "<Form: {0}>".format(self.xmlFilename)
@@ -142,6 +143,7 @@ def makeForm(xmlFilename):
     form.xmlFilename = xmlFilename
     form.formFilename = _utils.changeSuffix(xmlFilename, 'form', True)
     form.sequence = makeFormSequence(form.formFilename)
+    form.length = len(form.sequence)
 
     return form
 
