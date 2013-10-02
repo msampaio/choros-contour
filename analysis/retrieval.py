@@ -65,9 +65,10 @@ def csvPiecesProcess(filename):
         f.write(json.dumps(newSeq, indent=4))
 
 
-def getSingleStructureObjFromJson(jsonDic, objClass):
+def getSingleStructureObjFromJson(jsonDic, objClass, idn):
     obj = copy.deepcopy(objClass)
     attribList = obj.__dict__.keys()
+    obj.__setattr__('idn', idn)
     for key, value in jsonDic.items():
         attr = key.split('.')[1]
         if attr in attribList:
@@ -77,17 +78,17 @@ def getSingleStructureObjFromJson(jsonDic, objClass):
 
 def getStructureObjFromJson(jsonFile, objClass):
     jsonSeq = json.load(open(jsonFile))
-    return [getSingleStructureObjFromJson(row, objClass) for row in jsonSeq]
+    return [getSingleStructureObjFromJson(row, objClass, idn) for idn, row in enumerate(jsonSeq)]
 
 
 def getMusicologicalInfo(jsonDir='json'):
 
-    def pieceAux(pieceDic, composersSeq):
+    def pieceAux(pieceDic, composersSeq, idn):
         composerNames = pieceDic['piece.composers']
         composers = [comp for comp in composersSeq if comp.name in composerNames]
-        return structure.makePiece(pieceDic['piece.title'], composers, pieceDic['piece.year'], pieceDic['piece.city'])
+        return structure.makePiece(pieceDic['piece.title'], composers, pieceDic['piece.year'], pieceDic['piece.city'], idn)
 
-    def sourceAux(sourceDic, collections, composers, pieces):
+    def sourceAux(sourceDic, collections, composers, pieces, idn):
         composerNames = sourceDic['piece.composers']
         collectionTitle = sourceDic['collection.title']
         collectionVolume = sourceDic['collection.volume']
@@ -102,7 +103,7 @@ def getMusicologicalInfo(jsonDir='json'):
 
         filename = os.path.join('choros-corpus/corpus', '.'.join([idCode.idCode, 'xml']))
 
-        source = structure.makeSource(piece, collection, filename)
+        source = structure.makeSource(piece, collection, filename, False, idn)
 
         return source
 
@@ -111,8 +112,8 @@ def getMusicologicalInfo(jsonDir='json'):
 
     piecesSeq = json.load(open(os.path.join(jsonDir, 'pieces.json')))
     sourcesSeq = json.load(open(os.path.join(jsonDir, 'sources.json')))
-    pieces = [pieceAux(pieceDic, composers) for pieceDic in piecesSeq]
-    sources = [sourceAux(sourceDic, collections, composers, pieces) for sourceDic in sourcesSeq if sourceDic['collection.title'] != 'Songbook Choro']
+    pieces = [pieceAux(pieceDic, composers, idn) for idn, pieceDic in enumerate(piecesSeq)]
+    sources = [sourceAux(sourceDic, collections, composers, pieces, idn) for idn, sourceDic in enumerate(sourcesSeq) if sourceDic['collection.title'] != 'Songbook Choro']
 
     return composers, collections, pieces, sources
 
@@ -128,31 +129,81 @@ def getMusicInfo(jsonDir='json'):
     return composers, collections, pieces, sources, segments
 
 
-def savePickle(data, filename):
-    """Save the given data in the filename."""
+def singleSavePickle(obj):
+    """Save the given object in its corresponding filename."""
 
+    idn = str(obj.idn)
+    structureType = obj.__class__.__name__
+    path = os.path.join("data", structureType)
     _utils.mkdir("data")
-    with open(os.path.join("data", filename), 'w') as fileobj:
-        print 'Saving in {0}'.format(filename)
-        pickle.dump(data, fileobj)
+    _utils.mkdir(path)
+    with open(os.path.join(path, str(idn)), 'w') as fileobj:
+        pickle.dump(obj, fileobj)
 
 
-def loadPickle(filename):
-    """Load pickle file."""
+def savePickle(objects):
+    """Save the given objects sequence in their corresponding
+    filename."""
 
-    with open(os.path.join("data", filename)) as fileobj:
+    print 'Saving {0}: {1} objects'.format(objects[0].__class__.__name__, len(objects))
+    for obj in objects:
+        singleSavePickle(obj)
+        obj = None
+
+
+def singleLoadPickle(structureType, objIdn):
+    """Loads the object with the given structure type and idn."""
+
+    path = os.path.join('data', structureType, str(objIdn))
+    with open(path, 'r') as fileobj:
         return pickle.load(fileobj)
 
 
-def saveAll(partial=False):
-    """Save composer, collection, piece and source objects in pickle
-    files."""
+def loadPickle(structureType):
+    """Save the given objects sequence in their corresponding
+    filename."""
+
+    path = os.path.join('data', structureType)
+    files = os.listdir(path)
+    if '.DS_Store' in files:
+        files.remove('.DS_Store')
+    print 'Loading {0}'.format(structureType)
+    return [singleLoadPickle(structureType, idn) for idn in files]
+
+
+def makeAndSaveSegmentPickle(source, idn):
+    sourceScore = copy.deepcopy(source.score)
+    for formStructure in source.form.sequence:
+        seg = structure.makeSegment(source, formStructure, True, idn)
+        idn += 1
+        singleSavePickle(seg)
+        source.score = copy.deepcopy(sourceScore)
+    return idn
+
+
+def saveSegments(pointer=None):
+    sources = sorted(loadPickle('Source'))
+    idn = 0
+
+    if pointer:
+        idn = sum([src.form.length for src in sources[:pointer[0]]])
+        sources = sources[pointer[0]:pointer[1]]
+
+    for source in sources:
+        if not source.score:
+            source.makeScore()
+        source = music.getInfoAboutSource(source)
+        idn = makeAndSaveSegmentPickle(source, idn)
+
+
+def saveAll(segments=False):
+    """Save composer, collection, piece, source, and, optionally,
+    segments in pickle files."""
 
     for seq in getMusicologicalInfo():
-        savePickle(seq, seq[0].__class__.__name__)
-
-    if not partial:
-        savePickle(getSegmentsInfo(loadPickle('Source')), 'Segment')
+        savePickle(seq)
+    if segments:
+        saveSegments()
 
 
 def loadAll(segments=False):

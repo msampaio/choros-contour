@@ -304,7 +304,7 @@ def makeComposer(name, bornYear=None, deathYear=None, gender='M', instrument=Non
     return composer
 
 
-def makePiece(title, composers, year=None, city=None):
+def makePiece(title, composers, year=None, city=None, idn=None):
     """Return a Piece object with the given attributes. The composer
     attribute must be a sequence of Composer objects, and the year
     must be an integer such as 1977.
@@ -315,6 +315,7 @@ def makePiece(title, composers, year=None, city=None):
     piece = Piece()
 
     piece.type = piece.__class__.__name__
+    piece.idn = idn
     piece.title = title
     piece.year = year
     piece.composers = composers
@@ -323,12 +324,13 @@ def makePiece(title, composers, year=None, city=None):
     return piece
 
 
-def makeCollection(title, authorList, publisher, volume=None):
+def makeCollection(title, authorList, publisher, volume=None, idn=None):
     """Return a Collection object with the given attributes."""
 
     collection = Collection()
 
     collection.type = collection.__class__.__name__
+    collection.idn = idn
     collection.title = title
     collection.author = authorList
     collection.publisher = publisher
@@ -338,7 +340,7 @@ def makeCollection(title, authorList, publisher, volume=None):
     return collection
 
 
-def makeSource(piece, collection, filename=None, score=False):
+def makeSource(piece, collection, filename=None, score=False, idn=None):
     """Return a Source object with the given attributes. The arguments
     piece and collection must be Piece and Collection objects,
     respectively. The score argument define if a score argument will
@@ -350,6 +352,7 @@ def makeSource(piece, collection, filename=None, score=False):
     source = Source()
 
     source.type = source.__class__.__name__
+    source.idn = idn
     source.piece = piece
     source.collection = collection
     if filename :
@@ -370,13 +373,14 @@ def makeSource(piece, collection, filename=None, score=False):
     return source
 
 
-def makeSegment(source, formStructure, savePickle):
+def makeSegment(source, formStructure, savePickle, idn=None):
     """Return a Segment object from given Source object, formStructure object,
     and an order number."""
 
     print '.. Making segment {0}'.format(formStructure.number)
     segment = Segment()
 
+    segment.idn = idn
     segment.type = segment.__class__.__name__
     segment.typeOf = formStructure.typeOf
     segment.orderNumber = formStructure.number
@@ -388,7 +392,7 @@ def makeSegment(source, formStructure, savePickle):
     segment = music.getInfoAboutSegment(segment)
     if savePickle:
         segment.score = None
-
+        segment.source.score = None
     return segment
 
 
@@ -400,7 +404,7 @@ def makeSegments(source, savePickle=False):
 
     source = music.getInfoAboutSource(source)
     if source.form:
-        segments = [makeSegment(source, formStructure, savePickle) for formStructure in source.form.sequence]
+        segments = [makeSegment(source, formStructure, savePickle, idn) for idn, formStructure in enumerate(source.form.sequence)]
     else:
         segments = None
     if savePickle:
