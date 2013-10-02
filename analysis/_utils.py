@@ -122,14 +122,14 @@ def saveCsvFile(data, csvFilename):
             spamwriter.writerow(row)
 
 
-def testIn(a, b, exclusion=False):
-    if exclusion:
-        return a not in b
+def testInEqual(a, b, exclusion=False):
+    if type(b) == int:
+        if exclusion:
+            return a != b
+        else:
+            return a == b
     else:
-        return a in b
-
-def testEqual(a, b, exclusion=False):
-    if exclusion:
-        return a != b
-    else:
-        return a == b
+        if exclusion:
+            return a not in b
+        else:
+            return a in b
