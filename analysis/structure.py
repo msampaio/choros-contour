@@ -4,39 +4,23 @@
 import copy
 import os
 import music21
+import core
 import _utils
 import idcode
 import music
 
 
 # classes
-class Structure(object):
-    """Class for Structure objects. It's a super class for the classes
-    Composer, Collection, Piece, Source and Segment."""
-
-    def __init__(self):
-        self.type = None
-
-    def getAttrib(self, attribString):
-        """Return the object's attribute from the attribstring.
-
-        >>> Source().getAttrib('piece.composers')
-        """
-
-        obj = copy.deepcopy(self)
-        args = attribString.split('.')
-        for arg in args:
-            if type(obj) == list and structureTypeCheck(obj[0]):
-                obj = [singleObj.getAttrib(arg) for singleObj in obj]
-                if len(obj) == 1:
-                    obj = obj[0]
-            else:
-                obj = copy.deepcopy(obj.__getattribute__(arg))
-        return obj
-
-
-class Composer(Structure):
+class Composer(core.Structure):
     """Class for Composer objects."""
+
+    # __tablename__ = 'composer'
+    # id = Column(Integer, primary_key=True)
+    # name = Column(String)
+    # gender = Column(String)
+    # bornYear = Column(String)
+    # deathYear = Column(String)
+    # instrument = Column(String)
 
     def __init__(self):
         self.name = None
@@ -61,7 +45,7 @@ class Composer(Structure):
             return self.deathYear - self.bornYear
 
 
-class Piece(Structure):
+class Piece(core.Structure):
     """Class for Piece objects."""
 
     def __init__(self):
@@ -86,7 +70,7 @@ class Piece(Structure):
             return self.composers[0].name
 
 
-class Collection(Structure):
+class Collection(core.Structure):
     """Class for Collection objects."""
 
     def __init__(self):
@@ -113,7 +97,7 @@ class Collection(Structure):
         self.code = ''.join(initials)
 
 
-class Source(Structure):
+class Source(core.Structure):
     """Class for Source objects."""
 
     def __init__(self):
@@ -273,7 +257,7 @@ class Source(Structure):
         return newScore
 
 
-class Segment(Structure):
+class Segment(core.Structure):
     """Class for segment objects."""
 
     def __init__(self):
@@ -311,12 +295,14 @@ class Segment(Structure):
         return "<Segment {0}: {1} ({2})>".format(self.orderNumber, title, composers)
 
 
-# functions
+# Structure class makers
 def makeComposer(name, bornYear=None, deathYear=None, gender='M', instrument=None):
     """Return a Composer object with the given attributes. The year
     must be an integer."""
 
     composer = Composer()
+
+    composer.type = composer.__class__.__name__
     composer.name = name
     composer.gender = gender
     composer.instrument = instrument
@@ -336,6 +322,7 @@ def makePiece(title, composers, year=None, city=None):
 
     piece = Piece()
 
+    piece.type = piece.__class__.__name__
     piece.title = title
     piece.year = year
     piece.composers = composers
@@ -349,6 +336,7 @@ def makeCollection(title, authorList, publisher, volume=None):
 
     collection = Collection()
 
+    collection.type = collection.__class__.__name__
     collection.title = title
     collection.author = authorList
     collection.publisher = publisher
@@ -369,6 +357,7 @@ def makeSource(piece, collection, filename=None, score=False):
 
     source = Source()
 
+    source.type = source.__class__.__name__
     source.piece = piece
     source.collection = collection
     if filename :
@@ -396,6 +385,7 @@ def makeSegment(source, formStructure, savePickle):
     print '.. Making segment {0}'.format(formStructure.number)
     segment = Segment()
 
+    segment.type = segment.__class__.__name__
     segment.typeOf = formStructure.typeOf
     segment.orderNumber = formStructure.number
     segment.initialEvent = formStructure.initial
@@ -424,11 +414,3 @@ def makeSegments(source, savePickle=False):
     if savePickle:
         source.score = None
     return segments
-
-
-def structureTypeCheck(obj):
-    """Returns True if the given object is a musical structure."""
-
-    objectType = obj.__class__.__name__
-    classes = ['Segment', 'Source', 'Collection', 'Piece', 'Composer']
-    return objectType in classes

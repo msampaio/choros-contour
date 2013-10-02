@@ -8,9 +8,10 @@ import music21
 from music21.contour import Contour
 from music21.interval import notesToInterval, notesToChromatic
 import _utils
+import core
 
 
-class _FormStructure(object):
+class _FormStructure(core.Structure):
     """Class for FormStructure objects."""
 
     def __init__(self):
@@ -27,9 +28,8 @@ class _FormStructure(object):
         return "<FormStructure: {0} n.{1}, {2}--{3}>".format(self.typeOf, self.number, self.initial, self.final)
 
 
-class Form(object):
+class Form(core.Structure):
     """Class for Form objects."""
-
 
     def __init__(self):
         self.xmlFilename = None
@@ -51,7 +51,7 @@ class Form(object):
         return [fs for fs in self.sequence if value == fs.__getattribute__(structure)]
 
 
-class Note(object):
+class Note(core.Structure):
     """Class for Note objects."""
 
     def __init__(self):
@@ -65,7 +65,7 @@ class Note(object):
         return u"<Note: {0}{1}>".format(self.name, self.octave)
 
 
-class Interval(object):
+class Interval(core.Structure):
     """Class for Interval objects."""
 
     def __init__(self):
@@ -86,6 +86,8 @@ class Interval(object):
 # Class makers
 def _makeFormStructure(formFilename, typeOf, initial, final, number):
     formStructure = _FormStructure()
+
+    formStructure.type = formStructure.__class__.__name__
     formStructure.formFilename = formFilename
     formStructure.typeOf = typeOf
     formStructure.initial = initial
@@ -135,6 +137,8 @@ def makeForm(xmlFilename):
         return formSequence
 
     form = Form()
+
+    form.type = form.__class__.__name__
     form.xmlFilename = xmlFilename
     form.formFilename = _utils.changeSuffix(xmlFilename, 'form', True)
     form.sequence = makeFormSequence(form.formFilename)
@@ -149,6 +153,8 @@ def makeNote(n):
     """
 
     note = Note()
+
+    note.type = note.__class__.__name__
     note.name = n.name
     note.code = music21.musedata.base40.pitchToBase40(n)
     note.duration = n.duration.quarterLength
@@ -166,6 +172,7 @@ def makeInterval(noteStart, noteEnd):
 
     interval = Interval()
 
+    interval.type = interval.__class__.__name__
     interval.noteStart = makeNote(noteStart)
     interval.noteEnd = makeNote(noteEnd)
 

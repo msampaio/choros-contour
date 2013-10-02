@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import core
+import inspect
 import _utils
 import auxiliar
 import structure
@@ -25,7 +27,6 @@ class Query(object):
     def __repr__(self):
         return "<Query: {0} objects {1}>".format(self.number, self.type)
 
-
     def getAttrib(self, attribString, counter=False):
         """Return the object's attribute from the attribstring.
 
@@ -35,7 +36,6 @@ class Query(object):
         args = attribString.split('.')
         objects = [obj.getAttrib(attribString) for obj in self.objects]
 
-
         r = []
         for obj in objects:
             if type(obj) == list:
@@ -43,9 +43,10 @@ class Query(object):
             else:
                 r.append(obj)
         objects = r
-
-        if structure.structureTypeCheck(objects[0]):
-            objects = makeQuery(objects)
+        objExample = objects[0]
+        if type(objExample) in ['str', 'int']:
+            if objExample.check():
+                objects = makeQuery(objects)
         elif counter:
             objects = auxiliar.makeExtCounter(objects, args[-1], args[0])
         return objects
@@ -64,7 +65,7 @@ class Query(object):
 
         types = list(set([obj.__class__.__name__ for obj in self.objects]))
         classes = ['Segment', 'Source', 'Collection', 'Piece', 'Composer']
-        if not (len(types) == 1 and types[0] in classes):
+        if not (len(types) == 1 and types[0] in core.CLASSES):
             raise QueryError('Error in the given structures types.')
         else:
             self.types = types[0]
@@ -73,13 +74,6 @@ class Query(object):
 def makeQuery(structureObjects):
     """Returns a Query object from a given sequence of structure
     objects."""
-
-    def check(types):
-        """Check if idCode is valid."""
-
-        classes = ['Segment', 'Source', 'Collection', 'Piece', 'Composer']
-        if not (len(types) == 1 and types[0] in classes):
-            raise QueryError('Error in the given structures types.')
 
     query = Query()
     query.objects = structureObjects
