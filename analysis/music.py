@@ -196,17 +196,25 @@ def makeContour(cpointsSeq):
     < 1 5 3 >
     """
 
+    def addCpointsSize(cseg):
+        """Returns a Contour object with cpoints and size attributes
+        added."""
+
+        cseg.cpoints = tuple(cseg.items)
+        cseg.size = len(cseg.cpoints)
+        return cseg
+
     cseg = Contour(cpointsSeq)
-    cseg.cpoints = tuple(cseg.items)
-    cseg.size = len(cseg.cpoints)
-    cseg.prime = cseg.reduction_morris()[0]
+    cseg = addCpointsSize(cseg)
+    cseg.prime = addCpointsSize(cseg.reduction_morris()[0])
 
     # FIXME: Update music21 with contour package to use Sampaio Prime
     # Form Algorithm and remove this action
     i = cseg.inversion()
     r = cseg.retrogression()
     ri = i.retrogression()
-    cseg.sampaioPrime = Contour(sorted([list(cseg), list(i), list(r), list(ri)])[0]).translation()
+    sampaioPrime = Contour(sorted([list(cseg), list(i), list(r), list(ri)])[0]).translation()
+    cseg.sampaioPrime = addCpointsSize(sampaioPrime)
 
     return cseg
 
@@ -361,6 +369,6 @@ def getInfoAboutSegment(segment):
     segment.lastInterval = segment.intervals[-1]
     segment.ambitus = score.analyze("ambitus").chromatic.directed
 
-    segment.contour = Contour(score)
+    segment.contour = makeContour(score)
 
     return segment
