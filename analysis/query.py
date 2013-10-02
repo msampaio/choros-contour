@@ -48,7 +48,7 @@ class Query(object):
                 objects = makeQuery(objects)
         elif counter:
             objects = auxiliar.makeExtCounter(objects, args[-1], args[0])
-        return objects
+        return sorted(objects)
 
     def query(self, attribString, value, exclusion=False):
         """Returns a Query object with the values that the given value
