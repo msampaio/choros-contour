@@ -14,14 +14,6 @@ import music
 class Composer(core.Structure):
     """Class for Composer objects."""
 
-    # __tablename__ = 'composer'
-    # id = Column(Integer, primary_key=True)
-    # name = Column(String)
-    # gender = Column(String)
-    # bornYear = Column(String)
-    # deathYear = Column(String)
-    # instrument = Column(String)
-
     def __init__(self):
         self.name = None
         self.gender = None
